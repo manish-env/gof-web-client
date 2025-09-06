@@ -23,6 +23,9 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body class="font-josefin bg-white text-gray-900">
     <div id="app">
@@ -34,17 +37,12 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                
 
-                <!-- Category Filter -->
+                <!-- Category Filter (Dropdown) -->
                 <div class="category-filter justify-center mb-8">
-                    <button @click="selectedCategory = ''" 
-                            :class="['category-btn', { active: selectedCategory === '' }]">
-                        All Projects
-                    </button>
-                    <button v-for="type in projectTypes" :key="type"
-                            @click="selectedCategory = type"
-                            :class="['category-btn', { active: selectedCategory === type }]">
-                        {{ type }}
-                    </button>
+                    <select v-model="selectedCategory" class="category-select">
+                        <option :value="''">All Projects</option>
+                        <option v-for="type in projectTypes" :key="type" :value="type">{{ type }}</option>
+                    </select>
                 </div>
 
                 <!-- Loading State -->
@@ -125,35 +123,35 @@
                         <!-- First slide: Info panel (fixed 350px, gradient overlay) -->
                         <div class="carousel-slide snap-start shrink-0 h-full text-white" style="width: 350px; min-width: 350px; padding: 20px; backdrop-filter: blur(12px); background: linear-gradient(90deg, rgba(0,0,0,0.65), rgba(0,0,0,0.35) 60%, rgba(0,0,0,0) 100%);">
                             <div class="max-w-xs">
-                                <ul style="font-size: 20px; line-height: 28px; color: rgba(255,255,255,0.95);">
+                                <ul class="modal-info-list">
                                     <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <lucide-info :size="18" class="mr-10" style="margin-right: 10px;"></lucide-info>
-                                        <span style="font-weight: 600;">{{ selectedProject.name }}</span>
+                                        <i class="fa-solid fa-circle-info mr-2 opacity-90"></i>
+                                        <span>{{ selectedProject.name }}</span>
                                     </li>
                                     <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <lucide-map-pin :size="18" class="mr-10" style="margin-right: 10px;"></lucide-map-pin>
-                                        <span style="font-weight: 500;">{{ selectedProject.location }}</span>
+                                        <i class="fa-solid fa-location-dot mr-2 opacity-90"></i>
+                                        <span>{{ selectedProject.location }}</span>
                                     </li>
                                     <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <lucide-badge-check :size="18" class="mr-10" style="margin-right: 10px;"></lucide-badge-check>
+                                        <i class="fa-solid fa-user-check mr-2 opacity-90"></i>
                                         <span>{{ selectedProject.clientName || 'N/A' }}</span>
                                     </li>
                                     <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <lucide-folder :size="18" class="mr-10" style="margin-right: 10px;"></lucide-folder>
+                                        <i class="fa-solid fa-folder-open mr-2 opacity-90"></i>
                                         <span>{{ selectedProject.status || 'N/A' }}</span>
                                     </li>
                                     <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <lucide-badge-info :size="18" class="mr-10" style="margin-right: 10px;"></lucide-badge-info>
+                                        <i class="fa-solid fa-layer-group mr-2 opacity-90"></i>
                                         <span>{{ selectedProject.type || 'N/A' }}</span>
                                     </li>
                                     <li class="flex items-center" style="margin-bottom: 0;">
-                                        <lucide-anchor :size="18" class="mr-10" style="margin-right: 10px;"></lucide-anchor>
+                                        <i class="fa-solid fa-ruler-combined mr-2 opacity-90"></i>
                                         <span>{{ selectedProject.area || 'N/A' }}</span>
                                     </li>
                                 </ul>
 
                                 <div v-if="selectedProject.description" style="margin-top: 22px;">
-                                    <p style="font-size: 17px; line-height: 30px; color: rgba(255,255,255,0.92);">{{ selectedProject.description }}</p>
+                                    <p class="modal-info-desc">{{ selectedProject.description }}</p>
                                 </div>
                             </div>
                         </div>

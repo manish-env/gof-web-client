@@ -6,24 +6,23 @@ const Navbar = {
                 <div class="flex justify-center items-center h-20 relative">
                     <!-- Left Navigation Links -->
                     <div class="flex items-center space-x-8 absolute left-0">
-                        <a href="projects.html" class="nav-link-simple">Projects</a>
-                        <a href="blogs.html" class="nav-link-simple">Blogs</a>
+                        <a href="index.html" :class="['nav-link-simple', { 'active-link': isActive('index.html') } ]">Home</a>
+                        <a href="projects.html" :class="['nav-link-simple', { 'active-link': isActive('projects.html') } ]">Projects</a>
+                        <a href="blogs.html" :class="['nav-link-simple', { 'active-link': isActive('blogs.html') } ]">Blogs</a>
                     </div>
                     
                     <!-- Center Logo -->
                     <div class="flex-shrink-0">
                         <a href="index.html" class="block">
-                            <div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors duration-300">
-                                <span class="text-white text-xl font-semibold">G</span>
-                            </div>
+                            <img src="https://i.ibb.co/WNqDWqx3/genre-of-design-logo-removebg-preview.png" alt="Genre of Design" class="h-14 w-14 object-contain" />
                         </a>
                     </div>
                     
                     <!-- Right Navigation Links -->
                     <div class="flex items-center space-x-8 absolute right-0">
-                        <a href="careers.html" class="nav-link-simple">Careers</a>
-                        <a href="contact.html" class="nav-link-simple">Contact</a>
-                        <a href="about.html" class="nav-link-simple">About Me</a>
+                        <a href="careers.html" :class="['nav-link-simple', { 'active-link': isActive('careers.html') } ]">Careers</a>
+                        <a href="contact.html" :class="['nav-link-simple', { 'active-link': isActive('contact.html') } ]">Contact</a>
+                        <a href="about.html" :class="['nav-link-simple', { 'active-link': isActive('about.html') } ]">About Me</a>
                     </div>
                     
                     <!-- Mobile menu button -->
@@ -38,11 +37,12 @@ const Navbar = {
                 <!-- Mobile Navigation -->
                 <div v-if="mobileMenuOpen" class="md:hidden">
                     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-                        <a href="projects.html" class="mobile-nav-link" @click="closeMobileMenu">Projects</a>
-                        <a href="blogs.html" class="mobile-nav-link" @click="closeMobileMenu">Blogs</a>
-                        <a href="careers.html" class="mobile-nav-link" @click="closeMobileMenu">Careers</a>
-                        <a href="contact.html" class="mobile-nav-link" @click="closeMobileMenu">Contact</a>
-                        <a href="about.html" class="mobile-nav-link" @click="closeMobileMenu">About Me</a>
+                        <a href="index.html" :class="['mobile-nav-link', { 'active-link': isActive('index.html') } ]" @click="closeMobileMenu">Home</a>
+                        <a href="projects.html" :class="['mobile-nav-link', { 'active-link': isActive('projects.html') } ]" @click="closeMobileMenu">Projects</a>
+                        <a href="blogs.html" :class="['mobile-nav-link', { 'active-link': isActive('blogs.html') } ]" @click="closeMobileMenu">Blogs</a>
+                        <a href="careers.html" :class="['mobile-nav-link', { 'active-link': isActive('careers.html') } ]" @click="closeMobileMenu">Careers</a>
+                        <a href="contact.html" :class="['mobile-nav-link', { 'active-link': isActive('contact.html') } ]" @click="closeMobileMenu">Contact</a>
+                        <a href="about.html" :class="['mobile-nav-link', { 'active-link': isActive('about.html') } ]" @click="closeMobileMenu">About Me</a>
                     </div>
                 </div>
                 
@@ -57,6 +57,14 @@ const Navbar = {
         };
     },
     methods: {
+        isActive(path) {
+            try {
+                const current = window.location.pathname.split('/').pop() || 'index.html';
+                return current === path;
+            } catch (e) {
+                return false;
+            }
+        },
         toggleMobileMenu() {
             this.mobileMenuOpen = !this.mobileMenuOpen;
         },
