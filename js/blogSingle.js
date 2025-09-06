@@ -1,13 +1,20 @@
-// Blogs Page Application
 const { createApp } = Vue;
 
-// Main App
+function getQueryParam(key) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(key);
+}
+
 const app = createApp({
     data() {
         return {
-            blogs: (window.BLOGS || []),
-            selectedBlog: null
+            blog: null
         };
+    },
+    mounted() {
+        const id = getQueryParam('id');
+        const list = window.BLOGS || [];
+        this.blog = list.find(b => b.id === id) || null;
     },
     methods: {
         formatDate(dateStr) {
@@ -17,13 +24,9 @@ const app = createApp({
     }
 });
 
-// Register components
 app.component('navbar-component', Navbar);
 app.component('footer-component', Footer);
 
-// Mount the app
 app.mount('#app');
-
-
 
 

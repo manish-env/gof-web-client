@@ -29,22 +29,57 @@
         <!-- Main Content -->
         <main class="min-h-screen py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Our Blogs</h1>
-                    <p class="text-lg text-gray-600">Discover insights, tips, and trends in interior design</p>
-                </div>
+                <!-- Hero -->
+                <section class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-3">Design Journal</h1>
+                    <p class="text-lg text-gray-600">Insights, process notes, and lessons from our projects</p>
+                </section>
 
-                <!-- Coming Soon Message -->
-                <div class="text-center py-20">
-                    <lucide-book-open :size="64" class="text-gray-400 mx-auto mb-4"></lucide-book-open>
-                    <h2 class="text-2xl font-semibold text-gray-600 mb-2">Blogs Coming Soon</h2>
-                    <p class="text-gray-500">We're working on creating amazing content for you. Check back soon!</p>
+                <!-- Blog Grid -->
+                <div class="blog-grid">
+                    <article v-for="blog in blogs" :key="blog.id" class="blog-card">
+                        <div class="blog-cover">
+                            <img :src="blog.cover" :alt="blog.title" />
+                        </div>
+                        <div class="blog-body">
+                            <div class="blog-meta">
+                                <span>{{ formatDate(blog.date) }}</span>
+                                <span>•</span>
+                                <span>{{ blog.readTime }} min read</span>
+                            </div>
+                            <h3 class="blog-title">{{ blog.title }}</h3>
+                            <p class="blog-excerpt">{{ blog.excerpt }}</p>
+                            <div class="blog-footer">
+                                <span class="blog-author">By {{ blog.author }}</span>
+                                <a class="btn-outline" :href="`blog.html?id=${blog.id}`">Read more</a>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </main>
         
         <!-- Footer Component -->
         <footer-component></footer-component>
+
+        <!-- Blog Modal -->
+        <div v-if="selectedBlog" class="modal-overlay" @click="closeModal">
+            <div class="modal-content max-w-3xl w-full" @click.stop>
+                <div class="relative">
+                    <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-700" @click="closeModal">
+                        <lucide-x :size="22"></lucide-x>
+                    </button>
+                </div>
+                <div class="p-6 blog-content">
+                    <h2 class="text-2xl font-bold mb-2">{{ selectedBlog.title }}</h2>
+                    <div class="text-sm text-gray-500 mb-4">{{ formatDate(selectedBlog.date) }} • {{ selectedBlog.readTime }} min read • By {{ selectedBlog.author }}</div>
+                    <div class="rounded-md overflow-hidden mb-4">
+                        <img :src="selectedBlog.cover" :alt="selectedBlog.title" class="w-full h-64 object-cover" />
+                    </div>
+                    <div v-html="selectedBlog.content"></div>
+                </div>
+            </div>
+        </div>
         
         <!-- WhatsApp Float Button -->
         <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
@@ -57,6 +92,7 @@
     <!-- Vue.js App Script -->
     <script src="js/components/Navbar.js"></script>
     <script src="js/components/Footer.js"></script>
+    <script src="js/blogData.js"></script>
     <script src="js/blogs.js"></script>
 </body>
 </html>
