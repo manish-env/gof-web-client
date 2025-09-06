@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Genre of Design</title>
+    <meta name="description" content="Learn about our interior design philosophy and team">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-josefin bg-white text-gray-900">
+    <div id="app">
+        <!-- Navigation Component -->
+        <navbar-component></navbar-component>
+        
+        <!-- Main Content -->
+        <main class="min-h-screen py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Hero Section -->
+                <section class="text-center mb-16">
+                    <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                        About Genre of Design
+                    </h1>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        We are passionate interior designers dedicated to creating beautiful, functional spaces that reflect your unique style and enhance your lifestyle.
+                    </p>
+                </section>
+
+                <!-- Story Section -->
+                <section class="mb-16">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
+                            <p class="text-lg text-gray-600 mb-6">
+                                Founded with a vision to transform spaces into extraordinary experiences, Genre of Design has been at the forefront of interior design innovation. Our journey began with a simple belief: every space has the potential to tell a story.
+                            </p>
+                            <p class="text-lg text-gray-600 mb-6">
+                                Over the years, we've had the privilege of working with clients from diverse backgrounds, each project teaching us something new about the art and science of interior design. From residential homes to commercial spaces, we approach every project with the same level of dedication and creativity.
+                            </p>
+                            <div class="flex items-center space-x-8">
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-red-600">17+</div>
+                                    <div class="text-gray-600">Years Experience</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-red-600">180+</div>
+                                    <div class="text-gray-600">Projects Completed</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-red-600">6M+</div>
+                                    <div class="text-gray-600">Sq Ft Built</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
+                            <p class="text-gray-500">Team Photo</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Philosophy Section -->
+                <section class="mb-16">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Philosophy</h2>
+                        <p class="text-lg text-gray-600">The principles that guide our work</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center p-6">
+                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <lucide-heart :size="32" class="text-red-600"></lucide-heart>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Passion</h3>
+                            <p class="text-gray-600">We love what we do and it shows in every project we undertake.</p>
+                        </div>
+                        <div class="text-center p-6">
+                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <lucide-lightbulb :size="32" class="text-red-600"></lucide-lightbulb>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Innovation</h3>
+                            <p class="text-gray-600">We constantly explore new ideas and techniques to stay ahead of trends.</p>
+                        </div>
+                        <div class="text-center p-6">
+                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <lucide-users :size="32" class="text-red-600"></lucide-users>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Collaboration</h3>
+                            <p class="text-gray-600">We work closely with our clients to bring their vision to life.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Services Section -->
+                <section class="mb-16">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">What We Do</h2>
+                        <p class="text-lg text-gray-600">Comprehensive interior design solutions</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold mb-3">Residential Design</h3>
+                            <p class="text-gray-600">Transform your home into a beautiful, functional living space that reflects your personality and lifestyle.</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold mb-3">Commercial Design</h3>
+                            <p class="text-gray-600">Create inspiring work environments that boost productivity and leave a lasting impression on clients and employees.</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold mb-3">Space Planning</h3>
+                            <p class="text-gray-600">Optimize your space for maximum functionality and aesthetic appeal through thoughtful layout design.</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold mb-3">Consultation</h3>
+                            <p class="text-gray-600">Get expert advice on design decisions, color schemes, furniture selection, and space optimization.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA Section -->
+                <section class="text-center bg-gray-50 rounded-lg p-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Transform Your Space?</h2>
+                    <p class="text-lg text-gray-600 mb-8">Let's work together to create something extraordinary.</p>
+                    <a href="contact.html" class="btn-primary">
+                        Get Started Today
+                    </a>
+                </section>
+            </div>
+        </main>
+        
+        <!-- Footer Component -->
+        <footer-component></footer-component>
+        
+        <!-- WhatsApp Float Button -->
+        <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
+           class="fixed bottom-4 right-4 z-50 p-3 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-colors duration-300"
+           aria-label="Contact us on WhatsApp">
+            <lucide-message-circle :size="24"></lucide-message-circle>
+        </a>
+    </div>
+    
+    <!-- Vue.js App Script -->
+    <script src="js/components/Navbar.js"></script>
+    <script src="js/components/Footer.js"></script>
+    <script src="js/about.js"></script>
+</body>
+</html>
+
+
+
+

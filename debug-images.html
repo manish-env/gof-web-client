@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Project Images</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8">
+    <h1 class="text-2xl font-bold mb-4">Debug Project Images</h1>
+    
+    <div class="space-y-4">
+        <div>
+            <h2 class="text-lg font-semibold">Test Image URLs:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="border rounded p-4">
+                    <h3 class="font-semibold">Pushpanjali Farm</h3>
+                    <img src="https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev/data/537de1da-c5fa-4ed0-b59e-4e172f3e18c8/1%20(3)%20(1).jpg" 
+                         alt="Pushpanjali Farm" 
+                         class="w-full h-48 object-cover rounded"
+                         onload="console.log('Image 1 loaded successfully')"
+                         onerror="console.log('Image 1 failed to load')">
+                </div>
+                
+                <div class="border rounded p-4">
+                    <h3 class="font-semibold">Manlok Villa</h3>
+                    <img src="https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev/data/85e8abfb-8515-436f-8b7c-e3cd044afdb0/IMG_0646%20(1).jpg" 
+                         alt="Manlok Villa" 
+                         class="w-full h-48 object-cover rounded"
+                         onload="console.log('Image 2 loaded successfully')"
+                         onerror="console.log('Image 2 failed to load')">
+                </div>
+                
+                <div class="border rounded p-4">
+                    <h3 class="font-semibold">The Royal Abode</h3>
+                    <img src="https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev/docs/C056%20-%20ShantiLal%20Ji%20Residence/1.%20architecture/3D/17.jpg" 
+                         alt="The Royal Abode" 
+                         class="w-full h-48 object-cover rounded"
+                         onload="console.log('Image 3 loaded successfully')"
+                         onerror="console.log('Image 3 failed to load')">
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2 class="text-lg font-semibold">Console Logs:</h2>
+            <p class="text-sm text-gray-600">Check the browser console for image loading status</p>
+        </div>
+    </div>
+    
+    <script>
+        console.log('Debug page loaded');
+        console.log('Testing image URLs...');
+    </script>
+</body>
+</html>

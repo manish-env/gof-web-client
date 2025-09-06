@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre of Design - Interior Design Portfolio</title>
+    <meta name="description" content="Genre of Design - Modern interior design portfolio showcasing projects, services, and company information">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Axios for API calls -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body class="font-josefin bg-white text-gray-900">
+    <div id="app">
+        <!-- Navigation Component -->
+        <navbar-component></navbar-component>
+        
+        <!-- Main Content -->
+        <main class="min-h-screen">
+            <!-- Hero Section -->
+            <section class="bg-gradient-to-r from-red-600 to-red-800 text-white py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 fade-in">
+                        Transform Your Space
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-8 fade-in">
+                        Creating beautiful, functional interiors that reflect your unique style
+                    </p>
+                    <div class="space-x-4 fade-in">
+                        <a href="projects.html" class="btn-primary">
+                            View Our Work
+                        </a>
+                        <a href="contact.html" class="btn-outline text-white border-white hover:bg-white hover:text-red-600">
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Projects -->
+            <section class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                            Featured Projects
+                        </h2>
+                        <p class="text-lg text-gray-600">
+                            Discover our latest interior design transformations
+                        </p>
+                    </div>
+                    
+                    <div v-if="loading" class="masonry-grid">
+                        <!-- Skeleton loading cards -->
+                        <div v-for="n in 12" :key="'skeleton-' + n" class="masonry-item">
+                            <div class="skeleton-card">
+                                <div class="skeleton-image"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div v-else class="masonry-grid">
+                        <div v-for="project in featuredProjects" :key="project.uuid1" class="masonry-item">
+                            <div class="project-card">
+                                <div class="project-image-container">
+                                    <!-- Skeleton loading -->
+                                    <div v-if="!project.isLazyLoaded" class="skeleton-image"></div>
+                                    
+                                    <!-- Lazy loaded image -->
+                                    <img 
+                                        :data-project-id="project.uuid1"
+                                        :src="project.imageLoaded ? getProjectImage(project) : ''"
+                                        :alt="project.name" 
+                                        class="project-image lazy-image"
+                                        :class="{ 'loaded': project.imageLoaded, 'error': project.imageError }"
+                                    >
+                                    
+                                    <!-- Loading spinner -->
+                                    <div v-if="project.isLazyLoaded && !project.imageLoaded && !project.imageError" class="loading-spinner"></div>
+                                    
+                                    <!-- Error state -->
+                                    <div v-if="project.imageError" class="image-placeholder">
+                                        <p>Image not available</p>
+                                    </div>
+                                    
+                                    <!-- Overlay with title and location - always visible -->
+                                    <div class="project-overlay">
+                                        <div class="project-info">
+                                            <h3 class="project-title-overlay">{{ project.name }}</h3>
+                                            <p class="project-location-overlay">{{ project.location }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-12">
+                        <a href="projects.html" class="btn-primary">
+                            View All Projects
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Section -->
+            <section class="py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                            Our Services
+                        </h2>
+                        <p class="text-lg text-gray-600">
+                            Comprehensive interior design solutions for every space
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow duration-300">
+                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <lucide-home :size="32" class="text-red-600"></lucide-home>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Residential Design</h3>
+                            <p class="text-gray-600">Transform your home into a beautiful, functional living space</p>
+                </div>
+                
+                        <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow duration-300">
+                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <lucide-building :size="32" class="text-red-600"></lucide-building>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Commercial Design</h3>
+                            <p class="text-gray-600">Create inspiring work environments that boost productivity</p>
+            </div>
+                        
+                        <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow duration-300">
+                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <lucide-palette :size="32" class="text-red-600"></lucide-palette>
+                    </div>
+                            <h3 class="text-xl font-semibold mb-2">Consultation</h3>
+                            <p class="text-gray-600">Expert advice to help you make the right design decisions</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Footer Component -->
+        <footer-component></footer-component>
+        
+        <!-- WhatsApp Float Button -->
+        <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
+           class="fixed bottom-4 right-4 z-50 p-3 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-colors duration-300"
+           aria-label="Contact us on WhatsApp">
+            <lucide-message-circle :size="24"></lucide-message-circle>
+        </a>
+    </div>
+    
+    <!-- Vue.js App Script -->
+    <script src="js/components/Navbar.js"></script>
+    <script src="js/components/Footer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

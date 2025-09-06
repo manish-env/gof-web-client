@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Genre of Design</title>
+    <meta name="description" content="Explore our portfolio of interior design projects">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Axios for API calls -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-josefin bg-white text-gray-900">
+    <div id="app">
+        <!-- Navigation Component -->
+        <navbar-component></navbar-component>
+        
+        <!-- Main Content -->
+        <main class="min-h-screen py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+               
+
+                <!-- Category Filter -->
+                <div class="category-filter justify-center mb-8">
+                    <button @click="selectedCategory = ''" 
+                            :class="['category-btn', { active: selectedCategory === '' }]">
+                        All Projects
+                    </button>
+                    <button v-for="type in projectTypes" :key="type"
+                            @click="selectedCategory = type"
+                            :class="['category-btn', { active: selectedCategory === type }]">
+                        {{ type }}
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div v-if="loading" class="flex justify-center">
+                    <div class="loading-spinner"></div>
+                </div>
+
+                <!-- Projects Grid with Infinite Scroll -->
+                <div v-else id="projects-container" class="masonry-grid">
+                    <div v-for="project in displayedProjects" :key="project.uuid1" class="masonry-item">
+                        <div class="project-card cursor-pointer" @click="viewProject(project)">
+                            <div class="project-image-container">
+                                <!-- Project image -->
+                                <img 
+                                    :data-project-id="project.uuid1"
+                                    :src="getProjectImage(project)"
+                                    :alt="project.name" 
+                                    class="project-image"
+                                    :class="{ 'loaded': project.imageLoaded, 'error': project.imageError }"
+                                    @load="handleImageLoad"
+                                    @error="handleImageError"
+                                >
+                                
+                                <!-- Error state -->
+                                <div v-if="project.imageError" class="image-placeholder">
+                                    <p>Image not available</p>
+                                </div>
+                                
+                                <!-- Overlay with title and location - always visible -->
+                                <div class="project-overlay">
+                                    <div class="project-info">
+                                        <h3 class="project-title-overlay">{{ project.name }}</h3>
+                                        <p class="project-location-overlay">{{ project.location }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading More Indicator -->
+                <div v-if="loadingMore" class="loading-more-indicator">
+                    <div class="flex justify-center items-center">
+                        <div class="loading-spinner"></div>
+                        <span class="ml-2 text-gray-600">Loading more projects...</span>
+                    </div>
+                </div>
+
+
+                <!-- End of Results -->
+                <div v-if="!hasMore && displayedProjects.length > 0" class="text-center py-8">
+                    <p class="text-gray-500">You've reached the end of our projects!</p>
+                </div>
+
+                <!-- Empty State -->
+                <div v-if="!loading && filteredProjects.length === 0" class="text-center py-12">
+                    <lucide-folder-open :size="64" class="text-gray-400 mx-auto mb-4"></lucide-folder-open>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No projects found</h3>
+                    <p class="text-gray-500">Try selecting a different category or check back later.</p>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer Component -->
+        <footer-component></footer-component>
+        
+        <!-- Project Modal -->
+        <div v-if="selectedProject" class="fixed inset-0 z-50 bg-transparent backdrop-blur-md" @click="closeModal">
+            <div class="relative w-full md:w-4/5 h-full mx-auto" @click.stop>
+                <!-- Close Button -->
+                <button @click="closeModal" class="absolute top-4 right-4 z-20 p-2 bg-white bg-opacity-20 rounded-full text-white hover:bg-opacity-30 transition-all duration-300">
+                    <lucide-x :size="24"></lucide-x>
+                </button>
+                
+                <!-- Full-Width Carousel with Info as First Slide -->
+                <div class="relative w-full h-full">
+                    <div class="w-full h-full overflow-x-auto overflow-y-hidden scrollbar-hide flex snap-x snap-mandatory carousel-container" ref="carouselContainer" @scroll="handleCarouselScroll" style="gap: 5px;">
+                        <!-- First slide: Info panel (fixed 350px, gradient overlay) -->
+                        <div class="carousel-slide snap-start shrink-0 h-full text-white" style="width: 350px; min-width: 350px; padding: 20px; backdrop-filter: blur(12px); background: linear-gradient(90deg, rgba(0,0,0,0.65), rgba(0,0,0,0.35) 60%, rgba(0,0,0,0) 100%);">
+                            <div class="max-w-xs">
+                                <ul style="font-size: 20px; line-height: 28px; color: rgba(255,255,255,0.95);">
+                                    <li class="flex items-center" style="margin-bottom: 18px;">
+                                        <lucide-info :size="18" class="mr-10" style="margin-right: 10px;"></lucide-info>
+                                        <span style="font-weight: 600;">{{ selectedProject.name }}</span>
+                                    </li>
+                                    <li class="flex items-center" style="margin-bottom: 18px;">
+                                        <lucide-map-pin :size="18" class="mr-10" style="margin-right: 10px;"></lucide-map-pin>
+                                        <span style="font-weight: 500;">{{ selectedProject.location }}</span>
+                                    </li>
+                                    <li class="flex items-center" style="margin-bottom: 18px;">
+                                        <lucide-badge-check :size="18" class="mr-10" style="margin-right: 10px;"></lucide-badge-check>
+                                        <span>{{ selectedProject.clientName || 'N/A' }}</span>
+                                    </li>
+                                    <li class="flex items-center" style="margin-bottom: 18px;">
+                                        <lucide-folder :size="18" class="mr-10" style="margin-right: 10px;"></lucide-folder>
+                                        <span>{{ selectedProject.status || 'N/A' }}</span>
+                                    </li>
+                                    <li class="flex items-center" style="margin-bottom: 18px;">
+                                        <lucide-badge-info :size="18" class="mr-10" style="margin-right: 10px;"></lucide-badge-info>
+                                        <span>{{ selectedProject.type || 'N/A' }}</span>
+                                    </li>
+                                    <li class="flex items-center" style="margin-bottom: 0;">
+                                        <lucide-anchor :size="18" class="mr-10" style="margin-right: 10px;"></lucide-anchor>
+                                        <span>{{ selectedProject.area || 'N/A' }}</span>
+                                    </li>
+                                </ul>
+
+                                <div v-if="selectedProject.description" style="margin-top: 22px;">
+                                    <p style="font-size: 17px; line-height: 30px; color: rgba(255,255,255,0.92);">{{ selectedProject.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image slides: width equals image width, full height with 2px vertical margins -->
+                        <div v-for="(image, index) in selectedProject.photos" :key="`image-${index}`" class="carousel-slide snap-start shrink-0 h-full flex items-center justify-center p-0">
+                            <img :src="getCarouselImage(selectedProject, image)"
+                                 :alt="`${selectedProject.name} - Image ${index + 1}`"
+                                 class="object-contain shadow-2xl"
+                                 style="height: calc(100% - 4px); width: auto; margin-top: 2px; margin-bottom: 2px;"
+                                 @error="handleModalImageError">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Scroll Indicator -->
+                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-center">
+                    <div class="flex items-center space-x-2">
+                        <lucide-chevron-left :size="20"></lucide-chevron-left>
+                        <span class="text-sm">Scroll to view more images ({{ selectedProject.photos ? selectedProject.photos.length : 0 }} total)</span>
+                        <lucide-chevron-right :size="20"></lucide-chevron-right>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WhatsApp Float Button -->
+        <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
+           class="fixed bottom-4 right-4 z-50 p-3 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-colors duration-300"
+           aria-label="Contact us on WhatsApp">
+            <lucide-message-circle :size="24"></lucide-message-circle>
+        </a>
+    </div>
+    
+    <!-- Vue.js App Script -->
+    <script src="js/components/Navbar.js"></script>
+    <script src="js/components/Footer.js"></script>
+    <script src="js/projects.js"></script>
+</body>
+</html>

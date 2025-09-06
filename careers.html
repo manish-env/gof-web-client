@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - Genre of Design</title>
+    <meta name="description" content="Join our team and build amazing interior design projects">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Axios for API calls -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-josefin bg-white text-gray-900">
+    <div id="app">
+        <!-- Navigation Component -->
+        <navbar-component></navbar-component>
+        
+        <!-- Main Content -->
+        <main class="min-h-screen py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Join Our Team</h1>
+                    <p class="text-lg text-gray-600">Explore career opportunities in interior design</p>
+                </div>
+
+                <!-- Loading State -->
+                <div v-if="loading" class="flex justify-center">
+                    <div class="loading-spinner"></div>
+                </div>
+
+                <!-- Job Listings -->
+                <div v-else class="space-y-6">
+                    <div v-for="job in jobs" :key="job.id" class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ job.title }}</h3>
+                                <p class="text-gray-600 mb-4">{{ job.description }}</p>
+                                <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                                    <span v-if="job.experience" class="flex items-center">
+                                        <lucide-briefcase :size="16" class="mr-1"></lucide-briefcase>
+                                        {{ job.experience }}
+                                    </span>
+                                    <span v-if="job.qualification" class="flex items-center">
+                                        <lucide-graduation-cap :size="16" class="mr-1"></lucide-graduation-cap>
+                                        {{ job.qualification }}
+                                    </span>
+                                </div>
+                                <div v-if="job.skills" class="mt-3">
+                                    <span class="text-sm text-gray-500">Skills: {{ job.skills }}</span>
+                                </div>
+                            </div>
+                            <button @click="applyForJob(job)" 
+                                    class="ml-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-300">
+                                Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div v-if="!loading && jobs.length === 0" class="text-center py-12">
+                    <lucide-briefcase :size="64" class="text-gray-400 mx-auto mb-4"></lucide-briefcase>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No job openings at the moment</h3>
+                    <p class="text-gray-500">Check back later for new opportunities.</p>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer Component -->
+        <footer-component></footer-component>
+        
+        <!-- WhatsApp Float Button -->
+        <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
+           class="fixed bottom-4 right-4 z-50 p-3 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-colors duration-300"
+           aria-label="Contact us on WhatsApp">
+            <lucide-message-circle :size="24"></lucide-message-circle>
+        </a>
+    </div>
+    
+    <!-- Vue.js App Script -->
+    <script src="js/components/Navbar.js"></script>
+    <script src="js/components/Footer.js"></script>
+    <script src="js/careers.js"></script>
+</body>
+</html>
+
+
+
+

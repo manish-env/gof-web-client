@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Genre of Design</title>
+    <meta name="description" content="Get in touch with us for your interior design needs">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Axios for API calls -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-josefin bg-white text-gray-900">
+    <div id="app">
+        <!-- Navigation Component -->
+        <navbar-component></navbar-component>
+        
+        <!-- Main Content -->
+        <main class="min-h-screen py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
+                    <p class="text-lg text-gray-600">Get in touch for your interior design needs</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
+                    <div class="bg-white border border-gray-200 rounded-lg p-8">
+                        <h2 class="text-2xl font-semibold mb-6">Send us a Message</h2>
+                        <form @submit.prevent="submitForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                                    <input type="text" id="name" v-model="form.name" required
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                    <input type="email" id="email" v-model="form.email" required
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                                <input type="tel" id="phone" v-model="form.phone"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            </div>
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
+                                <textarea id="message" v-model="form.message" rows="5" required
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                            </div>
+                            <button type="submit" :disabled="loading"
+                                    class="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors duration-300">
+                                <span v-if="loading">Sending...</span>
+                                <span v-else>Send Message</span>
+                            </button>
+                        </form>
+                        
+                        <!-- Success/Error Messages -->
+                        <div v-if="successMessage" class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                            {{ successMessage }}
+                        </div>
+                        <div v-if="errorMessage" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                            {{ errorMessage }}
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="space-y-8">
+                        <div>
+                            <h2 class="text-2xl font-semibold mb-6">Get in Touch</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <lucide-phone :size="20" class="text-red-600 mr-3"></lucide-phone>
+                                    <span>+91 95998 01061</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <lucide-mail :size="20" class="text-red-600 mr-3"></lucide-mail>
+                                    <span>info@genreofdesign.com</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <lucide-map-pin :size="20" class="text-red-600 mr-3 mt-1"></lucide-map-pin>
+                                    <span>D-229, Ground Floor, Sarvodya Enclave, New Delhi, 110017, India</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-gray-600 hover:text-red-600 transition-colors duration-300">
+                                    <lucide-facebook :size="24"></lucide-facebook>
+                                </a>
+                                <a href="#" class="text-gray-600 hover:text-red-600 transition-colors duration-300">
+                                    <lucide-instagram :size="24"></lucide-instagram>
+                                </a>
+                                <a href="#" class="text-gray-600 hover:text-red-600 transition-colors duration-300">
+                                    <lucide-linkedin :size="24"></lucide-linkedin>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Map Placeholder -->
+                        <div class="bg-gray-200 rounded-lg h-64 flex items-center justify-center">
+                            <p class="text-gray-500">Map will be displayed here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer Component -->
+        <footer-component></footer-component>
+        
+        <!-- WhatsApp Float Button -->
+        <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
+           class="fixed bottom-4 right-4 z-50 p-3 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-colors duration-300"
+           aria-label="Contact us on WhatsApp">
+            <lucide-message-circle :size="24"></lucide-message-circle>
+        </a>
+    </div>
+    
+    <!-- Vue.js App Script -->
+    <script src="js/components/Navbar.js"></script>
+    <script src="js/components/Footer.js"></script>
+    <script src="js/contact.js"></script>
+</body>
+</html>
+
+
+
+
