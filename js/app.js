@@ -2,7 +2,9 @@
 const { createApp } = Vue;
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:3001/api'
+    : 'https://god-web-api.onrender.com/api';
 
 // API Service
 const apiService = {
