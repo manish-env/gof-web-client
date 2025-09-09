@@ -52,7 +52,8 @@ const app = createApp({
             currentPage: 0,
             hasMore: true,
             selectedProject: null,
-            carouselContainer: null
+            carouselContainer: null,
+            scrollObserver: null
         };
     },
     computed: {
@@ -70,6 +71,11 @@ const app = createApp({
         await this.loadInitialProjects();
         await this.loadProjectTypes();
         this.setupInfiniteScroll();
+    },
+    beforeUnmount() {
+        if (this.scrollObserver) {
+            this.scrollObserver.disconnect();
+        }
     },
     methods: {
         async loadInitialProjects() {
@@ -116,7 +122,10 @@ const app = createApp({
         },
 
         async loadMoreProjects() {
+            console.log('loadMoreProjects called - loadingMore:', this.loadingMore, 'hasMore:', this.hasMore);
+            
             if (this.loadingMore || !this.hasMore) {
+                console.log('Exiting loadMoreProjects - loadingMore:', this.loadingMore, 'hasMore:', this.hasMore);
                 return;
             }
             
@@ -150,9 +159,10 @@ const app = createApp({
                     console.log('Total projects now:', this.projects.length);
                     console.log('Has more projects:', this.hasMore);
                     
-                    // Setup lazy loading for new projects
+                    // Setup lazy loading for new projects and re-setup infinite scroll
                     this.$nextTick(() => {
                         this.setupLazyLoading();
+                        this.setupInfiniteScroll();
                     });
                 } else {
                     this.hasMore = false;
@@ -205,24 +215,31 @@ const app = createApp({
         },
 
         setupInfiniteScroll() {
-            const observer = new IntersectionObserver((entries) => {
+            // Destroy existing observer if any
+            if (this.scrollObserver) {
+                this.scrollObserver.disconnect();
+            }
+
+            this.scrollObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting && this.hasMore && !this.loadingMore) {
-                        console.log('Load more trigger detected');
+                        console.log('Load more trigger detected - hasMore:', this.hasMore, 'loadingMore:', this.loadingMore);
                         this.loadMoreProjects();
                     }
                 });
             }, {
-                rootMargin: '100px 0px',
+                rootMargin: '50px 0px',
                 threshold: 0.1
             });
 
-            // Observe the loading indicator or last project
+            // Observe the trigger element
             this.$nextTick(() => {
-                const trigger = document.querySelector('.load-more-trigger') || 
-                              document.querySelector('.project-card:last-child');
+                const trigger = document.querySelector('.load-more-trigger');
                 if (trigger) {
-                    observer.observe(trigger);
+                    console.log('Observing trigger element for infinite scroll');
+                    this.scrollObserver.observe(trigger);
+                } else {
+                    console.log('No trigger element found for infinite scroll');
                 }
             });
         },

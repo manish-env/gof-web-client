@@ -93,6 +93,8 @@
                     </div>
                 </div>
 
+                <!-- Infinite Scroll Trigger -->
+                <div v-if="hasMore && !loadingMore" class="load-more-trigger" style="height: 20px; margin: 20px 0;"></div>
 
                 <!-- End of Results -->
                 <div v-if="!hasMore && filteredProjects.length > 0" class="text-center py-8">
