@@ -20,6 +20,9 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="font-josefin bg-white text-gray-900">
     <div id="app">
@@ -27,114 +30,106 @@
         <navbar-component></navbar-component>
         
         <!-- Main Content -->
-        <main class="min-h-screen py-8">
+        <main class="flex-1 py-6 md:py-16 w-full">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Hero Section -->
-                <section class="text-center mb-16">
-                    <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                        About Genre of Design
+                <section class="w-full">
+                    <div class="space-y-6">
+                        <div class="">
+                            <div class="flex flex-col justify-center space-y-4">
+                                <div class="space-y-2">
+                                    <h1 class="text-4xl md:text-9xl text-red-600 font-semibold tracking-normal sm:text-5xl xl:text-8xl/none">
+                                        Genre Of Design
                     </h1>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                        We are passionate interior designers dedicated to creating beautiful, functional spaces that reflect your unique style and enhance your lifestyle.
-                    </p>
-                </section>
+                                    <p class="max-w-[700px] text-neutral-500 md:text-xl leading-7 tracking-normal dark:text-neutral-400">
+                                        Genre Of Design is a multi-disciplinary platform for
+                                        Architecture, Urbanism, and Landscape, creating
+                                        possibilities for life through diverse expertise in
+                                        Architecture, Structures, Hospitality, Healthcare, Master
+                                        Planning, Urban Design, Landscape, Interior, and Product.
+                                    </p>
+                                    <p class="text-right">Since 2010</p>
+                                </div>
+                            </div>
+                        </div>
 
-                <!-- Story Section -->
-                <section class="mb-16">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
-                            <p class="text-lg text-gray-600 mb-6">
-                                Founded with a vision to transform spaces into extraordinary experiences, Genre of Design has been at the forefront of interior design innovation. Our journey began with a simple belief: every space has the potential to tell a story.
-                            </p>
-                            <p class="text-lg text-gray-600 mb-6">
-                                Over the years, we've had the privilege of working with clients from diverse backgrounds, each project teaching us something new about the art and science of interior design. From residential homes to commercial spaces, we approach every project with the same level of dedication and creativity.
-                            </p>
-                            <div class="flex items-center space-x-8">
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-red-600">17+</div>
-                                    <div class="text-gray-600">Years Experience</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-red-600">180+</div>
-                                    <div class="text-gray-600">Projects Completed</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-red-600">6M+</div>
-                                    <div class="text-gray-600">Sq Ft Built</div>
-                                </div>
+                        <!-- Background Image Section -->
+                        <div class="relative h-96 md:h-[500px] w-full rounded-lg overflow-hidden"
+                             style="background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;">
+                            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+                            <div class="absolute bottom-6 left-6 text-white">
+                                <h2 class="text-2xl md:text-4xl font-bold mb-2">Creating Possibilities for Life</h2>
+                                <p class="text-lg">Through innovative design and thoughtful architecture</p>
                             </div>
-                        </div>
-                        <div class="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
-                            <p class="text-gray-500">Team Photo</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Philosophy Section -->
-                <section class="mb-16">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Philosophy</h2>
-                        <p class="text-lg text-gray-600">The principles that guide our work</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="text-center p-6">
-                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <lucide-heart :size="32" class="text-red-600"></lucide-heart>
-                            </div>
-                            <h3 class="text-xl font-semibold mb-3">Passion</h3>
-                            <p class="text-gray-600">We love what we do and it shows in every project we undertake.</p>
-                        </div>
-                        <div class="text-center p-6">
-                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <lucide-lightbulb :size="32" class="text-red-600"></lucide-lightbulb>
-                            </div>
-                            <h3 class="text-xl font-semibold mb-3">Innovation</h3>
-                            <p class="text-gray-600">We constantly explore new ideas and techniques to stay ahead of trends.</p>
-                        </div>
-                        <div class="text-center p-6">
-                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <lucide-users :size="32" class="text-red-600"></lucide-users>
-                            </div>
-                            <h3 class="text-xl font-semibold mb-3">Collaboration</h3>
-                            <p class="text-gray-600">We work closely with our clients to bring their vision to life.</p>
                         </div>
                     </div>
                 </section>
 
                 <!-- Services Section -->
-                <section class="mb-16">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">What We Do</h2>
-                        <p class="text-lg text-gray-600">Comprehensive interior design solutions</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="border border-gray-200 rounded-lg p-6">
-                            <h3 class="text-xl font-semibold mb-3">Residential Design</h3>
-                            <p class="text-gray-600">Transform your home into a beautiful, functional living space that reflects your personality and lifestyle.</p>
-                        </div>
-                        <div class="border border-gray-200 rounded-lg p-6">
-                            <h3 class="text-xl font-semibold mb-3">Commercial Design</h3>
-                            <p class="text-gray-600">Create inspiring work environments that boost productivity and leave a lasting impression on clients and employees.</p>
-                        </div>
-                        <div class="border border-gray-200 rounded-lg p-6">
-                            <h3 class="text-xl font-semibold mb-3">Space Planning</h3>
-                            <p class="text-gray-600">Optimize your space for maximum functionality and aesthetic appeal through thoughtful layout design.</p>
-                        </div>
-                        <div class="border border-gray-200 rounded-lg p-6">
-                            <h3 class="text-xl font-semibold mb-3">Consultation</h3>
-                            <p class="text-gray-600">Get expert advice on design decisions, color schemes, furniture selection, and space optimization.</p>
+                <section class="py-12">
+                    <div class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="space-y-4">
+                                <h3 class="text-2xl font-bold text-gray-900">Architecture</h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    We in genre of design strongly believe in blurring the typological boundaries of architecture and creating an architecture which is not stamped as 'something' based on a functionalist approach but evolves 'for' and 'from' life.
+                                </p>
+                            </div>
+                            <div class="space-y-4">
+                                <h3 class="text-2xl font-bold text-gray-900">Interior Designing</h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    We extend our philosophy into our approach to Interior Design, where spaces are conceived as fluid environments that seamlessly integrate with the architecture, enriching the human experience through thoughtful spatial compositions and material selections.
+                                </p>
+                            </div>
+                            <div class="space-y-4">
+                                <h3 class="text-2xl font-bold text-gray-900">Urban Designing</h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    In Urban Design, our focus is on fostering vibrant, inclusive communities by reimagining urban landscapes as interconnected ecosystems that prioritize sustainability and social well-being.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </section>
 
+                <!-- Spotlight Section -->
+                <section class="flex flex-col gap-10">
+                    <div class="flex flex-col md:flex-row text-xl py-4 justify-center items-center">
+                        <div class="font-medium text-6xl text-center xl:text-right md:text-[110px] text-red-600">
+                            Spotlight
+                        </div>
+                        <div class="w-full text-center sm:text-right md:mt-0 mt-12">
+                            Some of our best works.
+                        </div>
+                    </div>
+                    <div>
+                        <spotlight-carousel></spotlight-carousel>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <section class="flex flex-col gap-10 py-12">
+                    <div class="flex flex-col-reverse md:flex-row text-xl py-4 justify-center items-center">
+                        <div class="w-full text-center md:text-left sm:text-left md:mt-0 mt-12">
+                            Magazines that appreciated Genre of Design.
+                        </div>
+                        <div class="font-medium text-6xl text-center xl:text-right md:text-[110px] text-red-600">
+                            Features
+                        </div>
+                    </div>
+                    <features-section></features-section>
+                </section>
+
+                <!-- Testimonials Section -->
+                <testimonials-section></testimonials-section>
+
                 <!-- CTA Section -->
-                <section class="text-center bg-gray-50 rounded-lg p-12">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Transform Your Space?</h2>
-                    <p class="text-lg text-gray-600 mb-8">Let's work together to create something extraordinary.</p>
-                    <a href="contact.html" class="btn-primary">
-                        Get Started Today
-                    </a>
+                <section class="py-12 md:py-24">
+                    <div class="flex flex-col items-center justify-center">
+                        <h2 class="mb-6 text-3xl font-bold md:text-7xl md:text-center">
+                            Let's shape spaces and create inspiring environments{" "}
+                            <span class="text-red-600">Let's Talk</span>
+                        </h2>
+                    </div>
                 </section>
             </div>
         </main>
