@@ -57,16 +57,22 @@
                     <div v-for="project in filteredProjects" :key="project.uuid1" class="masonry-item">
                         <div class="project-card cursor-pointer" @click="viewProject(project)">
                             <div class="project-image-container">
-                                <!-- Project image -->
+                                <!-- Skeleton loading -->
+                                <div v-if="!project.isLazyLoaded" class="skeleton-image"></div>
+
+                                <!-- Lazy loaded image -->
                                 <img 
                                     :data-project-id="project.uuid1"
-                                    :src="getProjectImage(project)"
+                                    :src="project.imageLoaded ? getProjectImage(project) : ''"
                                     :alt="project.name" 
-                                    class="project-image"
+                                    class="project-image lazy-image"
                                     :class="{ 'loaded': project.imageLoaded, 'error': project.imageError }"
                                     @load="handleImageLoad"
                                     @error="handleImageError"
                                 >
+
+                                <!-- Loading spinner while fetching -->
+                                <div v-if="project.isLazyLoaded && !project.imageLoaded && !project.imageError" class="loading-spinner"></div>
                                 
                                 <!-- Error state -->
                                 <div v-if="project.imageError" class="image-placeholder">
