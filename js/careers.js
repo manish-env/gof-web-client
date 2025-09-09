@@ -2,7 +2,7 @@
 const { createApp } = Vue;
 
 // API Configuration
-const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const API_BASE_URL = 'https://god-public-api.restless-mountain-f968.workers.dev/api';
 
 // API Service
 const apiService = {
@@ -84,7 +84,7 @@ const app = createApp({
         
         // Test if basic functionality works
         try {
-            await this.loadJobs();
+        await this.loadJobs();
         } catch (error) {
             console.error('Error in mounted:', error);
             // Load sample jobs as fallback
@@ -300,7 +300,7 @@ app.component('logo-component', Logo);
 // Mount the app
 console.log('About to mount Vue app...');
 try {
-    app.mount('#app');
+app.mount('#app');
     console.log('Vue app mounted successfully!');
 } catch (error) {
     console.error('Failed to mount Vue app:', error);
