@@ -77,6 +77,7 @@ const app = createApp({
                 this.loading = true;
                 this.error = null;
                 
+                console.log('Loading initial projects...');
                 const response = await apiService.getProjects({ limit: 12, offset: 0 });
                 
                 console.log('Initial API Response:', response);
@@ -94,13 +95,16 @@ const app = createApp({
                     this.hasMore = response.pagination?.hasMore || false;
                     
                     console.log('Initial projects loaded:', this.projects.length);
+                    console.log('Projects data:', this.projects);
                     console.log('Has more projects:', this.hasMore);
+                    console.log('Filtered projects count:', this.filteredProjects.length);
                     
                     // Setup lazy loading for initial projects
                     this.$nextTick(() => {
                         this.setupLazyLoading();
                     });
                 } else {
+                    console.error('API returned success: false', response);
                     this.error = 'Failed to load projects';
                 }
             } catch (error) {
@@ -407,6 +411,26 @@ const app = createApp({
             }
             
             return 'https://via.placeholder.com/800x600/f3f4f6/9ca3af?text=No+Image';
+        },
+
+        viewProject(project) {
+            this.openProjectModal(project);
+        },
+
+        closeModal() {
+            this.closeProjectModal();
+        },
+
+        getCarouselImage(project, imagePath) {
+            return this.getProjectImageUrl(project, imagePath);
+        },
+
+        handleModalImageError(event) {
+            event.target.src = 'https://via.placeholder.com/800x600/f3f4f6/9ca3af?text=Image+Not+Found';
+        },
+
+        handleCarouselScroll(event) {
+            // Handle carousel scroll if needed
         }
     }
 });

@@ -54,7 +54,7 @@
 
                 <!-- Projects Grid with Infinite Scroll -->
                 <div v-else id="projects-container" class="masonry-grid">
-                    <div v-for="project in displayedProjects" :key="project.uuid1" class="masonry-item">
+                    <div v-for="project in filteredProjects" :key="project.uuid1" class="masonry-item">
                         <div class="project-card cursor-pointer" @click="viewProject(project)">
                             <div class="project-image-container">
                                 <!-- Project image -->
@@ -95,7 +95,7 @@
 
 
                 <!-- End of Results -->
-                <div v-if="!hasMore && displayedProjects.length > 0" class="text-center py-8">
+                <div v-if="!hasMore && filteredProjects.length > 0" class="text-center py-8">
                     <p class="text-gray-500">You've reached the end of our projects!</p>
                 </div>
 
