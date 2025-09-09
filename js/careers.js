@@ -32,6 +32,7 @@ const apiService = {
     async getJobs() {
         return this.request('/jobs');
     },
+    nd
 
     async testJobsAPI() {
         return this.request('/jobs/test');
@@ -241,28 +242,26 @@ const app = createApp({
                 
                 console.log(`Uploading ${type} file:`, key);
                 
-                // Get presigned URL
-                const presignedResponse = await apiService.getPresignedUrls([key]);
-                console.log('Presigned URL response:', presignedResponse);
+                // Upload file directly through worker
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('key', key);
                 
-                if (!presignedResponse.success || !presignedResponse.urls || presignedResponse.urls.length === 0) {
-                    throw new Error('Failed to get presigned URL');
-                }
-                
-                const presignedUrl = presignedResponse.urls[0].url;
-                console.log('Presigned URL:', presignedUrl);
-                
-                // Upload file to R2
-                const uploadResponse = await fetch(presignedUrl, {
-                    method: 'PUT',
-                    body: file,
-                    headers: {
-                        'Content-Type': file.type
-                    }
+                const uploadResponse = await fetch(`${API_BASE_URL}/jobs/upload`, {
+                    method: 'POST',
+                    body: formData
                 });
                 
                 if (!uploadResponse.ok) {
-                    throw new Error(`Upload failed: ${uploadResponse.statusText}`);
+                    const errorText = await uploadResponse.text();
+                    throw new Error(`Upload failed: ${uploadResponse.statusText} - ${errorText}`);
+                }
+                
+                const result = await uploadResponse.json();
+                console.log('Upload response:', result);
+                
+                if (!result.success) {
+                    throw new Error(result.message || 'Upload failed');
                 }
                 
                 console.log(`${type} file uploaded successfully:`, key);
