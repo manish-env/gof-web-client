@@ -2,9 +2,7 @@
 const { createApp } = Vue;
 
 // API Configuration
-const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    ? 'http://localhost:3001/api'
-    : 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const API_BASE_URL =  'https://god-worker.restless-mountain-f968.workers.dev/api';
 
 // API Service
 const apiService = {
@@ -26,7 +24,10 @@ const apiService = {
     },
 
     async getProjects(params = {}) {
-        const queryString = new URLSearchParams(params).toString();
+        const cleanParams = Object.fromEntries(
+            Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== '' )
+        );
+        const queryString = new URLSearchParams(cleanParams).toString();
         return this.request(`/projects${queryString ? `?${queryString}` : ''}`);
     },
 
@@ -84,21 +85,24 @@ const app = createApp({
                 this.error = null;
                 
                 console.log('Loading initial projects...');
-                const response = await apiService.getProjects({ limit: 12, offset: 0 });
-                
+                const response = await apiService.getProjects({ limit: 12, offset: 0, type: this.selectedCategory || undefined });
+
                 console.log('Initial API Response:', response);
-                
-                if (response.success) {
-                    this.projects = response.data.map(project => ({
+
+                const payload = Array.isArray(response) ? response : (response && response.data) ? response.data : [];
+                if (Array.isArray(payload)) {
+                    this.projects = payload.map(project => ({
                         ...project,
                         imageLoaded: false,
                         imageError: false,
                         isLazyLoaded: false,
                         isInViewport: false
                     }));
-                    
+
                     this.currentPage = 0;
-                    this.hasMore = response.pagination?.hasMore || false;
+                    this.hasMore = (response && response.pagination && typeof response.pagination.hasMore !== 'undefined')
+                        ? response.pagination.hasMore
+                        : payload.length === 12;
                     
                     console.log('Initial projects loaded:', this.projects.length);
                     console.log('Projects data:', this.projects);
@@ -110,7 +114,7 @@ const app = createApp({
                         this.setupLazyLoading();
                     });
                 } else {
-                    console.error('API returned success: false', response);
+                    console.error('Unexpected API response shape', response);
                     this.error = 'Failed to load projects';
                 }
             } catch (error) {
@@ -141,9 +145,10 @@ const app = createApp({
                     offset: offset,
                     type: this.selectedCategory || undefined
                 });
-                
-                if (response.success && response.data.length > 0) {
-                    const newProjects = response.data.map(project => ({
+
+                const payload = Array.isArray(response) ? response : (response && response.data) ? response.data : [];
+                if (Array.isArray(payload) && payload.length > 0) {
+                    const newProjects = payload.map(project => ({
                         ...project,
                         imageLoaded: false,
                         imageError: false,
@@ -153,7 +158,9 @@ const app = createApp({
                     
                     this.projects.push(...newProjects);
                     this.currentPage = nextPage;
-                    this.hasMore = response.pagination?.hasMore || false;
+                    this.hasMore = (response && response.pagination && typeof response.pagination.hasMore !== 'undefined')
+                        ? response.pagination.hasMore
+                        : payload.length === 12;
                     
                     console.log('Loaded more projects:', newProjects.length);
                     console.log('Total projects now:', this.projects.length);
@@ -186,8 +193,9 @@ const app = createApp({
         async loadProjectTypes() {
             try {
                 const response = await apiService.getProjectTypes();
-                if (response.success) {
-                    this.projectTypes = response.data;
+                const payload = Array.isArray(response) ? response : (response && response.data) ? response.data : [];
+                if (Array.isArray(payload)) {
+                    this.projectTypes = payload;
                 }
             } catch (error) {
                 console.error('Failed to load project types:', error);

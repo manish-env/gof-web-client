@@ -5,9 +5,7 @@ function getQueryParam(key) {
     return params.get(key);
 }
 
-const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    ? 'http://localhost:3001/api'
-    : 'https://https-github-com-manish-env-god-web.vercel.app/api';
+const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
 const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'http://localhost:4001'
     : 'https://https-github-com-manish-env-god-web.vercel.app';
