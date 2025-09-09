@@ -69,25 +69,33 @@
     transform-origin: bottom left;
 }
 
-/* Projects Grid - Equal sized tiles */
+/* Projects Grid - Masonry Layout */
 .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 6px;
+    column-count: 2;
+    column-gap: 6px;
+    column-fill: balance;
     padding: 0;
 }
 
 @media (min-width: 640px) {
     .projects-grid {
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 6px;
+        column-count: 2;
+        column-gap: 6px;
     }
 }
 
 @media (min-width: 1024px) {
     .projects-grid {
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 6px;
+        column-count: 3;
+        column-gap: 6px;
+    }
+}
+
+/* Keep 3 columns even on larger screens */
+@media (min-width: 1280px) {
+    .projects-grid {
+        column-count: 3;
+        column-gap: 6px;
     }
 }
 
@@ -97,19 +105,24 @@
     height: 280px;
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: height 0.3s ease;
     opacity: 0;
     animation: fadeInUp 0.6s ease-out forwards;
+    break-inside: avoid;
+    margin-bottom: 6px;
+    /* Ensure items maintain order */
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
 }
 
 .project-tile:hover {
     transform: translateY(-2px);
 }
 
-/* When image is loaded, tile adjusts to image height */
+/* When image is loaded, tile adjusts to actual image height */
 .project-tile.has-image {
     height: auto;
-    min-height: 280px;
+    /* Remove min-height constraint to allow smaller images */
 }
 
 .tile-content {
@@ -173,16 +186,21 @@
     right: 1rem;
 }
 
-/* Tile with Background Image */
+/* Tile with Image */
 .tile-with-image {
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     position: relative;
     display: flex;
     align-items: flex-end;
+    overflow: hidden;
+}
+
+.tile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     animation: imageFadeIn 0.5s ease-in-out;
 }
 
@@ -568,16 +586,16 @@
     }
     
     .projects-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 6px;
+        column-count: 2;
+        column-gap: 6px;
     }
     
     .project-tile {
-        min-height: 240px;
+        height: 240px;
     }
     
     .project-tile.has-image {
-        min-height: 240px;
+        height: auto;
     }
     
     .project-title {

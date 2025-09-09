@@ -49,6 +49,7 @@ const app = createApp({
             selectedCategory: '',
             loading: false,
             loadingMore: false,
+            loadingImages: false,
             error: null,
             currentPage: 0,
             hasMore: true,
@@ -115,20 +116,10 @@ const app = createApp({
                     console.log('Has more projects:', this.hasMore);
                     console.log('Filtered projects count:', this.filteredProjects.length);
                     
-                    // Load all images immediately
+                    // Setup projects for display
                     this.$nextTick(() => {
-                        this.loadAllImages();
+                        this.setupProjectsForDisplay();
                         this.setupLazyLoading();
-                        
-                        // Debug project states
-                        setTimeout(() => {
-                            this.debugProjectStates();
-                        }, 2000);
-                        
-                        // Retry failed images after 3 seconds
-                        setTimeout(() => {
-                            this.retryFailedImages();
-                        }, 3000);
                     });
                 } else {
                     console.error('Unexpected API response shape', response);
@@ -143,7 +134,7 @@ const app = createApp({
         },
 
         async loadMoreProjects() {
-            console.log('loadMoreProjects called - loadingMore:', this.loadingMore, 'hasMore:', this.hasMore);
+            console.log('loadMoreProjects called - loadingMore:', this.loadingMore, 'hasMore:', this.hasMore, 'loadingImages:', this.loadingImages);
             
             if (this.loadingMore || !this.hasMore) {
                 console.log('Exiting loadMoreProjects - loadingMore:', this.loadingMore, 'hasMore:', this.hasMore);
@@ -183,9 +174,9 @@ const app = createApp({
                     console.log('Total projects now:', this.projects.length);
                     console.log('Has more projects:', this.hasMore);
                     
-                    // Load images for new projects and re-setup infinite scroll
+                    // Setup new projects for display and re-setup infinite scroll
                     this.$nextTick(() => {
-                        this.loadAllImages();
+                        this.setupProjectsForDisplay();
                         this.setupLazyLoading();
                         this.setupInfiniteScroll();
                     });
@@ -308,23 +299,30 @@ const app = createApp({
 
         handleImageError(event) {
             console.log('Image error for project:', event.target.src);
-            // Set a fallback image
-            event.target.src = 'https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=Image+Not+Found';
             
             // Find the project and mark image as error
             const project = this.projects.find(p => this.getProjectImage(p) === event.target.src);
             if (project) {
                 project.imageError = true;
-                project.imageLoaded = true;
+                project.imageLoaded = false;
+                console.log('Image failed to load for project:', project.name);
             }
         },
 
         handleImageLoad(event) {
             console.log('Image loaded successfully:', event.target.src);
-            // Find the project and mark image as loaded
+            // Find the project and update dimensions
             const project = this.projects.find(p => this.getProjectImage(p) === event.target.src);
             if (project) {
-                project.imageLoaded = true;
+                project.imageError = false;
+                project.imageWidth = event.target.naturalWidth;
+                project.imageHeight = event.target.naturalHeight;
+                console.log('Image loaded for project:', project.name, 'Dimensions:', event.target.naturalWidth, 'x', event.target.naturalHeight);
+                
+                // Update tile height based on actual image dimensions
+                this.$nextTick(() => {
+                    this.updateTileHeight(project);
+                });
             }
         },
 
@@ -363,7 +361,7 @@ const app = createApp({
                 });
             } else {
                 // Fallback for browsers without IntersectionObserver
-                this.loadAllImages();
+            this.loadAllImages();
             }
         },
 
@@ -400,50 +398,16 @@ const app = createApp({
             }
         },
 
-        loadAllImages() {
-            // Load all images immediately
+        setupProjectsForDisplay() {
+            // Setup all projects for immediate display
             this.projects.forEach(project => {
-                if (!project.isLazyLoaded) {
-                    project.isLazyLoaded = true;
-                    const imageUrl = this.getProjectImage(project);
-                    
-                    // Always try to load the image, even if it's a placeholder
-                    const img = new Image();
-                    let imageTimeout;
-                    
-                    img.onload = () => {
-                        clearTimeout(imageTimeout);
-                        project.imageLoaded = true;
-                        project.imageError = false;
-                        project.imageWidth = img.naturalWidth;
-                        project.imageHeight = img.naturalHeight;
-                        console.log('Image loaded for project:', project.name, 'Dimensions:', img.naturalWidth, 'x', img.naturalHeight);
-                        
-                        // Update tile height based on image aspect ratio
-                        this.$nextTick(() => {
-                            this.updateTileHeight(project);
-                        });
-                    };
-                    
-                    img.onerror = () => {
-                        clearTimeout(imageTimeout);
-                        project.imageError = true;
-                        project.imageLoaded = false;
-                        console.log('Image failed to load for project:', project.name);
-                    };
-                    
-                    // Set a timeout to force error state if image doesn't load within 5 seconds
-                    imageTimeout = setTimeout(() => {
-                        if (!project.imageLoaded) {
-                            project.imageError = true;
-                            project.imageLoaded = false;
-                            console.log('Image timeout for project:', project.name);
-                        }
-                    }, 5000);
-                    
-                    img.src = imageUrl;
-                }
+                project.isLazyLoaded = true;
+                project.imageLoaded = true; // Set to true immediately
+                project.imageError = false;
+                console.log('Project ready for display:', project.name);
             });
+            
+            console.log('All projects ready for display');
         },
 
         openProjectModal(project) {
@@ -521,11 +485,34 @@ const app = createApp({
                 // Calculate new height based on aspect ratio
                 const newHeight = tileWidth * aspectRatio;
                 
-                // Apply the new height
+                // Apply the new height (no minimum constraint)
                 tile.style.height = `${newHeight}px`;
                 tile.classList.add('has-image');
                 
-                console.log('Updated tile height for', project.name, 'to', newHeight, 'px');
+                console.log('Updated tile height for', project.name, 'to', newHeight, 'px (aspect ratio:', aspectRatio.toFixed(2), ')');
+                
+                // Force masonry reflow
+                this.$nextTick(() => {
+                    this.triggerMasonryReflow();
+                });
+            }
+        },
+
+        triggerMasonryReflow() {
+            // Force a reflow of the masonry grid
+            const container = document.getElementById('projects-container');
+            if (container) {
+                // Force reflow by reading a layout property
+                container.offsetHeight;
+                
+                // Add a small delay to ensure smooth animation
+                setTimeout(() => {
+                    // Trigger any CSS transitions
+                    container.style.transform = 'translateZ(0)';
+                    requestAnimationFrame(() => {
+                        container.style.transform = '';
+                    });
+                }, 10);
             }
         },
 
@@ -540,6 +527,7 @@ const app = createApp({
                 }
             });
         },
+
 
         debugProjectStates() {
             console.log('=== Project States Debug ===');

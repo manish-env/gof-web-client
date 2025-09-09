@@ -63,6 +63,23 @@
                                 <div class="loading-text">Loading...</div>
                             </div>
 
+                            <!-- Image when loaded -->
+                            <div v-else-if="project.imageLoaded" class="tile-with-image">
+                                <img 
+                                    :src="getProjectImage(project)"
+                                    :alt="project.name"
+                                    class="tile-image"
+                                    @load="handleImageLoad"
+                                    @error="handleImageError"
+                                />
+                                <div class="tile-overlay">
+                                    <div class="tile-info">
+                                        <h3 class="project-title">{{ project.name }}</h3>
+                                        <p class="project-location">{{ project.location }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Placeholder when image failed to load -->
                             <div v-else-if="project.imageError" class="tile-placeholder">
                                 <div class="placeholder-icon">
@@ -71,16 +88,6 @@
                                 <div class="placeholder-text">
                                     <h3 class="project-title">{{ project.name }}</h3>
                                     <p class="project-location">{{ project.location }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Tile with background image when loaded -->
-                            <div v-else-if="project.imageLoaded" class="tile-with-image" :style="{ backgroundImage: `url(${getProjectImage(project)})` }">
-                                <div class="tile-overlay">
-                                    <div class="tile-info">
-                                        <h3 class="project-title">{{ project.name }}</h3>
-                                        <p class="project-location">{{ project.location }}</p>
-                                    </div>
                                 </div>
                             </div>
 
@@ -188,7 +195,6 @@
                 <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-center">
                     <div class="flex items-center space-x-2">
                         <lucide-chevron-left :size="20"></lucide-chevron-left>
-                        <span class="text-sm">Scroll to view more images ({{ selectedProject.photos ? selectedProject.photos.length : 0 }} total)</span>
                         <lucide-chevron-right :size="20"></lucide-chevron-right>
                     </div>
                 </div>
