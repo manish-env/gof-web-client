@@ -30,43 +30,171 @@
         <navbar-component></navbar-component>
         
         <!-- Main Content -->
-        <main class="min-h-screen py-8">
+        <main class="min-h-screen">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Join Our Team</h1>
-                    <p class="text-lg text-gray-600">Explore career opportunities in interior design</p>
+                <div class="flex-1 py-6 md:py-16">
+                    <section class="w-full">
+                        <div class="space-y-6">
+                            <div class="flex flex-col justify-center space-y-4">
+                                <div class="space-y-2">
+                                    <h1 class="text-4xl md:text-9xl text-red-600 font-semibold tracking-normal sm:text-5xl xl:text-8xl/none">
+                                        Join the team
+                                    </h1>
+                                    <p class="max-w-[600px] text-neutral-500 md:text-xl leading-7 tracking-normal dark:text-neutral-400">
+                                        Our team is looking for the brightest, most creative and
+                                        innovative minds in the design industry that have a passion
+                                        for problem solving, conceptualizing & executing an idea.
+                                    </p>
+                                </div>
                 </div>
 
+                            <div class="flex justify-end items-end space-y-4">
+                                <h2 class="text-4xl md:text-9xl text-red-600 font-semibold tracking-normal sm:text-5xl xl:text-8xl/none">
+                                    Available Roles
+                                </h2>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="w-full">
+                        <div class="">
                 <!-- Loading State -->
-                <div v-if="loading" class="flex justify-center">
+                            <div v-if="loading" class="flex justify-center py-12">
                     <div class="loading-spinner"></div>
                 </div>
 
-                <!-- Job Listings -->
-                <div v-else class="space-y-6">
-                    <div v-for="job in jobs" :key="job.id" class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ job.title }}</h3>
-                                <p class="text-gray-600 mb-4">{{ job.description }}</p>
-                                <div class="flex flex-wrap gap-4 text-sm text-gray-500">
-                                    <span v-if="job.experience" class="flex items-center">
-                                        <lucide-briefcase :size="16" class="mr-1"></lucide-briefcase>
-                                        {{ job.experience }}
-                                    </span>
-                                    <span v-if="job.qualification" class="flex items-center">
-                                        <lucide-graduation-cap :size="16" class="mr-1"></lucide-graduation-cap>
-                                        {{ job.qualification }}
-                                    </span>
+                            <!-- Accordion for Job Listings -->
+                            <div v-else class="accordion-container">
+                                <div v-for="(job, idx) in jobs" :key="job.id" class="accordion-item py-6">
+                                    <div class="accordion-trigger" @click="toggleAccordion(job.id)">
+                                        <div class="accordion-trigger-content">
+                                            <div class="accordion-number">
+                                                0{{ idx + 1 }}
+                                            </div>
+                                            <div class="accordion-title">
+                                                {{ job.title }}
+                                            </div>
+                                            <div class="accordion-icon" :class="{ 'rotated': job.isOpen }">
+                                                <lucide-chevron-down :size="24"></lucide-chevron-down>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-content" :class="{ 'open': job.isOpen }">
+                                        <div class="accordion-content-inner">
+                                            <div class="space-y-4">
+                                                <div>
+                                                    <p class="text-red-500 font-semibold">
+                                                        Job Description
+                                                    </p>
+                                                    <p>{{ job.description }}</p>
+                                                </div>
+                                                <div class="grid grid-cols-12 grid-rows-1 gap-3">
+                                                    <div class="col-span-4">
+                                                        <p class="text-red-500 font-semibold">
+                                                            Qualification
+                                                        </p>
+                                                        <p>{{ job.qualification }}</p>
                                 </div>
-                                <div v-if="job.skills" class="mt-3">
-                                    <span class="text-sm text-gray-500">Skills: {{ job.skills }}</span>
+                                                    <div class="col-span-8">
+                                                        <p class="text-red-500 font-semibold">
+                                                            Experience
+                                                        </p>
+                                                        <p>{{ job.experience }}</p>
                                 </div>
                             </div>
-                            <button @click="applyForJob(job)" 
-                                    class="ml-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-300">
-                                Apply Now
+                                                <div>
+                                                    <p class="text-red-500 font-semibold">Skills</p>
+                                                    <p>{{ job.skills }}</p>
+                                                </div>
+
+                                                <!-- Application Form -->
+                                                <form @submit.prevent="submitApplication(job)" class="max-w-2xl flex flex-col gap-y-3 px-1">
+                                                    <div class="form-group">
+                                                        <label for="name" class="form-label">Name *</label>
+                                                        <input type="text" id="name" v-model="applicationForm.name" required 
+                                                               class="form-input" placeholder="Enter your full name">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="email" class="form-label">Email *</label>
+                                                        <input type="email" id="email" v-model="applicationForm.email" required 
+                                                               class="form-input" placeholder="Enter your email">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="phoneNumber" class="form-label">Phone Number *</label>
+                                                        <input type="tel" id="phoneNumber" v-model="applicationForm.phoneNumber" required 
+                                                               class="form-input" placeholder="Enter your phone number">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="expectedSalary" class="form-label">Expected Salary *</label>
+                                                        <input type="text" id="expectedSalary" v-model="applicationForm.expectedSalary" required 
+                                                               class="form-input" placeholder="Enter expected salary">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="yearsOfExperience" class="form-label">Years of Experience *</label>
+                                                        <select id="yearsOfExperience" v-model="applicationForm.yearsOfExperience" required class="form-input">
+                                                            <option value="">Select experience level</option>
+                                                            <option value="0-1 Years">0-1 Years</option>
+                                                            <option value="1-2 Years">1-2 Years</option>
+                                                            <option value="2-3 Years">2-3 Years</option>
+                                                            <option value="3-4 Years">3-4 Years</option>
+                                                            <option value="4-5 Years">4-5 Years</option>
+                                                            <option value="5+ Years">5+ Years</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="graduation" class="form-label">Graduation *</label>
+                                                        <input type="text" id="graduation" v-model="applicationForm.graduation" required 
+                                                               class="form-input" placeholder="Enter your graduation details">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="marksInTenth" class="form-label">10th Marks</label>
+                                                        <input type="text" id="marksInTenth" v-model="applicationForm.marksInTenth" 
+                                                               class="form-input" placeholder="Enter 10th marks">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="marksInTwelveth" class="form-label">12th Marks</label>
+                                                        <input type="text" id="marksInTwelveth" v-model="applicationForm.marksInTwelveth" 
+                                                               class="form-input" placeholder="Enter 12th marks">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="noticePeriod" class="form-label">Notice Period *</label>
+                                                        <input type="text" id="noticePeriod" v-model="applicationForm.noticePeriod" required 
+                                                               class="form-input" placeholder="Enter notice period">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="skills" class="form-label">Skills</label>
+                                                        <textarea id="skills" v-model="applicationForm.skills" 
+                                                                  class="form-input" placeholder="Enter your skills"></textarea>
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="resume" class="form-label">Resume *</label>
+                                                        <input type="file" id="resume" @change="handleFileUpload($event, 'resume')" required 
+                                                               accept=".pdf,.doc,.docx" class="form-input">
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="coverLetter" class="form-label">Portfolio</label>
+                                                        <input type="file" id="coverLetter" @change="handleFileUpload($event, 'coverLetter')" 
+                                                               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="form-input">
+                                                    </div>
+                                                    
+                                                    <button type="submit" class="apply-button" :disabled="submitting">
+                                                        <span v-if="submitting">Applying...</span>
+                                                        <span v-else>Apply</span>
                             </button>
+                                                </form>
+                                            </div>
+                                        </div>
                         </div>
                     </div>
                 </div>
@@ -76,6 +204,22 @@
                     <lucide-briefcase :size="64" class="text-gray-400 mx-auto mb-4"></lucide-briefcase>
                     <h3 class="text-xl font-semibold text-gray-600 mb-2">No job openings at the moment</h3>
                     <p class="text-gray-500">Check back later for new opportunities.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="separator"></div>
+
+                    <section class="w-full mt-12">
+                        <div class="flex gap-x-4 flex-col items-center justify-center space-y-4">
+                            <div class="flex items-center justify-center">
+                                <logo-component class="h-10 w-auto"></logo-component>
+                            </div>
+                            <h2 class="text-xl md:text-3xl text-red-600 font-semibold tracking-normal sm:text-3xl">
+                                Genre of Design
+                            </h2>
+                        </div>
+                    </section>
                 </div>
             </div>
         </main>
@@ -94,6 +238,7 @@
     <!-- Vue.js App Script -->
     <script src="js/components/Navbar.js"></script>
     <script src="js/components/Footer.js"></script>
+    <script src="js/components/Logo.js"></script>
     <script src="js/careers.js"></script>
 </body>
 </html>
