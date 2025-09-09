@@ -116,8 +116,8 @@ const app = createApp({
         async loadProjects() {
             try {
                 this.loading = true;
-                // Fetch all projects and show first 6 on homepage
-                const response = await apiService.getProjects();
+                // Fetch first 12 projects for homepage
+                const response = await apiService.getProjects({ limit: 12, offset: 0 });
                 
                 console.log('Homepage API Response:', response);
                 
