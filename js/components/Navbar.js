@@ -6,8 +6,7 @@ const Navbar = {
                 <div class="flex justify-center items-center h-20 relative">
                     <!-- Left Navigation Links -->
                     <div class="hidden md:flex items-center space-x-8 absolute left-0">
-                        <a href="index.html" :class="['nav-link-simple', { 'active-link': isActive('index.html') } ]">Home</a>
-                        <a href="projects.html" :class="['nav-link-simple', { 'active-link': isActive('projects.html') } ]">Projects</a>
+                        <a href="index.html" :class="['nav-link-simple', { 'active-link': isActive('index.html') } ]">Projects</a>
                         <a href="blogs.html" :class="['nav-link-simple', { 'active-link': isActive('blogs.html') } ]">Blogs</a>
                     </div>
                     
@@ -44,8 +43,7 @@ const Navbar = {
                                 <button @click="closeMobileMenu" class="text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
                             </div>
                             <nav class="flex flex-col gap-2 h-full overflow-y-auto pb-24">
-                                <a href="index.html" :class="['mobile-nav-link', { 'active-link': isActive('index.html') } ]" @click="closeMobileMenu">Home</a>
-                                <a href="projects.html" :class="['mobile-nav-link', { 'active-link': isActive('projects.html') } ]" @click="closeMobileMenu">Projects</a>
+                                <a href="index.html" :class="['mobile-nav-link', { 'active-link': isActive('index.html') } ]" @click="closeMobileMenu">Projects</a>
                                 <a href="blogs.html" :class="['mobile-nav-link', { 'active-link': isActive('blogs.html') } ]" @click="closeMobileMenu">Blogs</a>
                                 <a href="careers.html" :class="['mobile-nav-link', { 'active-link': isActive('careers.html') } ]" @click="closeMobileMenu">Careers</a>
                                 <a href="contact.html" :class="['mobile-nav-link', { 'active-link': isActive('contact.html') } ]" @click="closeMobileMenu">Contact</a>
