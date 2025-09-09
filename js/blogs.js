@@ -1,8 +1,13 @@
 // Blogs Page Application
 const { createApp } = Vue;
 
-const API_BASE_URL = 'http://localhost:3001/api';
-const FILE_BASE_URL = 'http://localhost:4001';
+// API Configuration
+const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:3001/api'
+    : 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:4001'
+    : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 
 // Main App
 const app = createApp({

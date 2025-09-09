@@ -4,7 +4,7 @@ const { createApp } = Vue;
 // API Configuration
 const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'http://localhost:3001/api'
-    : 'https://https-github-com-manish-env-god-web.vercel.app/api';
+    : 'https://god-worker.restless-mountain-f968.workers.dev/api';
 
 // API Service
 const apiService = {
