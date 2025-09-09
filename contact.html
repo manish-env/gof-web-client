@@ -32,92 +32,201 @@
         <!-- Main Content -->
         <main class="min-h-screen py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
-                    <p class="text-lg text-gray-600">Get in touch for your interior design needs</p>
+                <!-- Tabs -->
+                <div class="w-full mb-8">
+                    <div class="flex justify-center bg-white border-b border-gray-200">
+                        <button @click="activeTab = 'contact'" 
+                                :class="activeTab === 'contact' ? 'border-b-2 border-red-600 text-red-600' : 'text-gray-500 hover:text-gray-700'"
+                                class="w-1/2 text-xl py-4 px-6 font-medium transition-colors duration-300">
+                            Contact
+                        </button>
+                        <button @click="activeTab = 'vendor'" 
+                                :class="activeTab === 'vendor' ? 'border-b-2 border-red-600 text-red-600' : 'text-gray-500 hover:text-gray-700'"
+                                class="w-1/2 text-xl py-4 px-6 font-medium transition-colors duration-300">
+                            Vendor Registration
+                        </button>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <!-- Contact Form -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-8">
-                        <h2 class="text-2xl font-semibold mb-6">Send us a Message</h2>
-                        <form @submit.prevent="submitForm" class="space-y-6">
+                <!-- Contact Tab Content -->
+                <div v-if="activeTab === 'contact'" class="min-h-96">
+                    <div class="mb-8">
+                        <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Get in Touch</h2>
+                        <p class="leading-relaxed mb-5 text-gray-600">
+                            Please fill out the form below and we will get back to you as soon as possible.
+                        </p>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <!-- Map Section -->
+                        <div class="bg-gray-300 flex-1 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
+                            <iframe
+                                width="100%"
+                                height="100%"
+                                class="absolute inset-0"
+                                style="filter: contrast(1.0) opacity(0.6);"
+                                frameborder="0"
+                                title="map"
+                                marginheight="0"
+                                marginwidth="0"
+                                scrolling="no"
+                                src="https://www.google.com/maps/embed/v1/place?q=Genre%20of%20Design&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8">
+                            </iframe>
+                            <div class="bg-white sm:mt-0 mt-20 relative flex flex-wrap py-6 rounded shadow-md">
+                                <div class="lg:w-1/2 px-6">
+                                    <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs">ADDRESS</h2>
+                                    <p class="mt-1">
+                                        D-229, Ground Floor, Sarvodya Enclave, New Delhi, 110017, India
+                                    </p>
+                                </div>
+                                <div class="lg:w-1/2 px-6 mt-4 lg:mt-0">
+                                    <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs">EMAIL</h2>
+                                    <a href="mailto:info@genreofdesign.com" class="text-red-500 hover:underline leading-relaxed">
+                                        info@genreofdesign.com
+                                    </a>
+                                    <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">PHONE</h2>
+                                    <p class="leading-relaxed">
+                                        +91-1141050151, +91 9599695099
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Form -->
+                        <div class="w-full flex-1">
+                            <form @submit.prevent="submitContactForm" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="contact-name" class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                                        <input type="text" id="contact-name" v-model="contactForm.name" required
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    </div>
+                                    <div>
+                                        <label for="contact-email" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                        <input type="email" id="contact-email" v-model="contactForm.email" required
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="contact-phone" class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                                    <input type="tel" id="contact-phone" v-model="contactForm.phone"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label for="contact-message" class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
+                                    <textarea id="contact-message" v-model="contactForm.message" rows="5" required
+                                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                                </div>
+                                <button type="submit" :disabled="contactLoading"
+                                        class="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors duration-300">
+                                    <span v-if="contactLoading">Sending...</span>
+                                    <span v-else>Submit</span>
+                                </button>
+                            </form>
+                            
+                            <!-- Success/Error Messages -->
+                            <div v-if="contactSuccessMessage" class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                                {{ contactSuccessMessage }}
+                            </div>
+                            <div v-if="contactErrorMessage" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                                {{ contactErrorMessage }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vendor Tab Content -->
+                <div v-if="activeTab === 'vendor'" class="min-h-96">
+                    <div class="mb-8">
+                        <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Vendor Registration</h2>
+                        <p class="leading-relaxed mb-5 text-gray-600">
+                            Join our network of trusted vendors and partners. Fill out the form below to get started.
+                        </p>
+                    </div>
+                    
+                    <div class="max-w-4xl mx-auto">
+                        <form @submit.prevent="submitVendorForm" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
-                                    <input type="text" id="name" v-model="form.name" required
+                                    <label for="vendor-name" class="block text-sm font-medium text-gray-700 mb-2">Company Name *</label>
+                                    <input type="text" id="vendor-name" v-model="vendorForm.companyName" required
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                 </div>
                                 <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
-                                    <input type="email" id="email" v-model="form.email" required
+                                    <label for="vendor-contact-person" class="block text-sm font-medium text-gray-700 mb-2">Contact Person *</label>
+                                    <input type="text" id="vendor-contact-person" v-model="vendorForm.contactPerson" required
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                 </div>
                             </div>
-                            <div>
-                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                                <input type="tel" id="phone" v-model="form.phone"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="vendor-email" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                    <input type="email" id="vendor-email" v-model="vendorForm.email" required
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label for="vendor-phone" class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
+                                    <input type="tel" id="vendor-phone" v-model="vendorForm.phone" required
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                </div>
                             </div>
+                            
                             <div>
-                                <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
-                                <textarea id="message" v-model="form.message" rows="5" required
+                                <label for="vendor-address" class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
+                                <textarea id="vendor-address" v-model="vendorForm.address" rows="3" required
                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
                             </div>
-                            <button type="submit" :disabled="loading"
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="vendor-category" class="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+                                    <select id="vendor-category" v-model="vendorForm.category" required
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                        <option value="">Select Category</option>
+                                        <option value="furniture">Furniture</option>
+                                        <option value="lighting">Lighting</option>
+                                        <option value="decor">Decor & Accessories</option>
+                                        <option value="flooring">Flooring</option>
+                                        <option value="paint">Paint & Wall Coverings</option>
+                                        <option value="kitchen">Kitchen & Bath</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="vendor-experience" class="block text-sm font-medium text-gray-700 mb-2">Years of Experience *</label>
+                                    <select id="vendor-experience" v-model="vendorForm.experience" required
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                        <option value="">Select Experience</option>
+                                        <option value="0-1">0-1 years</option>
+                                        <option value="1-3">1-3 years</option>
+                                        <option value="3-5">3-5 years</option>
+                                        <option value="5-10">5-10 years</option>
+                                        <option value="10+">10+ years</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="vendor-description" class="block text-sm font-medium text-gray-700 mb-2">Company Description *</label>
+                                <textarea id="vendor-description" v-model="vendorForm.description" rows="4" required
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                          placeholder="Tell us about your company, services, and what makes you unique..."></textarea>
+                            </div>
+                            
+                            <button type="submit" :disabled="vendorLoading"
                                     class="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors duration-300">
-                                <span v-if="loading">Sending...</span>
-                                <span v-else>Send Message</span>
+                                <span v-if="vendorLoading">Submitting...</span>
+                                <span v-else>Submit Registration</span>
                             </button>
                         </form>
                         
                         <!-- Success/Error Messages -->
-                        <div v-if="successMessage" class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-                            {{ successMessage }}
+                        <div v-if="vendorSuccessMessage" class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                            {{ vendorSuccessMessage }}
                         </div>
-                        <div v-if="errorMessage" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                            {{ errorMessage }}
-                        </div>
-                    </div>
-
-                    <!-- Contact Information -->
-                    <div class="space-y-8">
-                        <div>
-                            <h2 class="text-2xl font-semibold mb-6">Get in Touch</h2>
-                            <div class="space-y-4">
-                                <div class="flex items-center">
-                                    <lucide-phone :size="20" class="text-red-600 mr-3"></lucide-phone>
-                                    <span>+91 95998 01061</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <lucide-mail :size="20" class="text-red-600 mr-3"></lucide-mail>
-                                    <span>info@genreofdesign.com</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <lucide-map-pin :size="20" class="text-red-600 mr-3 mt-1"></lucide-map-pin>
-                                    <span>D-229, Ground Floor, Sarvodya Enclave, New Delhi, 110017, India</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
-                            <div class="flex space-x-4">
-                                <a href="#" class="text-gray-600 hover:text-red-600 transition-colors duration-300">
-                                    <lucide-facebook :size="24"></lucide-facebook>
-                                </a>
-                                <a href="#" class="text-gray-600 hover:text-red-600 transition-colors duration-300">
-                                    <lucide-instagram :size="24"></lucide-instagram>
-                                </a>
-                                <a href="#" class="text-gray-600 hover:text-red-600 transition-colors duration-300">
-                                    <lucide-linkedin :size="24"></lucide-linkedin>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Map Placeholder -->
-                        <div class="bg-gray-200 rounded-lg h-64 flex items-center justify-center">
-                            <p class="text-gray-500">Map will be displayed here</p>
+                        <div v-if="vendorErrorMessage" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                            {{ vendorErrorMessage }}
                         </div>
                     </div>
                 </div>

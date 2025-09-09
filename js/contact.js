@@ -2,7 +2,7 @@
 const { createApp } = Vue;
 
 // API Configuration
-const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const API_BASE_URL = 'https://god-public-api.restless-mountain-f968.workers.dev/api';
 
 // API Service
 const apiService = {
@@ -28,6 +28,13 @@ const apiService = {
             method: 'POST',
             data: messageData
         });
+    },
+
+    async sendVendorRegistration(vendorData) {
+        return this.request('/vendor/register', {
+            method: 'POST',
+            data: vendorData
+        });
     }
 };
 
@@ -35,42 +42,87 @@ const apiService = {
 const app = createApp({
     data() {
         return {
-            form: {
+            activeTab: 'contact',
+            contactForm: {
                 name: '',
                 email: '',
                 phone: '',
                 message: ''
             },
-            loading: false,
-            successMessage: '',
-            errorMessage: ''
+            vendorForm: {
+                companyName: '',
+                contactPerson: '',
+                email: '',
+                phone: '',
+                address: '',
+                category: '',
+                experience: '',
+                description: ''
+            },
+            contactLoading: false,
+            vendorLoading: false,
+            contactSuccessMessage: '',
+            contactErrorMessage: '',
+            vendorSuccessMessage: '',
+            vendorErrorMessage: ''
         };
     },
     methods: {
-        async submitForm() {
+        async submitContactForm() {
             try {
-                this.loading = true;
-                this.successMessage = '';
-                this.errorMessage = '';
+                this.contactLoading = true;
+                this.contactSuccessMessage = '';
+                this.contactErrorMessage = '';
 
-                const response = await apiService.sendMessage(this.form);
+                const response = await apiService.sendMessage(this.contactForm);
                 
                 if (response.success) {
-                    this.successMessage = 'Message sent successfully! We\'ll get back to you soon.';
-                    this.form = {
+                    this.contactSuccessMessage = 'Message sent successfully! We\'ll get back to you soon.';
+                    this.contactForm = {
                         name: '',
                         email: '',
                         phone: '',
                         message: ''
                     };
                 } else {
-                    this.errorMessage = 'Failed to send message. Please try again.';
+                    this.contactErrorMessage = 'Failed to send message. Please try again.';
                 }
             } catch (error) {
                 console.error('Error sending message:', error);
-                this.errorMessage = 'Failed to send message. Please try again.';
+                this.contactErrorMessage = 'Failed to send message. Please try again.';
             } finally {
-                this.loading = false;
+                this.contactLoading = false;
+            }
+        },
+
+        async submitVendorForm() {
+            try {
+                this.vendorLoading = true;
+                this.vendorSuccessMessage = '';
+                this.vendorErrorMessage = '';
+
+                const response = await apiService.sendVendorRegistration(this.vendorForm);
+                
+                if (response.success) {
+                    this.vendorSuccessMessage = 'Registration submitted successfully! We\'ll review your application and get back to you soon.';
+                    this.vendorForm = {
+                        companyName: '',
+                        contactPerson: '',
+                        email: '',
+                        phone: '',
+                        address: '',
+                        category: '',
+                        experience: '',
+                        description: ''
+                    };
+                } else {
+                    this.vendorErrorMessage = 'Failed to submit registration. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error submitting vendor registration:', error);
+                this.vendorErrorMessage = 'Failed to submit registration. Please try again.';
+            } finally {
+                this.vendorLoading = false;
             }
         }
     }
