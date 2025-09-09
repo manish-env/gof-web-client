@@ -52,39 +52,46 @@
                     <div class="loading-spinner"></div>
                 </div>
 
-                <!-- Projects Grid with Infinite Scroll -->
-                <div v-else id="projects-container" class="masonry-grid">
-                    <div v-for="project in filteredProjects" :key="project.uuid1" class="masonry-item">
-                        <div class="project-card cursor-pointer" @click="viewProject(project)">
-                            <div class="project-image-container">
-                                <!-- Skeleton loading -->
-                                <div v-if="!project.isLazyLoaded" class="skeleton-image"></div>
+                <!-- Projects Grid with Equal Tiles -->
+                <div v-else id="projects-container" class="projects-grid">
+                    <div v-for="project in filteredProjects" :key="project.uuid1" :data-project-id="project.uuid1" class="project-tile" :class="{ 'has-image': project.imageLoaded }" @click="viewProject(project)">
+                        <!-- Tile Content -->
+                        <div class="tile-content">
+                            <!-- Loading state -->
+                            <div v-if="!project.isLazyLoaded" class="tile-loading">
+                                <div class="loading-spinner"></div>
+                                <div class="loading-text">Loading...</div>
+                            </div>
 
-                                <!-- Lazy loaded image -->
-                                <img 
-                                    :data-project-id="project.uuid1"
-                                    :src="project.imageLoaded ? getProjectImage(project) : ''"
-                                    :alt="project.name" 
-                                    class="project-image lazy-image"
-                                    :class="{ 'loaded': project.imageLoaded, 'error': project.imageError }"
-                                    @load="handleImageLoad"
-                                    @error="handleImageError"
-                                >
-
-                                <!-- Loading spinner while fetching -->
-                                <div v-if="project.isLazyLoaded && !project.imageLoaded && !project.imageError" class="loading-spinner"></div>
-                                
-                                <!-- Error state -->
-                                <div v-if="project.imageError" class="image-placeholder">
-                                    <p>Image not available</p>
+                            <!-- Placeholder when image failed to load -->
+                            <div v-else-if="project.imageError" class="tile-placeholder">
+                                <div class="placeholder-icon">
+                                    <lucide-alert-circle :size="48"></lucide-alert-circle>
                                 </div>
-                                
-                                <!-- Overlay with title and location - always visible -->
-                                <div class="project-overlay">
-                                    <div class="project-info">
-                                        <h3 class="project-title-overlay">{{ project.name }}</h3>
-                                        <p class="project-location-overlay">{{ project.location }}</p>
+                                <div class="placeholder-text">
+                                    <h3 class="project-title">{{ project.name }}</h3>
+                                    <p class="project-location">{{ project.location }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Tile with background image when loaded -->
+                            <div v-else-if="project.imageLoaded" class="tile-with-image" :style="{ backgroundImage: `url(${getProjectImage(project)})` }">
+                                <div class="tile-overlay">
+                                    <div class="tile-info">
+                                        <h3 class="project-title">{{ project.name }}</h3>
+                                        <p class="project-location">{{ project.location }}</p>
                                     </div>
+                                </div>
+                            </div>
+
+                            <!-- Fallback placeholder -->
+                            <div v-else class="tile-placeholder">
+                                <div class="placeholder-icon">
+                                    <lucide-image :size="48"></lucide-image>
+                                </div>
+                                <div class="placeholder-text">
+                                    <h3 class="project-title">{{ project.name }}</h3>
+                                    <p class="project-location">{{ project.location }}</p>
                                 </div>
                             </div>
                         </div>

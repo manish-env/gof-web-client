@@ -59,8 +59,14 @@ const app = createApp({
     },
     computed: {
         filteredProjects() {
-            if (!this.selectedCategory) return this.projects;
-            return this.projects.filter(project => project.type === this.selectedCategory);
+            let filtered = this.projects;
+            
+            // Filter by category if selected
+            if (this.selectedCategory) {
+                filtered = filtered.filter(project => project.type === this.selectedCategory);
+            }
+            
+            return filtered;
         }
     },
     watch: {
@@ -109,9 +115,20 @@ const app = createApp({
                     console.log('Has more projects:', this.hasMore);
                     console.log('Filtered projects count:', this.filteredProjects.length);
                     
-                    // Setup lazy loading for initial projects
+                    // Load all images immediately
                     this.$nextTick(() => {
+                        this.loadAllImages();
                         this.setupLazyLoading();
+                        
+                        // Debug project states
+                        setTimeout(() => {
+                            this.debugProjectStates();
+                        }, 2000);
+                        
+                        // Retry failed images after 3 seconds
+                        setTimeout(() => {
+                            this.retryFailedImages();
+                        }, 3000);
                     });
                 } else {
                     console.error('Unexpected API response shape', response);
@@ -166,8 +183,9 @@ const app = createApp({
                     console.log('Total projects now:', this.projects.length);
                     console.log('Has more projects:', this.hasMore);
                     
-                    // Setup lazy loading for new projects and re-setup infinite scroll
+                    // Load images for new projects and re-setup infinite scroll
                     this.$nextTick(() => {
+                        this.loadAllImages();
                         this.setupLazyLoading();
                         this.setupInfiniteScroll();
                     });
@@ -255,27 +273,36 @@ const app = createApp({
         getProjectImage(project) {
             const baseUrl = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
             
+            console.log('Getting image for project:', project.name, 'Photos:', project.photos);
+            
             // Check if project has photos array and it's not empty
             if (project.photos && Array.isArray(project.photos) && project.photos.length > 0) {
                 const firstPhoto = project.photos[0];
+                console.log('First photo:', firstPhoto);
                 
                 // If it's already a full URL, return it
                 if (firstPhoto && firstPhoto.startsWith('http')) {
+                    console.log('Using full URL:', firstPhoto);
                     return firstPhoto;
                 }
                 
                 // If it starts with data/ or docs/, use the R2 bucket URL
                 if (firstPhoto && (firstPhoto.startsWith('data/') || firstPhoto.startsWith('docs/'))) {
-                    return `${baseUrl}/${firstPhoto}`;
+                    const url = `${baseUrl}/${firstPhoto}`;
+                    console.log('Using R2 URL with prefix:', url);
+                    return url;
                 }
                 
                 // If it's a relative path, use the R2 bucket URL
                 if (firstPhoto) {
-                    return `${baseUrl}/${firstPhoto}`;
+                    const url = `${baseUrl}/${firstPhoto}`;
+                    console.log('Using R2 URL:', url);
+                    return url;
                 }
             }
             
             // Fallback to placeholder
+            console.log('No photos found, using placeholder');
             return 'https://via.placeholder.com/400x300/f3f4f6/9ca3af?text=No+Image';
         },
 
@@ -307,17 +334,17 @@ const app = createApp({
                 const imageObserver = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            const img = entry.target;
-                            const projectId = img.dataset.projectId;
+                            const tile = entry.target;
+                            const projectId = tile.dataset.projectId;
                             
                             // Find the project and mark as in viewport
                             const project = this.projects.find(p => p.uuid1 === projectId);
                             if (project) {
                                 project.isInViewport = true;
-                                this.loadProjectImage(project, img);
+                                this.loadProjectImage(project, null);
                             }
                             
-                            observer.unobserve(img);
+                            observer.unobserve(tile);
                         }
                     });
                 }, {
@@ -325,18 +352,18 @@ const app = createApp({
                     threshold: 0.1
                 });
                 
-                // Observe all project images
+                // Observe all project tiles
                 this.$nextTick(() => {
-                    const images = document.querySelectorAll('.project-image[data-project-id]');
-                    console.log('Found', images.length, 'images to observe');
+                    const tiles = document.querySelectorAll('.project-tile[data-project-id]');
+                    console.log('Found', tiles.length, 'tiles to observe');
                     
-                    images.forEach(img => {
-                        imageObserver.observe(img);
+                    tiles.forEach(tile => {
+                        imageObserver.observe(tile);
                     });
                 });
             } else {
                 // Fallback for browsers without IntersectionObserver
-            this.loadAllImages();
+                this.loadAllImages();
             }
         },
 
@@ -351,46 +378,70 @@ const app = createApp({
                 img.onload = () => {
                     project.imageLoaded = true;
                     project.imageError = false;
-                    if (imgElement) {
-                        imgElement.src = imageUrl;
-                        imgElement.classList.add('loaded');
-                    }
+                    project.imageWidth = img.naturalWidth;
+                    project.imageHeight = img.naturalHeight;
+                    console.log('Image loaded for project:', project.name, 'Dimensions:', img.naturalWidth, 'x', img.naturalHeight);
+                    
+                    // Update tile height based on image aspect ratio
+                    this.$nextTick(() => {
+                        this.updateTileHeight(project);
+                    });
                 };
                 img.onerror = () => {
                     project.imageError = true;
                     project.imageLoaded = false;
-                    if (imgElement) {
-                        imgElement.classList.add('error');
-                    }
+                    console.log('Image failed to load for project:', project.name);
                 };
                 img.src = imageUrl;
             } else {
                 project.imageError = true;
                 project.imageLoaded = false;
-                if (imgElement) {
-                    imgElement.classList.add('error');
-                }
+                console.log('No image URL for project:', project.name);
             }
         },
 
         loadAllImages() {
-            // Fallback: load all images immediately
+            // Load all images immediately
             this.projects.forEach(project => {
                 if (!project.isLazyLoaded) {
-                project.isLazyLoaded = true;
-                const imageUrl = this.getProjectImage(project);
-                    if (imageUrl) {
-                        const img = new Image();
-                        img.onload = () => {
-                            project.imageLoaded = true;
-                            project.imageError = false;
-                        };
-                        img.onerror = () => {
+                    project.isLazyLoaded = true;
+                    const imageUrl = this.getProjectImage(project);
+                    
+                    // Always try to load the image, even if it's a placeholder
+                    const img = new Image();
+                    let imageTimeout;
+                    
+                    img.onload = () => {
+                        clearTimeout(imageTimeout);
+                        project.imageLoaded = true;
+                        project.imageError = false;
+                        project.imageWidth = img.naturalWidth;
+                        project.imageHeight = img.naturalHeight;
+                        console.log('Image loaded for project:', project.name, 'Dimensions:', img.naturalWidth, 'x', img.naturalHeight);
+                        
+                        // Update tile height based on image aspect ratio
+                        this.$nextTick(() => {
+                            this.updateTileHeight(project);
+                        });
+                    };
+                    
+                    img.onerror = () => {
+                        clearTimeout(imageTimeout);
+                        project.imageError = true;
+                        project.imageLoaded = false;
+                        console.log('Image failed to load for project:', project.name);
+                    };
+                    
+                    // Set a timeout to force error state if image doesn't load within 5 seconds
+                    imageTimeout = setTimeout(() => {
+                        if (!project.imageLoaded) {
                             project.imageError = true;
                             project.imageLoaded = false;
-                        };
-                        img.src = imageUrl;
-                    }
+                            console.log('Image timeout for project:', project.name);
+                        }
+                    }, 5000);
+                    
+                    img.src = imageUrl;
                 }
             });
         },
@@ -456,6 +507,52 @@ const app = createApp({
 
         handleCarouselScroll(event) {
             // Handle carousel scroll if needed
+        },
+
+        updateTileHeight(project) {
+            const tile = document.querySelector(`[data-project-id="${project.uuid1}"]`);
+            if (tile && project.imageWidth && project.imageHeight) {
+                // Calculate aspect ratio
+                const aspectRatio = project.imageHeight / project.imageWidth;
+                
+                // Get tile width
+                const tileWidth = tile.offsetWidth;
+                
+                // Calculate new height based on aspect ratio
+                const newHeight = tileWidth * aspectRatio;
+                
+                // Apply the new height
+                tile.style.height = `${newHeight}px`;
+                tile.classList.add('has-image');
+                
+                console.log('Updated tile height for', project.name, 'to', newHeight, 'px');
+            }
+        },
+
+        retryFailedImages() {
+            // Retry loading images that failed
+            this.projects.forEach(project => {
+                if (project.imageError && !project.imageLoaded) {
+                    console.log('Retrying image load for project:', project.name);
+                    project.isLazyLoaded = false;
+                    project.imageError = false;
+                    this.loadProjectImage(project, null);
+                }
+            });
+        },
+
+        debugProjectStates() {
+            console.log('=== Project States Debug ===');
+            this.projects.forEach(project => {
+                console.log(`${project.name}:`, {
+                    isLazyLoaded: project.isLazyLoaded,
+                    imageLoaded: project.imageLoaded,
+                    imageError: project.imageError,
+                    hasPhotos: project.photos && project.photos.length > 0,
+                    photoCount: project.photos ? project.photos.length : 0
+                });
+            });
+            console.log('=== End Debug ===');
         }
     }
 });

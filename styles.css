@@ -69,40 +69,199 @@
     transform-origin: bottom left;
 }
 
-/* Masonry Grid - Always 3 columns on desktop */
-.masonry-grid {
-    column-count: 2;
-    column-gap: 1rem;
-    column-fill: balance;
+/* Projects Grid - Equal sized tiles */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 6px;
+    padding: 0;
 }
 
 @media (min-width: 640px) {
-    .masonry-grid {
-        column-count: 2;
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 6px;
     }
 }
 
 @media (min-width: 1024px) {
-    .masonry-grid {
-        column-count: 3;
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 6px;
     }
 }
 
-/* Keep 3 columns even on larger screens */
-@media (min-width: 1280px) {
-    .masonry-grid {
-        column-count: 3;
-    }
-}
-
-.masonry-item {
-    break-inside: avoid;
-    margin-bottom: 1rem;
+/* Project Tile */
+.project-tile {
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
     opacity: 0;
     animation: fadeInUp 0.6s ease-out forwards;
-    /* Ensure items maintain order */
-    page-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
+}
+
+.project-tile:hover {
+    transform: translateY(-2px);
+}
+
+/* When image is loaded, tile adjusts to image height */
+.project-tile.has-image {
+    height: auto;
+    min-height: 280px;
+}
+
+.tile-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tile Loading State */
+.tile-loading {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+}
+
+.loading-text {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    font-weight: 500;
+}
+
+/* Tile Placeholder State */
+.tile-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+}
+
+.placeholder-icon {
+    color: #94a3b8;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.placeholder-text {
+    color: #64748b;
+}
+
+.tile-loading-spinner {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+/* Tile with Background Image */
+.tile-with-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    animation: imageFadeIn 0.5s ease-in-out;
+}
+
+@keyframes imageFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(1.05);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.tile-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), transparent);
+    padding: 1.5rem;
+}
+
+.tile-info {
+    color: white;
+}
+
+/* Tile Error State */
+.tile-error {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-icon {
+    color: #f87171;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.error-text {
+    color: #dc2626;
+}
+
+/* Project Title and Location Styles */
+.project-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+}
+
+.project-location {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.tile-placeholder .project-title,
+.tile-placeholder .project-location {
+    color: #64748b;
+}
+
+.tile-info .project-title,
+.tile-info .project-location {
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.tile-error .project-title,
+.tile-error .project-location {
+    color: #dc2626;
 }
 
 @keyframes fadeInUp {
@@ -408,13 +567,25 @@
         @apply px-4;
     }
     
-    .project-card {
-        @apply mb-4;
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 6px;
     }
     
-    .masonry-grid {
-        column-count: 2;
-        column-gap: 0.5rem;
+    .project-tile {
+        min-height: 240px;
+    }
+    
+    .project-tile.has-image {
+        min-height: 240px;
+    }
+    
+    .project-title {
+        font-size: 1.125rem;
+    }
+    
+    .project-location {
+        font-size: 0.8rem;
     }
 }
 
