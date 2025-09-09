@@ -32,7 +32,6 @@ const apiService = {
     async getJobs() {
         return this.request('/jobs');
     },
-    nd
 
     async testJobsAPI() {
         return this.request('/jobs/test');
