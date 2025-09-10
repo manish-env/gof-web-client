@@ -39,12 +39,57 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                
 
-                <!-- Category Filter (Dropdown) -->
+                <!-- Category Filter (Custom Dropdown with Search) -->
                 <div class="category-filter justify-center mb-8" style="margin-top: -20px;margin-bottom: 5px;text-align: right;">
-                    <select v-model="selectedCategory" class="category-select">
-                        <option :value="''">All Projects</option>
-                        <option v-for="type in projectTypes" :key="type" :value="type">{{ type }}</option>
-                    </select>
+                    <div class="custom-dropdown" :class="{ 'dropdown-open': dropdownOpen }">
+                        <button @click="toggleDropdown" class="dropdown-button">
+                            <span>{{ selectedCategory || 'All Projects' }}</span>
+                            <lucide-chevron-down :size="16" class="dropdown-icon" :class="{ 'rotated': dropdownOpen }"></lucide-chevron-down>
+                        </button>
+                        
+                        <div v-if="dropdownOpen" class="dropdown-menu">
+                            <!-- Search Input -->
+                            <div class="search-container">
+                                <lucide-search :size="16" class="search-icon"></lucide-search>
+                                <input 
+                                    v-model="searchQuery" 
+                                    @input="searchProjects"
+                                    type="text" 
+                                    placeholder="Search projects..." 
+                                    class="search-input"
+                                    @click.stop
+                                >
+                                <button 
+                                    v-if="searchQuery" 
+                                    @click="clearSearch" 
+                                    class="clear-search-btn"
+                                    @click.stop
+                                >
+                                    <lucide-x :size="14"></lucide-x>
+                                </button>
+                            </div>
+                            
+                            <!-- Category List -->
+                            <div class="category-list">
+                                <div 
+                                    @click="selectCategory('')" 
+                                    class="category-item" 
+                                    :class="{ 'selected': selectedCategory === '' }"
+                                >
+                                    All Projects
+                                </div>
+                                <div 
+                                    v-for="type in projectTypes" 
+                                    :key="type" 
+                                    @click="selectCategory(type)" 
+                                    class="category-item"
+                                    :class="{ 'selected': selectedCategory === type }"
+                                >
+                                    {{ type }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Loading State -->

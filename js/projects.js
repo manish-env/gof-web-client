@@ -55,7 +55,10 @@ const app = createApp({
             hasMore: true,
             selectedProject: null,
             carouselContainer: null,
-            scrollObserver: null
+            scrollObserver: null,
+            // New properties for search dropdown
+            dropdownOpen: false,
+            searchQuery: ''
         };
     },
     computed: {
@@ -65,6 +68,25 @@ const app = createApp({
             // Filter by category if selected
             if (this.selectedCategory) {
                 filtered = filtered.filter(project => project.type === this.selectedCategory);
+            }
+            
+            // Filter by search query if provided
+            if (this.searchQuery && this.searchQuery.trim()) {
+                const query = this.searchQuery.toLowerCase().trim();
+                filtered = filtered.filter(project => {
+                    // Search in project name
+                    const nameMatch = project.name && project.name.toLowerCase().includes(query);
+                    // Search in project location
+                    const locationMatch = project.location && project.location.toLowerCase().includes(query);
+                    // Search in project type
+                    const typeMatch = project.type && project.type.toLowerCase().includes(query);
+                    // Search in client name
+                    const clientMatch = project.clientName && project.clientName.toLowerCase().includes(query);
+                    // Search in description
+                    const descMatch = project.description && project.description.toLowerCase().includes(query);
+                    
+                    return nameMatch || locationMatch || typeMatch || clientMatch || descMatch;
+                });
             }
             
             // Sort by date (latest first) and then by priority
@@ -96,6 +118,7 @@ const app = createApp({
         await this.loadInitialProjects();
         await this.loadProjectTypes();
         this.setupInfiniteScroll();
+        this.setupClickOutsideHandler();
     },
     beforeUnmount() {
         if (this.scrollObserver) {
@@ -226,6 +249,34 @@ const app = createApp({
             } catch (error) {
                 console.error('Failed to load project types:', error);
             }
+        },
+
+        // Dropdown and search methods
+        toggleDropdown() {
+            this.dropdownOpen = !this.dropdownOpen;
+        },
+
+        selectCategory(category) {
+            this.selectedCategory = category;
+            this.dropdownOpen = false;
+        },
+
+        searchProjects() {
+            // The search is handled by the filteredProjects computed property
+            // This method is called on input to trigger reactivity
+        },
+
+        clearSearch() {
+            this.searchQuery = '';
+        },
+
+        setupClickOutsideHandler() {
+            document.addEventListener('click', (event) => {
+                const dropdown = document.querySelector('.custom-dropdown');
+                if (dropdown && !dropdown.contains(event.target)) {
+                    this.dropdownOpen = false;
+                }
+            });
         },
 
         async loadSingleProject(id) {
