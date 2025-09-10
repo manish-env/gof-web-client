@@ -67,6 +67,23 @@ const app = createApp({
                 filtered = filtered.filter(project => project.type === this.selectedCategory);
             }
             
+            // Sort by date (latest first) and then by priority
+            filtered = filtered.sort((a, b) => {
+                // First sort by created_at (latest first)
+                const dateA = new Date(a.createdAt || a.created_at || 0);
+                const dateB = new Date(b.createdAt || b.created_at || 0);
+                
+                if (dateA > dateB) return -1;
+                if (dateA < dateB) return 1;
+                
+                // If dates are equal, sort by priority (high to low)
+                const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+                const priorityA = priorityOrder[a.priority] || 0;
+                const priorityB = priorityOrder[b.priority] || 0;
+                
+                return priorityB - priorityA;
+            });
+            
             return filtered;
         }
     },
