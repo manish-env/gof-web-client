@@ -39,9 +39,9 @@ const app = createApp({
                         id: b.id || b.slug,
                         title: b.title,
                         author: b.author,
-                        date: b.publishedAt || b.createdAt,
+                        date: b.publishedAt || b.published_at || b.createdAt || b.created_at,
                         readTime: b.readTime || 5,
-                        cover: this.resolveCoverUrl(b.coverImage || b.cover || ''),
+                        cover: this.resolveCoverUrl(b.coverImage || b.cover_image || b.cover || ''),
                         excerpt: b.excerpt || '',
                         content: b.content
                     }));

@@ -8,7 +8,7 @@ function getQueryParam(key) {
 const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
 const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'http://localhost:4001'
-    : 'https://https-github-com-manish-env-god-web.vercel.app';
+    : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 
 const app = createApp({
     data() {
@@ -44,9 +44,9 @@ const app = createApp({
                         id: b.id || b.slug,
                         title: b.title,
                         author: b.author,
-                        date: b.publishedAt || b.createdAt,
+                        date: b.publishedAt || b.published_at || b.createdAt || b.created_at,
                         readTime: b.readTime || 5,
-                        cover: this.resolveCoverUrl(b.coverImage || b.cover || ''),
+                        cover: this.resolveCoverUrl(b.coverImage || b.cover_image || b.cover || ''),
                         content: b.content
                     };
                 } else {
