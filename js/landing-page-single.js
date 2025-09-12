@@ -67,11 +67,14 @@ const app = createApp({
             try {
                 this.submitting = true;
                 
+                // Extract primary identity fields robustly from dynamic formData
+                const { name, email, phone } = this.extractLeadIdentity();
+
                 // Prepare form data
                 const formPayload = {
-                    name: this.formData.name || '',
-                    email: this.formData.email || '',
-                    phone: this.formData.phone || '',
+                    name,
+                    email,
+                    phone,
                     landing_page_id: this.landingPage.id,
                     landing_page_title: this.landingPage.title,
                     category: this.landingPage.category,
@@ -105,6 +108,33 @@ const app = createApp({
             } finally {
                 this.submitting = false;
             }
+        },
+        // Map dynamic form keys (e.g., "Name", "Email Address") to required payload fields
+        extractLeadIdentity() {
+            const normalized = {};
+            for (const key in this.formData) {
+                if (!Object.prototype.hasOwnProperty.call(this.formData, key)) continue;
+                const normKey = key.toString().trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+                normalized[normKey] = this.formData[key];
+            }
+
+            const valueFor = (synonyms) => {
+                for (const s of synonyms) {
+                    if (normalized[s]) return normalized[s];
+                }
+                return '';
+            };
+
+            const name = valueFor(['name', 'fullname', 'full_name', 'yourname', 'contactname']);
+            const email = valueFor(['email', 'emailaddress', 'mail', 'e-mail', 'emailid']);
+            const phone = valueFor(['phone', 'phonenumber', 'phone_number', 'mobile', 'mobilephone', 'whatsapp', 'whatsappnumber', 'contact', 'contactnumber']);
+
+            return {
+                // Fallback to original common keys if not mapped
+                name: name || this.formData.name || this.formData.Name || '',
+                email: email || this.formData.email || this.formData.Email || '',
+                phone: phone || this.formData.phone || this.formData.Phone || ''
+            };
         },
         getUtmParam(param) {
             const params = new URLSearchParams(window.location.search);
