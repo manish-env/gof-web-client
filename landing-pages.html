@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Pages - Genre of Design</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <navbar-component></navbar-component>
+        
+        <main class="min-h-screen bg-gray-50">
+            <!-- Hero Section -->
+            <section class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20">
+                <div class="container mx-auto px-4 text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">Marketing Landing Pages</h1>
+                    <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                        Discover our specialized landing pages designed for targeted marketing campaigns
+                    </p>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <div v-if="loading" class="container mx-auto px-4 py-20 text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                <p class="mt-4 text-gray-600">Loading landing pages...</p>
+            </div>
+
+            <!-- Error State -->
+            <div v-if="error" class="container mx-auto px-4 py-20 text-center">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded max-w-md mx-auto">
+                    {{ error }}
+                </div>
+            </div>
+
+            <!-- Landing Pages Grid -->
+            <div v-if="!loading && !error" class="container mx-auto px-4 py-20">
+                <!-- Filter Section -->
+                <div class="mb-12">
+                    <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                        <div class="relative">
+                            <input 
+                                v-model="searchQuery" 
+                                @input="filterPages"
+                                type="text" 
+                                placeholder="Search landing pages..."
+                                class="w-80 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+                        <select 
+                            v-model="selectedCategory" 
+                            @change="filterPages"
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                            <option value="">All Categories</option>
+                            <option value="Hospitality">Hospitality</option>
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Results Count -->
+                <div class="mb-8 text-center">
+                    <p class="text-gray-600">
+                        Showing {{ filteredPages.length }} landing page{{ filteredPages.length !== 1 ? 's' : '' }}
+                    </p>
+                </div>
+
+                <!-- Landing Pages Grid -->
+                <div v-if="filteredPages.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div 
+                        v-for="page in filteredPages" 
+                        :key="page.id"
+                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                    >
+                        <!-- Image -->
+                        <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 relative overflow-hidden">
+                            <img 
+                                v-if="page.heroImage" 
+                                :src="resolveImageUrl(page.heroImage)" 
+                                :alt="page.title"
+                                class="w-full h-full object-cover"
+                            >
+                            <div v-else class="w-full h-full flex items-center justify-center">
+                                <div class="text-white text-6xl font-bold opacity-50">
+                                    {{ page.category.charAt(0) }}
+                                </div>
+                            </div>
+                            <div class="absolute top-4 left-4">
+                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+                                    {{ page.category }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ page.title }}</h3>
+                            <p class="text-gray-600 mb-4 line-clamp-3">{{ page.description }}</p>
+                            
+                            <!-- Tags -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span 
+                                    v-for="tag in page.tags.slice(0, 3)" 
+                                    :key="tag"
+                                    class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
+                                >
+                                    #{{ tag }}
+                                </span>
+                            </div>
+
+                            <!-- CTA Button -->
+                            <a 
+                                :href="`landing-page.html?slug=${page.slug}`"
+                                class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-center block"
+                            >
+                                View Landing Page
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Results -->
+                <div v-else class="text-center py-20">
+                    <div class="text-gray-400 text-6xl mb-4">🔍</div>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No landing pages found</h3>
+                    <p class="text-gray-500">Try adjusting your search or filter criteria</p>
+                </div>
+            </div>
+        </main>
+
+        <footer-component></footer-component>
+    </div>
+    
+    <!-- Vue.js App Script -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="js/components/Navbar.js"></script>
+    <script src="js/components/Footer.js"></script>
+    <script src="js/landing-pages.js"></script>
+</body>
+</html>
