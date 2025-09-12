@@ -34,17 +34,22 @@ const app = createApp({
         async loadLandingPages() {
             try {
                 this.loading = true;
+                console.log('🌐 Fetching landing pages from:', `${API_BASE_URL}/landing-pages`);
                 const res = await fetch(`${API_BASE_URL}/landing-pages`);
+                console.log('📡 Response status:', res.status, res.statusText);
                 const data = await res.json();
+                console.log('📦 Response data:', data);
                 if (data && data.success) {
                     this.landingPages = data.data || [];
                     this.filteredPages = [...this.landingPages];
+                    console.log('✅ Loaded landing pages:', this.landingPages.length);
                 } else {
-                    this.error = 'Failed to load landing pages';
+                    console.error('❌ API returned error:', data);
+                    this.error = 'Failed to load landing pages: ' + (data.message || 'Unknown error');
                 }
             } catch (e) {
-                console.error('Failed to load landing pages', e);
-                this.error = 'Failed to load landing pages';
+                console.error('❌ Failed to load landing pages', e);
+                this.error = 'Failed to load landing pages: ' + e.message;
             } finally {
                 this.loading = false;
             }
