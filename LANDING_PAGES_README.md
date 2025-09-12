@@ -107,3 +107,4 @@ The system comes with two example landing pages:
 ## Navigation
 
 The landing pages are accessible through the main navigation menu under "Landing Pages".
+
