@@ -76,6 +76,7 @@ const app = createApp({
                     email,
                     phone,
                     landing_page_id: this.landingPage.id,
+                    landing_page_slug: this.landingPage.slug,
                     landing_page_title: this.landingPage.title,
                     category: this.landingPage.category,
                     form_data: this.formData,
