@@ -2,7 +2,7 @@
 const { createApp } = Vue;
 
 // API Configuration
-const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const API_BASE_URL = 'https://god-admin-worker.restless-mountain-f968.workers.dev/api';
 const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'http://localhost:4001'
     : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
