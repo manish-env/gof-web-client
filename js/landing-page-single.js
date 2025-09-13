@@ -158,14 +158,33 @@ const app = createApp({
                 }
                 
                 // Initialize project states for image loading (same as index page)
-                this.projects = this.projects.map(project => ({
-                    ...project,
-                    isLazyLoaded: true, // Set to true immediately like index page
-                    imageLoaded: false, // Will be set to true when image loads
-                    imageError: false
-                }));
+                this.projects = this.projects.map(project => {
+                    // Ensure photos is properly parsed
+                    let photos = project.photos;
+                    if (typeof photos === 'string') {
+                        try {
+                            photos = JSON.parse(photos);
+                        } catch (e) {
+                            console.log('Failed to parse photos for project:', project.name, photos);
+                            photos = [];
+                        }
+                    }
+                    
+                    return {
+                        ...project,
+                        photos: photos, // Ensure photos is an array
+                        isLazyLoaded: true, // Set to true immediately like index page
+                        imageLoaded: false, // Will be set to true when image loads
+                        imageError: false
+                    };
+                });
                 
                 console.log('📝 Projects loaded:', this.projects.length);
+                console.log('📝 First project data:', this.projects[0]);
+                if (this.projects[0]) {
+                    console.log('📝 First project photos:', this.projects[0].photos);
+                    console.log('📝 First project photos type:', typeof this.projects[0].photos);
+                }
             } catch (error) {
                 console.error('❌ Failed to load projects:', error);
                 this.projects = [];
@@ -178,12 +197,28 @@ const app = createApp({
             const baseUrl = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
             
             // Check if project has photos array and it's not empty
-            if (!project || !project.photos || project.photos.length === 0) {
+            if (!project || !project.photos) {
                 console.log('No photos for project:', project?.name);
                 return null;
             }
             
-            const photoPath = project.photos[0];
+            // Handle case where photos might be a string that needs parsing
+            let photos = project.photos;
+            if (typeof photos === 'string') {
+                try {
+                    photos = JSON.parse(photos);
+                } catch (e) {
+                    console.log('Failed to parse photos string:', photos);
+                    return null;
+                }
+            }
+            
+            if (!Array.isArray(photos) || photos.length === 0) {
+                console.log('No photos array for project:', project?.name, 'Photos:', photos);
+                return null;
+            }
+            
+            const photoPath = photos[0];
             console.log('Getting image for project:', project.name, 'Photo path:', photoPath);
             
             // If it's already a full URL, return as-is
