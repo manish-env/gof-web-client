@@ -89,22 +89,8 @@ const app = createApp({
                 });
             }
             
-            // Sort by date (latest first) and then by priority
-            filtered = filtered.sort((a, b) => {
-                // First sort by created_at (latest first)
-                const dateA = new Date(a.createdAt || a.created_at || 0);
-                const dateB = new Date(b.createdAt || b.created_at || 0);
-                
-                if (dateA > dateB) return -1;
-                if (dateA < dateB) return 1;
-                
-                // If dates are equal, sort by priority (high to low)
-                const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
-                const priorityA = priorityOrder[a.priority] || 0;
-                const priorityB = priorityOrder[b.priority] || 0;
-                
-                return priorityB - priorityA;
-            });
+            // Note: Projects are already sorted by priority (lowest number first) from the backend API
+            // No additional sorting needed here to maintain consistent order
             
             return filtered;
         }
@@ -112,6 +98,12 @@ const app = createApp({
     watch: {
         selectedCategory() {
             this.resetPagination();
+        },
+        filteredProjects() {
+            // Resize masonry layout when projects change
+            this.$nextTick(() => {
+                this.resizeAllMasonryItems();
+            });
         }
     },
     async mounted() {
@@ -119,6 +111,15 @@ const app = createApp({
         await this.loadProjectTypes();
         this.setupInfiniteScroll();
         this.setupClickOutsideHandler();
+        this.setupResizeHandler();
+        
+        // Make app globally accessible for event handlers
+        window.app = this;
+        
+        // Setup masonry on window load
+        window.addEventListener('load', () => {
+            this.resizeAllMasonryItems();
+        });
     },
     beforeUnmount() {
         if (this.scrollObserver) {
@@ -279,6 +280,16 @@ const app = createApp({
             });
         },
 
+        setupResizeHandler() {
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    this.resizeAllMasonryItems();
+                }, 250);
+            });
+        },
+
         async loadSingleProject(id) {
             try {
                 console.log('API Request: Fetching project with ID:', id);
@@ -379,18 +390,22 @@ const app = createApp({
 
         handleImageLoad(event) {
             console.log('Image loaded successfully:', event.target.src);
-            // Find the project and update dimensions
+            // Find the project and mark as loaded
             const project = this.projects.find(p => this.getProjectImage(p) === event.target.src);
             if (project) {
                 project.imageError = false;
-                project.imageWidth = event.target.naturalWidth;
-                project.imageHeight = event.target.naturalHeight;
+                project.imageLoaded = true;
                 console.log('Image loaded for project:', project.name, 'Dimensions:', event.target.naturalWidth, 'x', event.target.naturalHeight);
                 
-                // Update tile height based on actual image dimensions
-                this.$nextTick(() => {
-                    this.updateTileHeight(project);
-                });
+                // Mark tile as having image and resize masonry
+                const tile = document.querySelector(`[data-project-id="${project.uuid1}"]`);
+                if (tile) {
+                    tile.classList.add('has-image');
+                    // Resize masonry after image loads
+                    this.$nextTick(() => {
+                        this.resizeMasonryItem(tile);
+                    });
+                }
             }
         },
 
@@ -448,9 +463,13 @@ const app = createApp({
                     project.imageHeight = img.naturalHeight;
                     console.log('Image loaded for project:', project.name, 'Dimensions:', img.naturalWidth, 'x', img.naturalHeight);
                     
-                    // Update tile height based on image aspect ratio
+                    // Mark tile as having image and resize masonry
                     this.$nextTick(() => {
-                        this.updateTileHeight(project);
+                        const tile = document.querySelector(`[data-project-id="${project.uuid1}"]`);
+                        if (tile) {
+                            tile.classList.add('has-image');
+                            this.resizeMasonryItem(tile);
+                        }
                     });
                 };
                 img.onerror = () => {
@@ -476,6 +495,33 @@ const app = createApp({
             });
             
             console.log('All projects ready for display');
+            
+            // Setup masonry layout after projects are ready
+            this.$nextTick(() => {
+                this.resizeAllMasonryItems();
+            });
+        },
+
+        resizeMasonryItem(item) {
+            const grid = document.getElementById('projects-container');
+            if (!grid) return;
+            
+            const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+            const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('gap'));
+            
+            // Get the actual height of the tile content
+            const content = item.querySelector('.tile-content');
+            if (!content) return;
+            
+            const itemHeight = content.offsetHeight;
+            const rowSpan = Math.ceil((itemHeight + rowGap) / (rowHeight + rowGap));
+            
+            item.style.gridRowEnd = "span " + rowSpan;
+        },
+
+        resizeAllMasonryItems() {
+            const allItems = document.querySelectorAll('.projects-grid .project-tile');
+            allItems.forEach(item => this.resizeMasonryItem(item));
         },
 
         openProjectModal(project) {
@@ -563,48 +609,7 @@ const app = createApp({
             }
         },
 
-        updateTileHeight(project) {
-            const tile = document.querySelector(`[data-project-id="${project.uuid1}"]`);
-            if (tile && project.imageWidth && project.imageHeight) {
-                // Calculate aspect ratio
-                const aspectRatio = project.imageHeight / project.imageWidth;
-                
-                // Get tile width
-                const tileWidth = tile.offsetWidth;
-                
-                // Calculate new height based on aspect ratio
-                const newHeight = tileWidth * aspectRatio;
-                
-                // Apply the new height (no minimum constraint)
-                tile.style.height = `${newHeight}px`;
-                tile.classList.add('has-image');
-                
-                console.log('Updated tile height for', project.name, 'to', newHeight, 'px (aspect ratio:', aspectRatio.toFixed(2), ')');
-                
-                // Force masonry reflow
-                this.$nextTick(() => {
-                    this.triggerMasonryReflow();
-                });
-            }
-        },
 
-        triggerMasonryReflow() {
-            // Force a reflow of the masonry grid
-            const container = document.getElementById('projects-container');
-            if (container) {
-                // Force reflow by reading a layout property
-                container.offsetHeight;
-                
-                // Add a small delay to ensure smooth animation
-                setTimeout(() => {
-                    // Trigger any CSS transitions
-                    container.style.transform = 'translateZ(0)';
-                    requestAnimationFrame(() => {
-                        container.style.transform = '';
-                    });
-                }, 10);
-            }
-        },
 
         retryFailedImages() {
             // Retry loading images that failed

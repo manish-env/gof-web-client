@@ -186,50 +186,45 @@ footer .fab:hover {
     transform-origin: bottom left;
 }
 
-/* Projects Grid - Masonry Layout */
+/* Projects Grid - Simple Masonry Layout */
 .projects-grid {
-    column-count: 2;
-    column-gap: 6px;
-    column-fill: balance;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 10px;
+    gap: 6px;
     padding: 0;
 }
 
 @media (min-width: 640px) {
     .projects-grid {
-        column-count: 2;
-        column-gap: 6px;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (min-width: 1024px) {
     .projects-grid {
-        column-count: 3;
-        column-gap: 6px;
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 /* Keep 3 columns even on larger screens */
 @media (min-width: 1280px) {
     .projects-grid {
-        column-count: 3;
-        column-gap: 6px;
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 /* Project Tile */
 .project-tile {
-    width: 100%;
-    height: 280px;
+    min-height: 280px;
     overflow: hidden;
     cursor: pointer;
-    transition: height 0.3s ease;
+    transition: all 0.3s ease;
     opacity: 0;
     animation: fadeInUp 0.6s ease-out forwards;
-    break-inside: avoid;
-    margin-bottom: 6px;
-    /* Ensure items maintain order */
-    page-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
+    /* Grid layout - allow natural height */
+    display: flex;
+    flex-direction: column;
 }
 
 .project-tile:hover {
@@ -244,12 +239,12 @@ footer .fab:hover {
 
 .tile-content {
     width: 100%;
-    height: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex: 1;
 }
 
 /* Tile Loading State */
@@ -306,19 +301,19 @@ footer .fab:hover {
 /* Tile with Image */
 .tile-with-image {
     width: 100%;
-    height: 100%;
     position: relative;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
     overflow: hidden;
 }
 
 .tile-image {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
     object-position: center;
     animation: imageFadeIn 0.5s ease-in-out;
+    display: block;
 }
 
 @keyframes imageFadeIn {
@@ -339,6 +334,7 @@ footer .fab:hover {
     right: 0;
     background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), transparent);
     padding: 1.5rem;
+    pointer-events: none;
 }
 
 .tile-info {
@@ -929,15 +925,15 @@ footer .fab:hover {
     }
     
     .projects-grid {
-        column-count: 2;
-        column-gap: 6px;
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .project-tile {
-        height: 240px;
+        min-height: 240px;
     }
     
     .project-tile.has-image {
+        min-height: auto;
         height: auto;
     }
     

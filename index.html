@@ -111,7 +111,7 @@
                     <div class="loading-spinner"></div>
                 </div>
 
-                <!-- Projects Grid with Equal Tiles -->
+                <!-- Projects Grid with Simple Masonry -->
                 <div v-else id="projects-container" class="projects-grid">
                     <div v-for="project in filteredProjects" :key="project.uuid1" :data-project-id="project.uuid1" class="project-tile" :class="{ 'has-image': project.imageLoaded }" @click="viewProject(project)">
                         <!-- Tile Content -->
