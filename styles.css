@@ -38,19 +38,6 @@
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
 }
 
-.loader-spinner {
-    margin-bottom: 1.5rem;
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid #f3f4f6;
-    border-top: 3px solid #ef4444;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
-}
 
 .loader-text {
     font-size: 1.125rem;
@@ -69,14 +56,6 @@
     }
 }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
 
 @keyframes pulse {
     0%, 100% {
