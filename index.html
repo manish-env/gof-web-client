@@ -288,12 +288,8 @@
             </div>
         </div>
 
-        <!-- WhatsApp Float Button -->
-        <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
-           class="fixed bottom-4 right-4 z-50 p-3 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-colors duration-300"
-           aria-label="Contact us on WhatsApp">
-            <lucide-message-circle :size="24"></lucide-message-circle>
-        </a>
+        <!-- WhatsApp Float Button Component -->
+        <whatsapp-component></whatsapp-component>
     </div>
     
     <!-- Landing Page Clean URL Redirect -->
@@ -302,13 +298,14 @@
     <!-- Vue.js App Script -->
     <script src="js/components/Navbar.js"></script>
     <script src="js/components/Footer.js"></script>
+    <script src="js/components/WhatsApp.js"></script>
     <script src="js/projects.js"></script>
     
     <!-- Page Loader Script -->
     <script>
         // Page Loader Logic
         let resourcesLoaded = 0;
-        const totalResources = 6; // CSS, Vue.js, Axios, Lucide, Navbar, and Footer
+        const totalResources = 7; // CSS, Vue.js, Axios, Lucide, Navbar, Footer, and WhatsApp
         
         function checkAllResourcesLoaded() {
             resourcesLoaded++;
@@ -425,6 +422,18 @@
                 const checkFooter = setInterval(() => {
                     if (typeof Footer !== 'undefined') {
                         clearInterval(checkFooter);
+                        checkAllResourcesLoaded();
+                    }
+                }, 100);
+            }
+            
+            // Check if WhatsApp component is loaded
+            if (typeof WhatsApp !== 'undefined') {
+                checkAllResourcesLoaded();
+            } else {
+                const checkWhatsApp = setInterval(() => {
+                    if (typeof WhatsApp !== 'undefined') {
+                        clearInterval(checkWhatsApp);
                         checkAllResourcesLoaded();
                     }
                 }, 100);
