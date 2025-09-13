@@ -63,25 +63,85 @@
                             </div>
                         </div>
                     </section>
-                    <!-- Featured Image Section -->
-                    <section class="mb-12">
-                        <div class="relative h-96 md:h-[500px] w-full rounded-lg overflow-hidden">
-                            <img 
-                                v-if="landingPage.heroImage" 
-                                :src="resolveImageUrl(landingPage.heroImage)" 
-                                :alt="landingPage.title"
-                                class="w-full h-full object-cover"
+                    <!-- Featured Projects Grid Section -->
+                    <section v-if="projects.length > 0" class="mb-12">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                {{ landingPage?.projectDisplayTitle || 'Featured Projects' }}
+                            </h2>
+                            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                                {{ landingPage?.projectDisplaySubtitle || 'Explore our portfolio of exceptional design work' }}
+                            </p>
+                        </div>
+                        
+                        <!-- Loading State -->
+                        <div v-if="loadingProjects" class="flex justify-center items-center py-12">
+                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+                        </div>
+                        
+                        <!-- Projects Grid (3x2) -->
+                        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                            <div 
+                                v-for="(project, index) in projects.slice(0, 6)" 
+                                :key="project.uuid1 || index"
+                                class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
                             >
-                            <div v-else class="w-full h-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
-                                <div class="text-white text-6xl font-bold opacity-50">
-                                    {{ landingPage.category.charAt(0) }}
+                                <!-- Project Image -->
+                                <div class="aspect-w-16 aspect-h-12 bg-gray-200 overflow-hidden">
+                                    <img 
+                                        v-if="project.photos && project.photos.length > 0"
+                                        :src="resolveImageUrl(project.photos[0])" 
+                                        :alt="project.name"
+                                        class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                        @error="(e) => e.target.src = '/placeholder-image.png'"
+                                    >
+                                    <div v-else class="w-full h-48 bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
+                                        <div class="text-center text-gray-500">
+                                            <svg class="mx-auto h-12 w-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <p class="text-sm">No Image</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Project Details -->
+                                <div class="p-6">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            {{ project.type || 'Project' }}
+                                        </span>
+                                        <span v-if="project.location" class="text-sm text-gray-500">{{ project.location }}</span>
+                                    </div>
+                                    
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
+                                        {{ project.name }}
+                                    </h3>
+                                    
+                                    <p v-if="project.description" class="text-gray-600 text-sm line-clamp-2 mb-3">
+                                        {{ project.description }}
+                                    </p>
+                                    
+                                    <div v-if="project.clientName" class="text-sm text-gray-500">
+                                        <span class="font-medium">Client:</span> {{ project.clientName }}
+                                    </div>
+                                    
+                                    <div v-if="project.area" class="text-sm text-gray-500 mt-1">
+                                        <span class="font-medium">Area:</span> {{ project.area }}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-                            <div class="absolute bottom-6 left-6 text-white">
-                                <h2 class="text-2xl md:text-4xl font-bold mb-2">{{ landingPage.aboveFold.headline || landingPage.title }}</h2>
-                                <p class="text-lg">{{ landingPage.aboveFold.subheadline || landingPage.description }}</p>
+                        </div>
+                        
+                        <!-- Empty State -->
+                        <div v-if="!loadingProjects && projects.length === 0" class="text-center py-12">
+                            <div class="text-gray-400 mb-4">
+                                <svg class="mx-auto h-16 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
                             </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">No Projects Available</h3>
+                            <p class="text-gray-500">Projects will be displayed here once they are added.</p>
                         </div>
                     </section>
 

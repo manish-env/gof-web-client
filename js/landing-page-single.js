@@ -14,6 +14,8 @@ const app = createApp({
             landingPage: null,
             loading: false,
             error: null,
+            projects: [], // Projects to display in grid
+            loadingProjects: false,
             formData: {},
             submitting: false,
             formSubmitted: false
@@ -21,6 +23,9 @@ const app = createApp({
     },
     async mounted() {
         await this.loadLandingPage();
+        if (this.landingPage) {
+            await this.loadProjects();
+        }
     },
     methods: {
         resolveImageUrl(path) {
@@ -94,6 +99,68 @@ const app = createApp({
             if (history.pushState) {
                 const newUrl = `/${slug}`;
                 window.history.pushState({path: newUrl}, '', newUrl);
+            }
+        },
+        // Load projects based on landing page configuration
+        async loadProjects() {
+            if (!this.landingPage) return;
+            
+            this.loadingProjects = true;
+            try {
+                console.log('📝 Loading projects for landing page...');
+                
+                if (this.landingPage.projectSelectionType === 'specific' && this.landingPage.selectedProjects) {
+                    // Load specific projects
+                    const projectIds = this.landingPage.selectedProjects;
+                    console.log('📝 Loading specific projects:', projectIds);
+                    
+                    const projectPromises = projectIds.map(async (projectId) => {
+                        try {
+                            const res = await fetch(`${API_BASE_URL}/projects/${projectId}`);
+                            const data = await res.json();
+                            return data.success ? data.data : null;
+                        } catch (error) {
+                            console.error(`Failed to load project ${projectId}:`, error);
+                            return null;
+                        }
+                    });
+                    
+                    const projects = await Promise.all(projectPromises);
+                    this.projects = projects.filter(p => p !== null).slice(0, 6); // Limit to 6 for 3x2 grid
+                } else if (this.landingPage.projectSelectionType === 'category' && this.landingPage.selectedCategory) {
+                    // Load projects by category
+                    console.log('📝 Loading projects by category:', this.landingPage.selectedCategory);
+                    
+                    const res = await fetch(`${API_BASE_URL}/projects?type=${encodeURIComponent(this.landingPage.selectedCategory)}&limit=6`);
+                    const data = await res.json();
+                    
+                    if (data.success) {
+                        this.projects = data.data || [];
+                    } else {
+                        console.error('Failed to load projects by category:', data.message);
+                        this.projects = [];
+                    }
+                } else {
+                    // Fallback: load all projects
+                    console.log('📝 Loading all projects as fallback');
+                    
+                    const res = await fetch(`${API_BASE_URL}/projects?limit=6`);
+                    const data = await res.json();
+                    
+                    if (data.success) {
+                        this.projects = data.data || [];
+                    } else {
+                        console.error('Failed to load projects:', data.message);
+                        this.projects = [];
+                    }
+                }
+                
+                console.log('📝 Projects loaded:', this.projects.length);
+            } catch (error) {
+                console.error('❌ Failed to load projects:', error);
+                this.projects = [];
+            } finally {
+                this.loadingProjects = false;
             }
         },
         async submitForm() {
