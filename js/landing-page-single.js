@@ -174,7 +174,7 @@ const app = createApp({
                         ...project,
                         photos: photos, // Ensure photos is an array
                         isLazyLoaded: true, // Set to true immediately like index page
-                        imageLoaded: false, // Will be set to true when image loads
+                        imageLoaded: true, // Set to true immediately like index page
                         imageError: false
                     };
                 });
@@ -184,6 +184,9 @@ const app = createApp({
                 if (this.projects[0]) {
                     console.log('📝 First project photos:', this.projects[0].photos);
                     console.log('📝 First project photos type:', typeof this.projects[0].photos);
+                    console.log('📝 First project imageLoaded:', this.projects[0].imageLoaded);
+                    console.log('📝 First project isLazyLoaded:', this.projects[0].isLazyLoaded);
+                    console.log('📝 First project image URL:', this.getProjectImage(this.projects[0]));
                 }
             } catch (error) {
                 console.error('❌ Failed to load projects:', error);
