@@ -93,6 +93,35 @@
     font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
 }
 
+/* Social Media Icons - Force Font Awesome to work */
+.fab {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+}
+
+/* Specific icon content for social media */
+.fa-youtube:before { content: "\f167"; }
+.fa-facebook:before { content: "\f09a"; }
+.fa-instagram:before { content: "\f16d"; }
+.fa-pinterest:before { content: "\f0d2"; }
+.fa-whatsapp:before { content: "\f232"; }
+.fa-linkedin:before { content: "\f08c"; }
+
+/* Force WhatsApp icon to be white/gray like other icons */
+.fab.fa-whatsapp {
+    color: inherit !important;
+}
+
+/* Social media icons hover effect - all turn brand red */
+footer .fab:hover {
+    color: #ED1A23 !important;
+}
+
 /* Navigation Styles */
 .nav-link {
     @apply text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors duration-200;

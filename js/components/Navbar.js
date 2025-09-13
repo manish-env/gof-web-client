@@ -2,8 +2,8 @@
 const Navbar = {
     template: `
         <nav class="w-full bg-white sticky top-0 z-50 shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-center items-center h-20 relative">
+            <div class="max-w-full mx-auto px-2.5">
+                <div class="flex justify-center items-center h-16 relative">
                     <!-- Left Navigation Links -->
                     <div class="hidden md:flex items-center space-x-8 absolute left-0">
                         <a href="index.html" :class="['nav-link-simple', { 'active-link': isActive('index.html') } ]">Projects</a>
