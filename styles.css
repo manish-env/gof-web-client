@@ -1085,6 +1085,11 @@ footer .fab:hover {
 
 .carousel-slide {
     scroll-snap-align: start;
+    cursor: grab;
+}
+
+.carousel-slide:active {
+    cursor: grabbing;
 }
 
 /* Modal animations */
