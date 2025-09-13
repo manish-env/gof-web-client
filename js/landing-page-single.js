@@ -16,6 +16,8 @@ const app = createApp({
             error: null,
             projects: [], // Projects to display in grid
             loadingProjects: false,
+            selectedProject: null, // For modal
+            carouselContainer: null, // For carousel
             formData: {},
             submitting: false,
             formSubmitted: false
@@ -155,6 +157,14 @@ const app = createApp({
                     }
                 }
                 
+                // Initialize project states for image loading (same as index page)
+                this.projects = this.projects.map(project => ({
+                    ...project,
+                    isLazyLoaded: false,
+                    imageLoaded: false,
+                    imageError: false
+                }));
+                
                 console.log('📝 Projects loaded:', this.projects.length);
             } catch (error) {
                 console.error('❌ Failed to load projects:', error);
@@ -162,6 +172,85 @@ const app = createApp({
             } finally {
                 this.loadingProjects = false;
             }
+        },
+        // Image handling methods (same as index page)
+        getProjectImage(project) {
+            if (!project || !project.photos || project.photos.length === 0) {
+                return null;
+            }
+            return this.resolveImageUrl(project.photos[0]);
+        },
+        handleImageLoad(event) {
+            const projectId = event.target.closest('.project-tile')?.dataset.projectId;
+            if (projectId) {
+                const project = this.projects.find(p => p.uuid1 === projectId);
+                if (project) {
+                    project.isLazyLoaded = true;
+                    project.imageLoaded = true;
+                    project.imageError = false;
+                }
+            }
+        },
+        handleImageError(event) {
+            const projectId = event.target.closest('.project-tile')?.dataset.projectId;
+            if (projectId) {
+                const project = this.projects.find(p => p.uuid1 === projectId);
+                if (project) {
+                    project.isLazyLoaded = true;
+                    project.imageLoaded = false;
+                    project.imageError = true;
+                }
+            }
+        },
+        // Modal methods (same as index page)
+        viewProject(project) {
+            this.openProjectModal(project);
+        },
+        openProjectModal(project) {
+            this.selectedProject = project;
+            this.$nextTick(() => {
+                this.initializeCarousel();
+            });
+        },
+        closeProjectModal() {
+            this.selectedProject = null;
+            if (this.carouselContainer) {
+                this.carouselContainer.destroy();
+                this.carouselContainer = null;
+            }
+        },
+        closeModal() {
+            this.closeProjectModal();
+        },
+        initializeCarousel() {
+            this.$nextTick(() => {
+                const carouselElement = document.querySelector('.project-carousel');
+                if (carouselElement && this.selectedProject && this.selectedProject.photos && this.selectedProject.photos.length > 1) {
+                    console.log('Carousel initialized for project:', this.selectedProject.name);
+                }
+            });
+        },
+        getCarouselImage(project, imagePath) {
+            return this.getProjectImageUrl(project, imagePath);
+        },
+        getProjectImageUrl(project, photoPath) {
+            const baseUrl = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
+            
+            if (photoPath && photoPath.startsWith('http')) {
+                return photoPath;
+            }
+            
+            if (photoPath) {
+                return `${baseUrl}/${photoPath}`;
+            }
+            
+            return 'https://via.placeholder.com/800x600/f3f4f6/9ca3af?text=No+Image';
+        },
+        handleCarouselScroll(event) {
+            // Handle carousel scroll if needed
+        },
+        handleModalImageError(event) {
+            event.target.src = 'https://via.placeholder.com/800x600/f3f4f6/9ca3af?text=Image+Not+Found';
         },
         async submitForm() {
             if (this.submitting) return;
