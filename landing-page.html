@@ -74,7 +74,7 @@
                         <!-- Projects Grid (Masonry Layout - Same as Index) -->
                         <div v-else id="projects-container" class="projects-grid">
                             <div 
-                                v-for="(project, index) in projects.slice(0, 6)" 
+                                v-for="(project, index) in displayedProjects" 
                                 :key="project.uuid1 || index"
                                 :data-project-id="project.uuid1"
                                 class="project-tile" 
@@ -130,6 +130,27 @@
                                 </div>
                             </div>
                     </div>
+
+                        <!-- View All Button -->
+                        <div v-if="!loadingProjects && projects.length > 6" class="text-center mt-8">
+                            <button 
+                                @click="toggleViewAll"
+                                class="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 flex items-center mx-auto"
+                            >
+                                <span v-if="!showAllProjects">View All Projects ({{ projects.length }})</span>
+                                <span v-else>Show Less</span>
+                                <lucide-chevron-down 
+                                    v-if="!showAllProjects" 
+                                    :size="20" 
+                                    class="ml-2 transition-transform duration-200"
+                                ></lucide-chevron-down>
+                                <lucide-chevron-up 
+                                    v-else 
+                                    :size="20" 
+                                    class="ml-2 transition-transform duration-200"
+                                ></lucide-chevron-up>
+                            </button>
+                        </div>
 
                         <!-- Empty State -->
                         <div v-if="!loadingProjects && projects.length === 0" class="text-center py-12">

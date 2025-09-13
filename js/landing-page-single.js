@@ -14,14 +14,23 @@ const app = createApp({
             landingPage: null,
             loading: false,
             error: null,
-            projects: [], // Projects to display in grid
+            projects: [], // All projects loaded
             loadingProjects: false,
+            showAllProjects: false, // Toggle for view all
             selectedProject: null, // For modal
             carouselContainer: null, // For carousel
             formData: {},
             submitting: false,
             formSubmitted: false
         };
+    },
+    computed: {
+        displayedProjects() {
+            if (this.showAllProjects) {
+                return this.projects;
+            }
+            return this.projects.slice(0, 6);
+        }
     },
     async mounted() {
         await this.loadLandingPage();
@@ -128,12 +137,12 @@ const app = createApp({
                     });
                     
                     const projects = await Promise.all(projectPromises);
-                    this.projects = projects.filter(p => p !== null).slice(0, 6); // Limit to 6 for 3x2 grid
+                    this.projects = projects.filter(p => p !== null); // Load all selected projects
                 } else if (this.landingPage.projectSelectionType === 'category' && this.landingPage.selectedCategory) {
                     // Load projects by category
                     console.log('📝 Loading projects by category:', this.landingPage.selectedCategory);
                     
-                    const res = await fetch(`${API_BASE_URL}/projects?type=${encodeURIComponent(this.landingPage.selectedCategory)}&limit=6`);
+                    const res = await fetch(`${API_BASE_URL}/projects?type=${encodeURIComponent(this.landingPage.selectedCategory)}`);
                     const data = await res.json();
                     
                     if (data.success) {
@@ -146,7 +155,7 @@ const app = createApp({
                     // Fallback: load all projects
                     console.log('📝 Loading all projects as fallback');
                     
-                    const res = await fetch(`${API_BASE_URL}/projects?limit=6`);
+                    const res = await fetch(`${API_BASE_URL}/projects`);
                     const data = await res.json();
                     
                     if (data.success) {
@@ -315,6 +324,11 @@ const app = createApp({
         },
         handleModalImageError(event) {
             event.target.src = 'https://via.placeholder.com/800x600/f3f4f6/9ca3af?text=Image+Not+Found';
+        },
+        // View All Projects Toggle
+        toggleViewAll() {
+            this.showAllProjects = !this.showAllProjects;
+            console.log('Toggled view all:', this.showAllProjects, 'Showing', this.displayedProjects.length, 'projects');
         },
         async submitForm() {
             if (this.submitting) return;
