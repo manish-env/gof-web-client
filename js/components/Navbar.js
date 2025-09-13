@@ -20,9 +20,9 @@ const Navbar = {
                     
                     <!-- Right Navigation Links -->
                     <div class="hidden md:flex items-center space-x-8 absolute right-0">
-                        <a href="careers.html" :class="['nav-link-simple', { 'active-link': isActive('careers.html') } ]">Careers</a>
+                        <a href="careers.html" :class="['nav-link-simple', { 'active-link': isActive('careers.html') } ]">Career</a>
                         <a href="contact.html" :class="['nav-link-simple', { 'active-link': isActive('contact.html') } ]">Contact</a>
-                        <a href="about.html" :class="['nav-link-simple', { 'active-link': isActive('about.html') } ]">About Me</a>
+                        <a href="about.html" :class="['nav-link-simple', { 'active-link': isActive('about.html') } ]">About Us</a>
                     </div>
                     
                     <!-- Mobile menu button (left) -->
