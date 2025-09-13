@@ -30,35 +30,76 @@
         <navbar-component></navbar-component>
         
         <!-- Main Content -->
-        <main class="min-h-screen py-8">
+        <main class="flex-1 py-6 md:py-16 w-full">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Hero -->
-                <section class="text-center mb-12">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-3">Design Journal</h1>
-                    <p class="text-lg text-gray-600">Insights, process notes, and lessons from our projects</p>
+                <!-- Hero Section -->
+                <section class="w-full">
+                    <div class="space-y-6">
+                        <div class="">
+                            <div class="flex flex-col justify-center space-y-4">
+                                <div class="space-y-2">
+                                    <h1 class="text-4xl md:text-9xl text-red-600 font-semibold tracking-normal sm:text-5xl xl:text-8xl/none">
+                                        Design Journal
+                                    </h1>
+                                    <p class="max-w-[700px] text-neutral-500 md:text-xl leading-7 tracking-normal dark:text-neutral-400">
+                                        Insights, process notes, and lessons from our projects. 
+                                        Explore our design philosophy through detailed case studies, 
+                                        innovative approaches, and the stories behind our most 
+                                        impactful architectural and interior design solutions.
+                                    </p>
+                                    <p class="text-right">Since 2010</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Background Image Section -->
+                        <div class="relative h-96 md:h-[500px] w-full rounded-lg overflow-hidden"
+                             style="background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;">
+                            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+                            <div class="absolute bottom-6 left-6 text-white">
+                                <h2 class="text-2xl md:text-4xl font-bold mb-2">Design Stories & Insights</h2>
+                                <p class="text-lg">Discover the process behind our most innovative projects</p>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
-                <!-- Blog Grid -->
-                <div class="blog-grid">
-                    <article v-for="blog in blogs" :key="blog.id" class="blog-card">
-                        <div class="blog-cover">
-                            <img :src="blog.cover" :alt="blog.title" />
+                <!-- Blog Grid Section -->
+                <section class="py-12">
+                    <div class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <article v-for="blog in blogs" :key="blog.id" class="group cursor-pointer" @click="openModal(blog)">
+                                <div class="relative overflow-hidden rounded-lg mb-4">
+                                    <img :src="blog.cover" :alt="blog.title" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
+                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <span>{{ formatDate(blog.date) }}</span>
+                                        <span class="mx-2">•</span>
+                                        <span>{{ blog.readTime }} min read</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-200">{{ blog.title }}</h3>
+                                    <p class="text-gray-600 leading-relaxed line-clamp-3">{{ blog.excerpt || 'Read more about this design insight and process...' }}</p>
+                                    <div class="flex items-center justify-between pt-2">
+                                        <span class="text-sm text-gray-500">By {{ blog.author || 'Genre of Design' }}</span>
+                                        <span class="text-red-600 font-medium group-hover:underline">Read more →</span>
+                                    </div>
+                                </div>
+                            </article>
                         </div>
-                        <div class="blog-body">
-                            <div class="blog-meta">
-                                <span>{{ formatDate(blog.date) }}</span>
-                                <span>•</span>
-                                <span>{{ blog.readTime }} min read</span>
-                            </div>
-                            <h3 class="blog-title">{{ blog.title }}</h3>
-                            <p class="blog-excerpt">{{ blog.excerpt }}</p>
-                            <div class="blog-footer">
-                                <span class="blog-author">By {{ blog.author }}</span>
-                                <a class="btn-outline" :href="`blog.html?id=${blog.id}`">Read more</a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
+                    </div>
+                </section>
+
+                <!-- CTA Section -->
+                <section class="py-12 md:py-24">
+                    <div class="flex flex-col items-center justify-center">
+                        <h2 class="mb-6 text-3xl font-bold md:text-7xl md:text-center">
+                            Ready to explore more design insights?{" "}
+                            <span class="text-red-600">Let's Talk</span>
+                        </h2>
+                    </div>
+                </section>
             </div>
         </main>
         

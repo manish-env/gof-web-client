@@ -12,6 +12,64 @@
     display: inline-block;
 }
 
+/* Blog Page Styling */
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-content {
+    @apply text-gray-700 leading-relaxed;
+}
+
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+    @apply text-gray-900 font-bold mb-4 mt-6;
+}
+
+.blog-content h1 {
+    @apply text-3xl;
+}
+
+.blog-content h2 {
+    @apply text-2xl;
+}
+
+.blog-content h3 {
+    @apply text-xl;
+}
+
+.blog-content p {
+    @apply mb-4;
+}
+
+.blog-content ul,
+.blog-content ol {
+    @apply mb-4 pl-6;
+}
+
+.blog-content li {
+    @apply mb-2;
+}
+
+.blog-content blockquote {
+    @apply border-l-4 border-red-600 pl-4 italic text-gray-600 my-6;
+}
+
+.blog-content img {
+    @apply rounded-lg my-6;
+}
+
+.blog-content a {
+    @apply text-red-600 hover:underline;
+}
+
 .fa-brands {
     font-family: "Font Awesome 6 Brands" !important;
     font-weight: 400;
