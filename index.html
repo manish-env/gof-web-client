@@ -193,7 +193,7 @@
         <footer-component></footer-component>
         
         <!-- Project Modal -->
-        <div v-if="selectedProject" class="fixed inset-0 z-50 bg-transparent backdrop-blur-md" @click="closeModal">
+        <div v-if="selectedProject" class="fixed inset-0 z-50 bg-transparent backdrop-blur-md modal-animate" @click="closeModal">
             <div class="relative w-full md:w-4/5 h-full mx-auto" @click.stop>
                 <!-- Close Button -->
                 <button @click="closeModal" class="absolute top-4 right-4 z-20 p-2 bg-white bg-opacity-20 rounded-full text-white hover:bg-opacity-30 transition-all duration-300">
@@ -201,7 +201,17 @@
                 </button>
                 
                 <!-- Full-Width Carousel with Info as First Slide -->
-                <div class="relative w-full h-full">
+                <div class="relative w-full h-full flex items-center">
+                    <!-- Left Arrow - Outside slides -->
+                    <button @click="scrollLeft" class="absolute -left-16 top-1/2 transform -translate-y-1/2 z-30 p-3 bg-black bg-opacity-30 rounded-full text-white hover:bg-opacity-50 transition-all duration-300 backdrop-blur-sm carousel-arrow-left">
+                        <i class="fas fa-chevron-left text-xl"></i>
+                    </button>
+                    
+                    <!-- Right Arrow - Outside slides -->
+                    <button @click="scrollRight" class="absolute -right-16 top-1/2 transform -translate-y-1/2 z-30 p-3 bg-black bg-opacity-30 rounded-full text-white hover:bg-opacity-50 transition-all duration-300 backdrop-blur-sm carousel-arrow-right">
+                        <i class="fas fa-chevron-right text-xl"></i>
+                    </button>
+                    
                     <div class="w-full h-full overflow-x-auto overflow-y-hidden scrollbar-hide flex snap-x snap-mandatory carousel-container" ref="carouselContainer" @scroll="handleCarouselScroll" style="gap: 5px;">
                         <!-- First slide: Info panel (fixed 350px, gradient overlay) -->
                         <div class="carousel-slide snap-start shrink-0 h-full text-white" style="width: 350px; min-width: 350px; padding: 20px; backdrop-filter: blur(12px); background: linear-gradient(90deg, rgba(0,0,0,0.65), rgba(0,0,0,0.35) 60%, rgba(0,0,0,0) 100%);">

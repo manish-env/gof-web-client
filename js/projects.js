@@ -541,6 +541,28 @@ const app = createApp({
             // Handle carousel scroll if needed
         },
 
+        scrollLeft() {
+            const container = this.$refs.carouselContainer;
+            if (container) {
+                const slideWidth = 355; // 350px + 5px gap
+                container.scrollBy({
+                    left: -slideWidth,
+                    behavior: 'smooth'
+                });
+            }
+        },
+
+        scrollRight() {
+            const container = this.$refs.carouselContainer;
+            if (container) {
+                const slideWidth = 355; // 350px + 5px gap
+                container.scrollBy({
+                    left: slideWidth,
+                    behavior: 'smooth'
+                });
+            }
+        },
+
         updateTileHeight(project) {
             const tile = document.querySelector(`[data-project-id="${project.uuid1}"]`);
             if (tile && project.imageWidth && project.imageHeight) {
