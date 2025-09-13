@@ -22,12 +22,53 @@ const Footer = {
                         <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
                         <p class="text-gray-300">Phone: +91 95998 01061</p>
                         <p class="text-gray-300">Email: info@genreofdesign.com</p>
-                        <div class="mt-4">
-                            <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
-                               class="inline-flex items-center text-green-500 hover:text-green-400 transition-colors duration-300">
-                                <lucide-message-circle :size="20" class="mr-2"></lucide-message-circle>
-                                WhatsApp
-                            </a>
+                        
+                        <!-- Social Media Icons -->
+                        <div class="mt-6">
+                            <h5 class="text-md font-medium text-white mb-3">Follow Us</h5>
+                            <div class="flex items-center space-x-4">
+                                <!-- YouTube -->
+                                <a href="https://youtube.com/@genreofdesign" target="_blank" 
+                                   class="text-gray-300 hover:text-red-500 transition-colors duration-300"
+                                   aria-label="YouTube">
+                                    <i class="fa-brands fa-youtube text-xl"></i>
+                                </a>
+                                
+                                <!-- Facebook -->
+                                <a href="https://facebook.com/genreofdesign" target="_blank" 
+                                   class="text-gray-300 hover:text-blue-500 transition-colors duration-300"
+                                   aria-label="Facebook">
+                                    <i class="fa-brands fa-facebook text-xl"></i>
+                                </a>
+                                
+                                <!-- Instagram -->
+                                <a href="https://instagram.com/genreofdesign" target="_blank" 
+                                   class="text-gray-300 hover:text-pink-500 transition-colors duration-300"
+                                   aria-label="Instagram">
+                                    <i class="fa-brands fa-instagram text-xl"></i>
+                                </a>
+                                
+                                <!-- Pinterest -->
+                                <a href="https://pinterest.com/genreofdesign" target="_blank" 
+                                   class="text-gray-300 hover:text-red-600 transition-colors duration-300"
+                                   aria-label="Pinterest">
+                                    <i class="fa-brands fa-pinterest text-xl"></i>
+                                </a>
+                                
+                                <!-- WhatsApp -->
+                                <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
+                                   class="text-gray-300 hover:text-green-500 transition-colors duration-300"
+                                   aria-label="WhatsApp">
+                                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                                </a>
+                                
+                                <!-- LinkedIn -->
+                                <a href="https://linkedin.com/company/genreofdesign" target="_blank" 
+                                   class="text-gray-300 hover:text-blue-600 transition-colors duration-300"
+                                   aria-label="LinkedIn">
+                                    <i class="fa-brands fa-linkedin text-xl"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
