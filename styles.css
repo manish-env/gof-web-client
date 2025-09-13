@@ -9,16 +9,30 @@
 .fa-whatsapp {
     color: #25D366 !important;
     font-size: 1.2em;
+    display: inline-block;
 }
 
 .fa-brands {
     font-family: "Font Awesome 6 Brands" !important;
     font-weight: 400;
+    display: inline-block;
 }
 
 .fa-solid {
     font-family: "Font Awesome 6 Free" !important;
     font-weight: 900;
+    display: inline-block;
+}
+
+/* Debug: Check if Font Awesome is loading */
+.fa-whatsapp:before {
+    content: "\f232" !important;
+}
+
+/* Fallback for WhatsApp icon if Font Awesome fails */
+.fa-whatsapp.fallback:before {
+    content: "📱" !important;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
 }
 
 /* Navigation Styles */
