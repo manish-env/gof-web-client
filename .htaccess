@@ -6,8 +6,5 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !^/landing-page\.html$
 RewriteCond %{REQUEST_URI} !^/(index|about|contact|careers|blogs|projects|landing-pages)\.html$
+RewriteCond %{REQUEST_URI} !^/$
 RewriteRule ^([^/]+)/?$ /landing-page.html?slug=$1 [L,QSA]
-
-# Optional: Redirect old query parameter URLs to clean URLs
-RewriteCond %{QUERY_STRING} ^slug=([^&]+)$
-RewriteRule ^landing-page\.html$ /%1? [R=301,L]

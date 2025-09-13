@@ -27,6 +27,15 @@
         // Must not be the landing page base file
         if (segment === 'landing-page') return false;
         
+        // Must not be empty or just a slash
+        if (!segment || segment === '/') return false;
+        
+        // Additional check: only redirect if we're not already on a known page
+        const currentPage = window.location.pathname.split('/').pop();
+        if (KNOWN_PAGES.some(page => currentPage === page || currentPage === page + '.html')) {
+            return false;
+        }
+        
         return true;
     }
     
@@ -60,14 +69,21 @@
     
     // Initialize
     function init() {
-        // Handle clean URLs
-        handleCleanUrl();
+        // Only run on landing page or when we detect a clean URL
+        const currentPage = window.location.pathname.split('/').pop();
+        const isLandingPage = currentPage === 'landing-page.html' || currentPage === 'landing-page';
+        const isCleanUrl = isLandingPageCleanUrl();
         
-        // Update existing links to use clean URLs
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', updateLinksToCleanUrls);
-        } else {
-            updateLinksToCleanUrls();
+        if (isLandingPage || isCleanUrl) {
+            // Handle clean URLs
+            handleCleanUrl();
+            
+            // Update existing links to use clean URLs
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', updateLinksToCleanUrls);
+            } else {
+                updateLinksToCleanUrls();
+            }
         }
     }
     
