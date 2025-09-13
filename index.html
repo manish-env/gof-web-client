@@ -42,8 +42,29 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Loading Detection -->
+    <style>
+        /* This will be applied when CSS is loaded */
+        .css-loaded {
+            opacity: 1;
+        }
+    </style>
 </head>
-<body class="font-josefin bg-white text-gray-900">
+<body class="font-josefin bg-white text-gray-900 loading">
+    <!-- Page Loader -->
+    <div id="page-loader" class="page-loader">
+        <div class="loader-container">
+            <div class="loader-logo">
+                <img src="https://i.ibb.co/WNqDWqx3/genre-of-design-logo-removebg-preview.png" alt="Genre of Design" class="loader-logo-img" />
+            </div>
+            <div class="loader-spinner">
+                <div class="spinner"></div>
+            </div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
     <div id="app">
         <!-- Navigation Component -->
         <navbar-component></navbar-component>
@@ -285,5 +306,145 @@
     <script src="js/components/Navbar.js"></script>
     <script src="js/components/Footer.js"></script>
     <script src="js/projects.js"></script>
+    
+    <!-- Page Loader Script -->
+    <script>
+        // Page Loader Logic
+        let resourcesLoaded = 0;
+        const totalResources = 6; // CSS, Vue.js, Axios, Lucide, Navbar, and Footer
+        
+        function checkAllResourcesLoaded() {
+            resourcesLoaded++;
+            console.log(`Resources loaded: ${resourcesLoaded}/${totalResources}`);
+            
+            if (resourcesLoaded >= totalResources) {
+                hideLoader();
+            }
+        }
+        
+        function hideLoader() {
+            const loader = document.getElementById('page-loader');
+            const body = document.body;
+            
+            if (loader && body) {
+                // Add loaded class to body
+                body.classList.remove('loading');
+                body.classList.add('loaded');
+                
+                // Hide loader with animation
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    
+                    // Remove loader from DOM after animation
+                    setTimeout(() => {
+                        if (loader.parentNode) {
+                            loader.parentNode.removeChild(loader);
+                        }
+                    }, 500);
+                }, 100);
+            }
+        }
+        
+        // Check when external resources are loaded
+        function setupResourceLoading() {
+            // Check if CSS is loaded by testing a specific style
+            const testElement = document.createElement('div');
+            testElement.className = 'css-loaded';
+            document.body.appendChild(testElement);
+            const cssLoaded = window.getComputedStyle(testElement).opacity === '1';
+            document.body.removeChild(testElement);
+            
+            if (cssLoaded) {
+                checkAllResourcesLoaded();
+            } else {
+                // Wait for CSS to load
+                const checkCSS = setInterval(() => {
+                    const testEl = document.createElement('div');
+                    testEl.className = 'css-loaded';
+                    document.body.appendChild(testEl);
+                    const loaded = window.getComputedStyle(testEl).opacity === '1';
+                    document.body.removeChild(testEl);
+                    
+                    if (loaded) {
+                        clearInterval(checkCSS);
+                        checkAllResourcesLoaded();
+                    }
+                }, 100);
+            }
+            
+            // Check if Vue.js is loaded
+            if (typeof Vue !== 'undefined') {
+                checkAllResourcesLoaded();
+            } else {
+                // Wait for Vue.js to load
+                const checkVue = setInterval(() => {
+                    if (typeof Vue !== 'undefined') {
+                        clearInterval(checkVue);
+                        checkAllResourcesLoaded();
+                    }
+                }, 100);
+            }
+            
+            // Check if Axios is loaded
+            if (typeof axios !== 'undefined') {
+                checkAllResourcesLoaded();
+            } else {
+                const checkAxios = setInterval(() => {
+                    if (typeof axios !== 'undefined') {
+                        clearInterval(checkAxios);
+                        checkAllResourcesLoaded();
+                    }
+                }, 100);
+            }
+            
+            // Check if Lucide is loaded
+            if (typeof lucide !== 'undefined') {
+                checkAllResourcesLoaded();
+            } else {
+                const checkLucide = setInterval(() => {
+                    if (typeof lucide !== 'undefined') {
+                        clearInterval(checkLucide);
+                        checkAllResourcesLoaded();
+                    }
+                }, 100);
+            }
+            
+            // Check if our custom components are loaded
+            if (typeof Navbar !== 'undefined') {
+                checkAllResourcesLoaded();
+            } else {
+                const checkNavbar = setInterval(() => {
+                    if (typeof Navbar !== 'undefined') {
+                        clearInterval(checkNavbar);
+                        checkAllResourcesLoaded();
+                    }
+                }, 100);
+            }
+            
+            // Check if our main app is loaded
+            if (typeof Footer !== 'undefined') {
+                checkAllResourcesLoaded();
+            } else {
+                const checkFooter = setInterval(() => {
+                    if (typeof Footer !== 'undefined') {
+                        clearInterval(checkFooter);
+                        checkAllResourcesLoaded();
+                    }
+                }, 100);
+            }
+        }
+        
+        // Initialize loading check when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupResourceLoading);
+        } else {
+            setupResourceLoading();
+        }
+        
+        // Fallback: hide loader after maximum wait time
+        setTimeout(() => {
+            hideLoader();
+        }, 5000); // 5 seconds maximum wait
+    </script>
 </body>
 </html>
