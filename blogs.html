@@ -51,16 +51,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Background Image Section -->
-                        <div class="relative h-96 md:h-[500px] w-full rounded-lg overflow-hidden"
-                             style="background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;">
-                            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-                            <div class="absolute bottom-6 left-6 text-white">
-                                <h2 class="text-2xl md:text-4xl font-bold mb-2">Design Stories & Insights</h2>
-                                <p class="text-lg">Discover the process behind our most innovative projects</p>
-                            </div>
-                        </div>
                     </div>
                 </section>
 
@@ -68,8 +58,8 @@
                 <section class="py-12">
                     <div class="space-y-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <article v-for="blog in blogs" :key="blog.id" class="group cursor-pointer" @click="openModal(blog)">
-                                <div class="relative overflow-hidden rounded-lg mb-4">
+                            <article v-for="blog in blogs" :key="blog.id" class="group">
+                                <div class="relative overflow-hidden rounded-lg mb-4 cursor-pointer" @click="openModal(blog)">
                                     <img :src="blog.cover" :alt="blog.title" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
                                 </div>
@@ -79,11 +69,11 @@
                                         <span class="mx-2">•</span>
                                         <span>{{ blog.readTime }} min read</span>
                                     </div>
-                                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-200">{{ blog.title }}</h3>
+                                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-200 cursor-pointer" @click="openModal(blog)">{{ blog.title }}</h3>
                                     <p class="text-gray-600 leading-relaxed line-clamp-3">{{ blog.excerpt || 'Read more about this design insight and process...' }}</p>
                                     <div class="flex items-center justify-between pt-2">
                                         <span class="text-sm text-gray-500">By {{ blog.author || 'Genre of Design' }}</span>
-                                        <span class="text-red-600 font-medium group-hover:underline">Read more →</span>
+                                        <a :href="`blog.html?id=${blog.id}`" class="text-red-600 font-medium hover:underline transition-colors duration-200">Read more →</a>
                                     </div>
                                 </div>
                             </article>
@@ -91,13 +81,15 @@
                     </div>
                 </section>
 
-                <!-- CTA Section -->
-                <section class="py-12 md:py-24">
-                    <div class="flex flex-col items-center justify-center">
-                        <h2 class="mb-6 text-3xl font-bold md:text-7xl md:text-center">
-                            Ready to explore more design insights?{" "}
-                            <span class="text-red-600">Let's Talk</span>
-                        </h2>
+                <!-- Background Image Section -->
+                <section class="py-12">
+                    <div class="relative h-96 md:h-[500px] w-full rounded-lg overflow-hidden"
+                         style="background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;">
+                        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+                        <div class="absolute bottom-6 left-6 text-white">
+                            <h2 class="text-2xl md:text-4xl font-bold mb-2">Design Stories & Insights</h2>
+                            <p class="text-lg">Discover the process behind our most innovative projects</p>
+                        </div>
                     </div>
                 </section>
             </div>
