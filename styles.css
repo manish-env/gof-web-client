@@ -340,6 +340,11 @@ footer .fab:hover {
 
 .tile-info {
     color: white;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    bottom: -25px;
+
 }
 
 /* Tile Error State */
