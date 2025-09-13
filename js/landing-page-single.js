@@ -160,8 +160,8 @@ const app = createApp({
                 // Initialize project states for image loading (same as index page)
                 this.projects = this.projects.map(project => ({
                     ...project,
-                    isLazyLoaded: false,
-                    imageLoaded: false,
+                    isLazyLoaded: true, // Set to true immediately like index page
+                    imageLoaded: false, // Will be set to true when image loads
                     imageError: false
                 }));
                 
@@ -175,16 +175,40 @@ const app = createApp({
         },
         // Image handling methods (same as index page)
         getProjectImage(project) {
+            const baseUrl = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
+            
+            // Check if project has photos array and it's not empty
             if (!project || !project.photos || project.photos.length === 0) {
+                console.log('No photos for project:', project?.name);
                 return null;
             }
-            return this.resolveImageUrl(project.photos[0]);
+            
+            const photoPath = project.photos[0];
+            console.log('Getting image for project:', project.name, 'Photo path:', photoPath);
+            
+            // If it's already a full URL, return as-is
+            if (photoPath && photoPath.startsWith('http')) {
+                console.log('Using full URL:', photoPath);
+                return photoPath;
+            }
+            
+            // Construct the full URL
+            if (photoPath) {
+                const fullUrl = `${baseUrl}/${photoPath}`;
+                console.log('Constructed URL:', fullUrl);
+                return fullUrl;
+            }
+            
+            console.log('No valid photo path found');
+            return null;
         },
         handleImageLoad(event) {
             const projectId = event.target.closest('.project-tile')?.dataset.projectId;
+            console.log('Image loaded for project ID:', projectId);
             if (projectId) {
                 const project = this.projects.find(p => p.uuid1 === projectId);
                 if (project) {
+                    console.log('Image loaded successfully for:', project.name);
                     project.isLazyLoaded = true;
                     project.imageLoaded = true;
                     project.imageError = false;
@@ -193,9 +217,11 @@ const app = createApp({
         },
         handleImageError(event) {
             const projectId = event.target.closest('.project-tile')?.dataset.projectId;
+            console.log('Image error for project ID:', projectId, 'Error src:', event.target.src);
             if (projectId) {
                 const project = this.projects.find(p => p.uuid1 === projectId);
                 if (project) {
+                    console.log('Image failed to load for:', project.name);
                     project.isLazyLoaded = true;
                     project.imageLoaded = false;
                     project.imageError = true;
