@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Handle clean URLs for landing pages
+# Redirect /landing-page-slug to /landing-page.html?slug=landing-page-slug
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/landing-page\.html$
+RewriteCond %{REQUEST_URI} !^/(index|about|contact|careers|blogs|projects|landing-pages)\.html$
+RewriteRule ^([^/]+)/?$ /landing-page.html?slug=$1 [L,QSA]
+
+# Optional: Redirect old query parameter URLs to clean URLs
+RewriteCond %{QUERY_STRING} ^slug=([^&]+)$
+RewriteRule ^landing-page\.html$ /%1? [R=301,L]

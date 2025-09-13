@@ -145,7 +145,7 @@
 
                                     <!-- CTA Button -->
                                     <a 
-                                        :href="`landing-page.html?slug=${page.slug}`"
+                                        :href="`/${page.slug}`"
                                         class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors duration-200 text-center block font-medium"
                                     >
                                         View Landing Page →
@@ -186,6 +186,9 @@
             <lucide-message-circle :size="24"></lucide-message-circle>
         </a>
     </div>
+    
+    <!-- Clean URLs Handler -->
+    <script src="clean-urls.js"></script>
     
     <!-- Vue.js App Script -->
     <script src="js/components/Navbar.js"></script>

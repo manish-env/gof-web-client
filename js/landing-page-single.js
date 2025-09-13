@@ -47,6 +47,12 @@ const app = createApp({
                     this.landingPage = data.data;
                     document.title = `${this.landingPage.title} - Genre of Design`;
                     document.getElementById('page-title').textContent = this.landingPage.title;
+                    
+                    // Update URL to clean format if we loaded via query parameter
+                    const currentSlug = this.getSlugFromUrl();
+                    if (currentSlug && currentSlug === this.landingPage.slug) {
+                        this.updateUrlToClean(this.landingPage.slug);
+                    }
                 } else {
                     this.error = 'Landing page not found';
                 }
@@ -58,8 +64,37 @@ const app = createApp({
             }
         },
         getSlugFromUrl() {
+            // First try to get slug from clean URL path (e.g., /landing-page-slug)
+            const path = window.location.pathname;
+            const pathSegments = path.split('/').filter(segment => segment);
+            
+            // Look for landing page slug in the path
+            if (pathSegments.length > 0) {
+                const lastSegment = pathSegments[pathSegments.length - 1];
+                // If it's not a common file extension or known paths, treat it as a slug
+                if (!lastSegment.includes('.') && 
+                    lastSegment !== 'landing-page' && 
+                    lastSegment !== 'landing-pages' &&
+                    lastSegment !== 'index' &&
+                    lastSegment !== 'about' &&
+                    lastSegment !== 'contact' &&
+                    lastSegment !== 'careers' &&
+                    lastSegment !== 'blogs' &&
+                    lastSegment !== 'projects') {
+                    return lastSegment;
+                }
+            }
+            
+            // Fallback to query parameter for backward compatibility
             const params = new URLSearchParams(window.location.search);
             return params.get('slug');
+        },
+        // Update browser URL to clean format
+        updateUrlToClean(slug) {
+            if (history.pushState) {
+                const newUrl = `/${slug}`;
+                window.history.pushState({path: newUrl}, '', newUrl);
+            }
         },
         async submitForm() {
             if (this.submitting) return;
