@@ -184,7 +184,8 @@ body.loaded #app {
 }
 
 .blog-content {
-    @apply text-gray-700 leading-relaxed;
+    @apply text-gray-700 leading-relaxed text-base md:text-lg;
+    line-height: 1.7;
 }
 
 .blog-content h1,
@@ -193,44 +194,78 @@ body.loaded #app {
 .blog-content h4,
 .blog-content h5,
 .blog-content h6 {
-    @apply text-gray-900 font-bold mb-4 mt-6;
+    @apply text-gray-900 font-bold mb-4 mt-8 first:mt-0;
 }
 
 .blog-content h1 {
-    @apply text-3xl;
+    @apply text-2xl md:text-3xl;
 }
 
 .blog-content h2 {
-    @apply text-2xl;
+    @apply text-xl md:text-2xl;
 }
 
 .blog-content h3 {
-    @apply text-xl;
+    @apply text-lg md:text-xl;
 }
 
 .blog-content p {
-    @apply mb-4;
+    @apply mb-6 text-gray-700;
 }
 
 .blog-content ul,
 .blog-content ol {
-    @apply mb-4 pl-6;
+    @apply mb-6 pl-6 space-y-2;
+    list-style-position: outside;
 }
 
 .blog-content li {
-    @apply mb-2;
+    @apply mb-2 text-gray-700;
 }
 
+/* Ensure ordered and unordered list markers show consistently */
+.blog-content ul { list-style-type: disc; }
+.blog-content ol { list-style-type: decimal; }
+
+/* Support Quill indent classes coming from the editor */
+.blog-content .ql-indent-1 { padding-left: 1.5rem; }
+.blog-content .ql-indent-2 { padding-left: 3rem; }
+.blog-content .ql-indent-3 { padding-left: 4.5rem; }
+.blog-content .ql-indent-4 { padding-left: 6rem; }
+.blog-content .ql-indent-5 { padding-left: 7.5rem; }
+.blog-content .ql-indent-6 { padding-left: 9rem; }
+.blog-content .ql-indent-7 { padding-left: 10.5rem; }
+.blog-content .ql-indent-8 { padding-left: 12rem; }
+
 .blog-content blockquote {
-    @apply border-l-4 border-red-600 pl-4 italic text-gray-600 my-6;
+    @apply border-l-4 border-red-600 pl-6 italic text-gray-600 my-8 bg-gray-50 py-4 rounded-r-lg;
+    font-style: italic;
 }
 
 .blog-content img {
-    @apply rounded-lg my-6;
+    @apply rounded-xl my-8 shadow-md w-full;
+    max-height: 400px;
+    object-fit: cover;
 }
 
 .blog-content a {
-    @apply text-red-600 hover:underline;
+    @apply text-red-600 hover:text-red-700 hover:underline font-medium transition-colors duration-200;
+}
+
+.blog-content strong {
+    @apply font-semibold text-gray-900;
+}
+
+.blog-content code {
+    @apply bg-gray-100 px-2 py-1 rounded text-sm font-mono;
+}
+
+.blog-content pre {
+    @apply bg-gray-100 p-4 rounded-lg overflow-x-auto my-6;
+}
+
+.blog-content pre code {
+    @apply bg-transparent p-0;
 }
 
 .fa-brands {

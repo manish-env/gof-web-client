@@ -6,14 +6,14 @@ function getQueryParam(key) {
 }
 
 const API_BASE_URL = 'https://god-public-api.restless-mountain-f968.workers.dev/api';
-const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    ? 'http://localhost:4001'
-    : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
+const FILE_BASE_URL = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 
 const app = createApp({
     data() {
         return {
             blog: null,
+            blogContent: null,
+            relatedBlogs: [],
             loading: false,
             error: null
         };
@@ -40,17 +40,74 @@ const app = createApp({
                 const data = await res.json();
                 if (data && data.success) {
                     const b = data.data;
+                this.blogContent = b.content;
+                // Try to find content in various possible fields
+                let content = b.content || b.body || b.description || b.excerpt || b.html || b.richText || b.rich_text || '';
+                    
+                    // Try to find cover image in various possible fields
+                    let coverPath = b.coverImage || b.cover_image || b.cover || b.image || b.featured_image || '';
+                    
+                    // If no content found, try to use static data as fallback
+                    if (!content && window.BLOGS) {
+                        const staticBlog = window.BLOGS.find(blog => 
+                            blog.id === idOrSlug || blog.slug === idOrSlug
+                        );
+                        if (staticBlog) {
+                            content = staticBlog.content;
+                            if (!coverPath) coverPath = staticBlog.cover;
+                        }
+                    }
+                    
+                    // Ensure content is a string and not empty
+                    if (!content || typeof content !== 'string' || !content.trim()) {
+                        content = '<p>No content available for this blog post.</p>';
+                    }
+                    
                     this.blog = {
                         id: b.id || b.slug,
                         title: b.title,
                         author: b.author,
                         date: b.publishedAt || b.published_at || b.createdAt || b.created_at,
-                        readTime: b.readTime || 5,
-                        cover: this.resolveCoverUrl(b.coverImage || b.cover_image || b.cover || ''),
-                        content: b.content
+                        readTime: b.readTime || b.read_time || 5,
+                        cover: this.resolveCoverUrl(coverPath),
+                        content: content
                     };
+                    this.blogContent = content; // render as-is
+
+                    // Load related blogs (latest published, exclude current)
+                    try {
+                        const relRes = await fetch(`${API_BASE_URL}/blogs?published=true&limit=6`);
+                        const relData = await relRes.json();
+                        if (relData && relData.success && Array.isArray(relData.data)) {
+                            const currentId = this.blog.id;
+                            this.relatedBlogs = relData.data
+                                .filter(r => (r.id !== currentId))
+                                .slice(0, 4);
+                        }
+                    } catch (_) {}
                 } else {
-                    this.error = 'Failed to load blog';
+                    // Fallback to static data if API fails
+                    if (window.BLOGS) {
+                        const staticBlog = window.BLOGS.find(blog => 
+                            blog.id === idOrSlug || blog.slug === idOrSlug
+                        );
+                        if (staticBlog) {
+                            this.blog = {
+                                id: staticBlog.id,
+                                title: staticBlog.title,
+                                author: staticBlog.author,
+                                date: staticBlog.date,
+                                readTime: staticBlog.readTime,
+                                cover: staticBlog.cover,
+                                content: staticBlog.content
+                            };
+                            this.blogContent = staticBlog.content;
+                        } else {
+                            this.error = 'Blog not found';
+                        }
+                    } else {
+                        this.error = 'Failed to load blog';
+                    }
                 }
             } catch (e) {
                 console.error('Failed to load blog', e);
@@ -62,6 +119,13 @@ const app = createApp({
         formatDate(dateStr) {
             const d = new Date(dateStr);
             return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        },
+        handleImageError(event) {
+            // Hide the image and show fallback
+            event.target.style.display = 'none';
+        },
+        handleImageLoad(event) {
+            // Image loaded successfully
         }
     }
 });
