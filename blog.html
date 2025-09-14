@@ -80,7 +80,7 @@
                 <div class="space-y-4">
                   <a v-for="r in relatedBlogs" :key="r.id" :href="`blog.html?id=${r.id}`" class="block border rounded-lg p-4 hover:shadow-sm transition">
                     <div class="flex items-start gap-3">
-                      <img v-if="r.coverImage || r.cover" :src="r.coverImage || r.cover" :alt="r.title" class="w-16 h-16 object-cover rounded"/>
+                      <img v-if="r.cover" :src="r.cover" :alt="r.title" class="w-16 h-16 object-cover rounded"/>
                       <div>
                         <div class="font-medium leading-snug">{{ r.title }}</div>
                         <div class="text-xs text-gray-500 mt-1" v-if="r.publishedAt">{{ new Date(r.publishedAt || r.published_at || r.createdAt || r.created_at).toLocaleDateString() }}</div>

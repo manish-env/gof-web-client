@@ -39,7 +39,8 @@ const app = createApp({
                         const plain = content ? content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() : '';
                         const excerpt = b.excerpt || (plain ? plain.slice(0, 160) + (plain.length > 160 ? '…' : '') : '');
                         return {
-                        id: b.id || b.slug,
+                        id: b.id,
+                        slug: b.slug,
                         title: b.title,
                         author: b.author,
                         date: b.publishedAt || b.published_at || b.createdAt || b.created_at,
