@@ -353,7 +353,7 @@ footer .fab:hover {
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 10px;
+    grid-auto-rows: minmax(280px, auto);
     gap: 6px;
     padding: 0;
 }
