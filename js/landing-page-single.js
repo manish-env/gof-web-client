@@ -413,6 +413,19 @@ const app = createApp({
         formatDate(dateStr) {
             const d = new Date(dateStr);
             return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        },
+        // Get form fields with default fallback
+        getFormFields() {
+            if (!this.landingPage || !this.landingPage.form || !this.landingPage.form.fields || this.landingPage.form.fields.length === 0) {
+                // Return default fields if none are configured
+                return [
+                    { name: 'name', label: 'Full Name', type: 'text', required: true },
+                    { name: 'email', label: 'Email Address', type: 'email', required: true },
+                    { name: 'phone', label: 'Phone Number', type: 'tel', required: true },
+                    { name: 'message', label: 'Message', type: 'textarea', required: false }
+                ];
+            }
+            return this.landingPage.form.fields;
         }
     }
 });
