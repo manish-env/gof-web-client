@@ -30,6 +30,11 @@ const app = createApp({
                 return this.projects;
             }
             return this.projects.slice(0, 6);
+        },
+        columnCount() {
+            if (window.innerWidth < 640) return 2; // Mobile: 2 columns
+            if (window.innerWidth < 1024) return 2; // Tablet: 2 columns  
+            return 3; // Desktop: 3 columns
         }
     },
     async mounted() {
@@ -329,6 +334,19 @@ const app = createApp({
         toggleViewAll() {
             this.showAllProjects = !this.showAllProjects;
             console.log('Toggled view all:', this.showAllProjects, 'Showing', this.displayedProjects.length, 'projects');
+        },
+        // Masonry column distribution
+        getMasonryColumns() {
+            const columns = this.columnCount;
+            const columnData = Array.from({ length: columns }, () => []);
+            
+            // Distribute displayed projects across columns for proper masonry effect
+            this.displayedProjects.forEach((project, index) => {
+                const columnIndex = index % columns;
+                columnData[columnIndex].push(project);
+            });
+            
+            return columnData;
         },
         async submitForm() {
             if (this.submitting) return;

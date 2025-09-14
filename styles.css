@@ -1121,7 +1121,6 @@ footer .fab:hover {
     z-index: 10;
     opacity: 0;
     animation: fadeInUp 0.6s ease-out forwards;
-    border-radius: 8px;
 }
 
 .project-tile.has-image {
@@ -1228,7 +1227,6 @@ footer .fab:hover {
     background-color: #f9fafb;
     color: #6b7280;
     border: 2px dashed #d1d5db;
-    border-radius: 8px;
 }
 
 .tile-placeholder .placeholder-icon {
