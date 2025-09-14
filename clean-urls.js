@@ -40,14 +40,11 @@
         return true;
     }
     
-    // Check if current URL is a clean blog URL (/blog/slug)
+    // Check if current URL is a clean blog URL (/blog?blog=slug)
     function isBlogCleanUrl() {
         const path = window.location.pathname;
-        const segments = path.split('/').filter(Boolean);
-        if (segments.length !== 2) return false;
-        if (segments[0] !== 'blog') return false;
-        if (segments[1].includes('.')) return false;
-        return true;
+        const search = window.location.search;
+        return path === '/blog' && search.includes('blog=');
     }
     
     // Redirect clean URL to query parameter format
@@ -62,10 +59,12 @@
             return;
         }
         if (isBlogCleanUrl()) {
-            const segments = window.location.pathname.split('/').filter(Boolean);
-            const slug = segments[1];
-            const newUrl = `${BLOG_PAGE_BASE}?id=${encodeURIComponent(slug)}`;
-            window.location.replace(newUrl);
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('blog');
+            if (slug) {
+                const newUrl = `${BLOG_PAGE_BASE}?id=${encodeURIComponent(slug)}`;
+                window.location.replace(newUrl);
+            }
         }
     }
     
@@ -83,14 +82,14 @@
                 link.setAttribute('href', `/${slug}`);
             }
         });
-        // Convert blog links blog.html?id=slug to /blog/slug
+        // Convert blog links blog.html?id=slug to /blog?blog=slug
         const blogLinks = document.querySelectorAll('a[href*="blog.html?id="]');
         blogLinks.forEach(link => {
             const href = link.getAttribute('href');
             const match = href.match(/blog\.html\?id=([^&]+)/);
             if (match) {
                 const slug = decodeURIComponent(match[1]);
-                link.setAttribute('href', `/blog/${slug}`);
+                link.setAttribute('href', `/blog?blog=${slug}`);
             }
         });
     }

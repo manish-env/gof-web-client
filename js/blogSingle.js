@@ -128,6 +128,40 @@ const app = createApp({
             const d = new Date(dateStr);
             return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
         },
+        getShareUrl(platform) {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(this.blog?.title || 'Check out this blog post');
+            const text = encodeURIComponent(`${this.blog?.title || 'Blog Post'} - Genre of Design`);
+            
+            switch (platform) {
+                case 'facebook':
+                    return `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                case 'twitter':
+                    return `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+                case 'linkedin':
+                    return `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                case 'whatsapp':
+                    return `https://wa.me/?text=${text}%20${url}`;
+                default:
+                    return '#';
+            }
+        },
+        async copyUrl() {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                // You could add a toast notification here
+                alert('Link copied to clipboard!');
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = window.location.href;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Link copied to clipboard!');
+            }
+        },
         handleImageError(event) {
             // Hide the image and show fallback
             event.target.style.display = 'none';
