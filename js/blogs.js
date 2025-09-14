@@ -3,9 +3,7 @@ const { createApp } = Vue;
 
 // API Configuration
 const API_BASE_URL = 'https://god-public-api.restless-mountain-f968.workers.dev/api';
-const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    ? 'http://localhost:4001'
-    : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
+const FILE_BASE_URL = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 
 // Main App
 const app = createApp({
@@ -35,16 +33,22 @@ const app = createApp({
                 const res = await fetch(`${API_BASE_URL}/blogs`);
                 const data = await res.json();
                 if (data && data.success) {
-                    this.blogs = (data.data || []).map(b => ({
+                    this.blogs = (data.data || []).map(b => {
+                        const content = b.content || b.body || b.description || b.excerpt || b.html || '';
+                        // derive a plain-text excerpt if missing
+                        const plain = content ? content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() : '';
+                        const excerpt = b.excerpt || (plain ? plain.slice(0, 160) + (plain.length > 160 ? '…' : '') : '');
+                        return {
                         id: b.id || b.slug,
                         title: b.title,
                         author: b.author,
                         date: b.publishedAt || b.published_at || b.createdAt || b.created_at,
                         readTime: b.readTime || 5,
                         cover: this.resolveCoverUrl(b.coverImage || b.cover_image || b.cover || ''),
-                        excerpt: b.excerpt || '',
-                        content: b.content
-                    }));
+                        excerpt,
+                        content
+                        };
+                    });
                 } else {
                     this.error = 'Failed to load blogs';
                 }
