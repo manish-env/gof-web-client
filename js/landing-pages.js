@@ -12,11 +12,8 @@ const app = createApp({
     data() {
         return {
             landingPages: [],
-            filteredPages: [],
             loading: false,
-            error: null,
-            searchQuery: '',
-            selectedCategory: ''
+            error: null
         };
     },
     async mounted() {
@@ -41,7 +38,6 @@ const app = createApp({
                 console.log('📦 Response data:', data);
                 if (data && data.success) {
                     this.landingPages = data.data || [];
-                    this.filteredPages = [...this.landingPages];
                     console.log('✅ Loaded landing pages:', this.landingPages.length);
                 } else {
                     console.error('❌ API returned error:', data);
@@ -53,29 +49,6 @@ const app = createApp({
             } finally {
                 this.loading = false;
             }
-        },
-        filterPages() {
-            let filtered = [...this.landingPages];
-
-            // Filter by search query
-            if (this.searchQuery.trim()) {
-                const query = this.searchQuery.toLowerCase();
-                filtered = filtered.filter(page => 
-                    page.title.toLowerCase().includes(query) ||
-                    page.description.toLowerCase().includes(query) ||
-                    page.category.toLowerCase().includes(query) ||
-                    (page.tags && page.tags.some(tag => tag.toLowerCase().includes(query)))
-                );
-            }
-
-            // Filter by category
-            if (this.selectedCategory) {
-                filtered = filtered.filter(page => 
-                    page.category.toLowerCase() === this.selectedCategory.toLowerCase()
-                );
-            }
-
-            this.filteredPages = filtered;
         },
         formatDate(dateStr) {
             const d = new Date(dateStr);

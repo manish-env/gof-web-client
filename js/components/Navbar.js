@@ -8,7 +8,7 @@ const Navbar = {
                     <div class="hidden md:flex items-center space-x-8 absolute left-0">
                         <a href="index.html" :class="['nav-link-simple', { 'active-link': isActive('index.html') } ]">Projects</a>
                         <a href="blogs.html" :class="['nav-link-simple', { 'active-link': isActive('blogs.html') } ]">Blogs</a>
-                        <a href="landing-pages.html" :class="['nav-link-simple', { 'active-link': isActive('landing-pages.html') } ]">Landing Pages</a>
+                        <a href="landing-pages.html" :class="['nav-link-simple', { 'active-link': isActive('landing-pages.html') } ]">Discover More</a>
                     </div>
                     
                     <!-- Center Logo -->

@@ -51,37 +51,6 @@
                     </div>
                 </section>
 
-                <!-- Filter Section -->
-                <section class="py-8">
-                    <div class="flex flex-col md:flex-row gap-4 justify-center items-center mb-8">
-                        <div class="relative">
-                            <input 
-                                v-model="searchQuery" 
-                                @input="filterPages"
-                                type="text" 
-                                placeholder="Search landing pages..."
-                                class="w-80 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200"
-                            >
-                        </div>
-                        <select 
-                            v-model="selectedCategory" 
-                            @change="filterPages"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200"
-                        >
-                            <option value="">All Categories</option>
-                            <option value="Hospitality">Hospitality</option>
-                            <option value="Residential">Residential</option>
-                            <option value="Commercial">Commercial</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Results Count -->
-                    <div class="text-center mb-8">
-                        <p class="text-gray-600">
-                            Showing {{ filteredPages.length }} landing page{{ filteredPages.length !== 1 ? 's' : '' }}
-                        </p>
-                    </div>
-                </section>
 
                 <!-- Landing Pages Grid Section -->
                 <section class="py-12">
@@ -100,35 +69,20 @@
                         </div>
 
                         <!-- Landing Pages Grid -->
-                        <div v-else-if="filteredPages.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div v-else-if="landingPages.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             <div 
-                                v-for="page in filteredPages" 
+                                v-for="page in landingPages" 
                                 :key="page.id"
                                 class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                             >
-                                <!-- Image -->
-                                <div class="h-48 relative overflow-hidden">
-                                    <img 
-                                        v-if="page.heroImage" 
-                                        :src="resolveImageUrl(page.heroImage)" 
-                                        :alt="page.title"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    >
-                                    <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-400 to-red-600">
-                                        <div class="text-white text-6xl font-bold opacity-50">
-                                            {{ page.category.charAt(0) }}
-                                        </div>
-                                    </div>
-                                    <div class="absolute top-4 left-4">
-                                        <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-sm font-medium shadow-md">
-                                            {{ page.category }}
-                                        </span>
-                                    </div>
-                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
-                                </div>
 
                                 <!-- Content -->
                                 <div class="p-6">
+                                    <div class="mb-3">
+                                        <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                                            {{ page.category }}
+                                        </span>
+                                    </div>
                                     <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors duration-200">{{ page.title }}</h3>
                                     <p class="text-gray-600 mb-4 line-clamp-3">{{ page.description }}</p>
                                     
@@ -143,12 +97,12 @@
                                         </span>
                                     </div>
 
-                                    <!-- CTA Button -->
+                                    <!-- CTA Link -->
                                     <a 
                                         :href="`/${page.slug}`"
-                                        class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors duration-200 text-center block font-medium"
+                                        class="inline-flex items-center text-red-600 hover:text-red-700 font-medium transition-colors duration-200"
                                     >
-                                        View Landing Page →
+                                        Discover more →
                                     </a>
                                 </div>
                             </div>
@@ -163,17 +117,6 @@
                     </div>
                 </section>
 
-                <!-- Background Image Section -->
-                <section class="py-12">
-                    <div class="relative h-96 md:h-[500px] w-full rounded-lg overflow-hidden"
-                         style="background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;">
-                        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-                        <div class="absolute bottom-6 left-6 text-white">
-                            <h2 class="text-2xl md:text-4xl font-bold mb-2">Strategic Design Solutions</h2>
-                            <p class="text-lg">Each landing page is crafted to convert visitors into clients</p>
-                        </div>
-                    </div>
-                </section>
             </div>
         </main>
 
