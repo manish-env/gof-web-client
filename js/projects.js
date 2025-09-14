@@ -93,6 +93,13 @@ const app = createApp({
             // No additional sorting needed here to maintain consistent order
             
             return filtered;
+        },
+        
+        // Reactive column count
+        columnCount() {
+            if (window.innerWidth >= 1024) return 3;
+            if (window.innerWidth >= 640) return 2;
+            return 1;
         }
     },
     watch: {
@@ -120,6 +127,15 @@ const app = createApp({
         window.addEventListener('load', () => {
             this.resizeAllMasonryItems();
         });
+        
+        // Force initial render to ensure columns are calculated
+        this.$nextTick(() => {
+            this.$forceUpdate();
+        });
+        
+        console.log('App mounted, projects loaded:', this.projects.length);
+        console.log('Initial window width:', window.innerWidth);
+        console.log('Initial column count:', this.columnCount);
     },
     beforeUnmount() {
         if (this.scrollObserver) {
@@ -279,12 +295,15 @@ const app = createApp({
                 }
             });
         },
-
+        
+        // Setup window resize listener for responsive columns
         setupResizeHandler() {
             let resizeTimeout;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
+                    // Force re-render to recalculate columns
+                    this.$forceUpdate();
                     this.resizeAllMasonryItems();
                 }, 250);
             });
@@ -338,6 +357,24 @@ const app = createApp({
                     console.log('No trigger element found for infinite scroll');
                 }
             });
+        },
+        
+        // Masonry column distribution like god_old
+        getMasonryColumns() {
+            const columns = this.columnCount;
+            console.log('Current window width:', window.innerWidth);
+            console.log('Calculated columns:', columns);
+            
+            const columnData = Array.from({ length: columns }, () => []);
+            
+            // Distribute projects across columns for proper masonry effect
+            this.filteredProjects.forEach((project, index) => {
+                const columnIndex = index % columns;
+                columnData[columnIndex].push(project);
+            });
+            
+            console.log('Column distribution:', columnData.map(col => col.length));
+            return columnData;
         },
 
         getProjectImage(project) {
@@ -644,6 +681,7 @@ const app = createApp({
 app.component('navbar-component', Navbar);
 app.component('footer-component', Footer);
 app.component('whatsapp-component', WhatsApp);
+app.component('image-tile', ImageTile);
 
 // Mount the app
 app.mount('#app');

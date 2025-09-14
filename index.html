@@ -129,56 +129,23 @@
                     <div class="loading-spinner"></div>
                 </div>
 
-                <!-- Projects Grid with Simple Masonry -->
+                <!-- Projects Grid with Column-based Masonry like god_old -->
                 <div v-else id="projects-container" class="projects-grid">
-                    <div v-for="project in filteredProjects" :key="project.uuid1" :data-project-id="project.uuid1" class="project-tile" :class="{ 'has-image': project.imageLoaded }" @click="viewProject(project)">
-                        <!-- Tile Content -->
-                        <div class="tile-content">
-                            <!-- Loading state -->
-                            <div v-if="!project.isLazyLoaded" class="tile-loading">
-                                <div class="loading-spinner"></div>
-                                <div class="loading-text">Loading...</div>
-                            </div>
-
-                            <!-- Image when loaded -->
-                            <div v-else-if="project.imageLoaded" class="tile-with-image">
-                                <img 
-                                    :src="getProjectImage(project)"
-                                    :alt="project.name"
-                                    class="tile-image"
-                                    @load="handleImageLoad"
-                                    @error="handleImageError"
-                                />
-                                <div class="tile-overlay">
-                                    <div class="tile-info">
-                                        <h3 class="project-title">{{ project.name }}</h3>
-                                        <p class="project-location">{{ project.location }}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Placeholder when image failed to load -->
-                            <div v-else-if="project.imageError" class="tile-placeholder">
-                                <div class="placeholder-icon">
-                                    <lucide-alert-circle :size="48"></lucide-alert-circle>
-                                </div>
-                                <div class="placeholder-text">
-                                    <h3 class="project-title">{{ project.name }}</h3>
-                                    <p class="project-location">{{ project.location }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Fallback placeholder -->
-                            <div v-else class="tile-placeholder">
-                                <div class="placeholder-icon">
-                                    <lucide-image :size="48"></lucide-image>
-                                </div>
-                                <div class="placeholder-text">
-                                    <h3 class="project-title">{{ project.name }}</h3>
-                                    <p class="project-location">{{ project.location }}</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div 
+                        v-for="(column, columnIndex) in getMasonryColumns()" 
+                        :key="columnIndex" 
+                        class="masonry-column"
+                    >
+                        <image-tile 
+                            v-for="project in column" 
+                            :key="project.uuid1" 
+                            :project="project"
+                            :get-project-image="getProjectImage"
+                            :data-project-id="project.uuid1"
+                            @view-project="viewProject"
+                            @image-load="handleImageLoad"
+                            @image-error="handleImageError"
+                        ></image-tile>
                     </div>
                 </div>
 
@@ -214,8 +181,8 @@
         <div v-if="selectedProject" class="fixed inset-0 z-50 bg-transparent backdrop-blur-md modal-animate" @click="closeModal">
             <div class="relative w-full md:w-4/5 h-full mx-auto" @click.stop>
                 <!-- Close Button -->
-                <button @click="closeModal" class="absolute top-4 right-4 z-20 p-2 bg-white bg-opacity-20 rounded-full text-white hover:bg-opacity-30 transition-all duration-300">
-                    <lucide-x :size="24"></lucide-x>
+                <button @click="closeModal" class="absolute top-4 right-4 z-20 w-10 h-10 bg-white bg-opacity-20 rounded-full text-white hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                    <i class="fas fa-times text-lg"></i>
                 </button>
                 
                 <!-- Full-Width Carousel with Info as First Slide -->
@@ -299,6 +266,7 @@
     <script src="js/components/Navbar.js"></script>
     <script src="js/components/Footer.js"></script>
     <script src="js/components/WhatsApp.js"></script>
+    <script src="js/components/ImageTile.js"></script>
     <script src="js/projects.js"></script>
     
     <!-- Page Loader Script -->
