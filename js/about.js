@@ -1,7 +1,13 @@
 const { createApp } = Vue;
 
-// Spotlight Carousel Component
+// Spotlight Carousel Component (accepts images prop)
 const SpotlightCarousel = {
+    props: {
+        images: {
+            type: Array,
+            default: () => []
+        }
+    },
     template: `
         <div class="relative">
             <div class="overflow-hidden">
@@ -50,42 +56,14 @@ const SpotlightCarousel = {
     data() {
         return {
             currentIndex: 0,
-            projects: [
-                {
-                    id: "1",
-                    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                    name: "Ayodhya"
-                },
-                {
-                    id: "2", 
-                    image: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80",
-                    name: "Ayodhya"
-                },
-                {
-                    id: "3",
-                    image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80", 
-                    name: "Itarsi Mini Club"
-                },
-                {
-                    id: "4",
-                    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                    name: "Itarsi Township"
-                },
-                {
-                    id: "5",
-                    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2053&q=80",
-                    name: "Manlok Villa"
-                },
-                {
-                    id: "6",
-                    image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                    name: "Sea Leaf"
-                },
-                {
-                    id: "7",
-                    image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                    name: "Sea Leaf"
-                }
+            projects: this.images.length ? this.images : [
+                { id: "1", image: "public/images/projects/Ayodhya1.jpg", name: "Ayodhya" },
+                { id: "2", image: "public/images/projects/Ayodhya3.jpg", name: "Ayodhya" },
+                { id: "3", image: "public/images/projects/ItarsiMiniClub.jpg", name: "Itarsi Mini Club" },
+                { id: "4", image: "public/images/projects/ItarsiTownship.jpg", name: "Itarsi Township" },
+                { id: "5", image: "public/images/projects/ManlokVilla.jpg", name: "Manlok Villa" },
+                { id: "6", image: "public/images/projects/SeaLeaf1.jpg", name: "Sea Leaf" },
+                { id: "7", image: "public/images/projects/SeaLeaf2.jpg", name: "Sea Leaf" }
             ]
         }
     },
@@ -105,63 +83,133 @@ const SpotlightCarousel = {
     }
 };
 
-// Features Section Component
+// Features Section Component (Scrollable container)
 const FeaturesSection = {
     template: `
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div v-for="feature in features" :key="feature.id" 
-                 class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                <div class="aspect-video bg-gray-100">
-                    <img :src="feature.image" :alt="feature.title" 
-                         class="w-full h-full object-cover" />
-                </div>
-                <div class="p-4">
-                    <h3 class="font-semibold text-lg mb-2">{{ feature.title }}</h3>
-                    <p class="text-gray-600 text-sm">{{ feature.description }}</p>
+      <div class="relative">
+        <div class="overflow-x-auto scrollbar-hide"
+             ref="scrollContainer"
+             @scroll="onScroll">
+          <div class="flex pb-4" style="width: max-content;">
+            
+            <div v-for="feature in features" :key="feature.id"
+                 class="feature-card flex-shrink-0 flex items-center justify-center px-4">
+              <img :src="feature.image"
+                   :alt="feature.title"
+                   class="h-[80vh] w-auto object-contain"
+                   loading="lazy" />
+            </div>
+  
+          </div>
+        </div>
+  
+        <!-- Navigation Buttons -->
+        <button @click="scrollLeft" 
+                class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 transition-colors z-10">
+          <lucide-chevron-left :size="24"></lucide-chevron-left>
+        </button>
+        <button @click="scrollRight" 
+                class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 transition-colors z-10">
+          <lucide-chevron-right :size="24"></lucide-chevron-right>
+        </button>
+      </div>
+    `,
+    data() {
+      return {
+        features: [
+          {
+            id: 1,
+            title: "Glitz Magazine",
+            description: "Featured in the prestigious lifestyle magazine",
+            image: "public/features/Glitz.png"   // ✅ restored
+          },
+          {
+            id: 2,
+            title: "IFJ Publication",
+            description: "Recognized for innovative design approach",
+            image: "public/features/IFJ.png"
+          },
+          {
+            id: 3,
+            title: "SS Design",
+            description: "Showcased in leading design publication",
+            image: "public/features/SS.png"
+          },
+          {
+            id: 4,
+            title: "ToR Magazine",
+            description: "Featured for exceptional architectural solutions",
+            image: "public/features/ToR.png"
+          }
+        ]
+      }
+    },
+    methods: {
+      scrollLeft() {
+        const container = this.$refs.scrollContainer;
+        const card = container.querySelector('.feature-card');
+        const scrollAmount = card ? card.offsetWidth : 800;
+        container.scrollBy({
+          left: -scrollAmount,
+          behavior: 'smooth'
+        });
+      },
+      scrollRight() {
+        const container = this.$refs.scrollContainer;
+        const card = container.querySelector('.feature-card');
+        const scrollAmount = card ? card.offsetWidth : 800;
+        container.scrollBy({
+          left: scrollAmount,
+          behavior: 'smooth'
+        });
+      },
+      onScroll(e) {
+        // Optional: track active slide here if needed
+      }
+    }
+  };
+  
+
+// Services Accordion (matches old site layout)
+const ServicesAccordion = {
+    template: `
+        <div>
+            <div v-for="(s, idx) in services" :key="s.title" class="py-6 border-b border-gray-200">
+                <button @click="toggle(idx)" class="w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 text-3xl no-underline">
+                    <div class="justify-self-start">0{{ idx + 1 }}</div>
+                    <div class="text-left md:text-center">{{ s.title }}</div>
+                    <div>
+                        <svg :class="{'rotate-180': openIndex === idx}" class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </button>
+                <div v-show="openIndex === idx" class="pt-4 text-lg">
+                    {{ s.description }}
                 </div>
             </div>
         </div>
     `,
     data() {
         return {
-            features: [
+            openIndex: 0,
+            services: [
                 {
-                    id: 1,
-                    title: "Architectural Digest",
-                    description: "Featured in the prestigious architectural magazine",
-                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                    title: 'Architecture',
+                    description: "We in genre of design strongly believe in blurring the typological boundaries of architecture and creating an architecture which is not stamped as 'something' based on a functionalist approach but evolves 'for' and 'from' life."
                 },
                 {
-                    id: 2,
-                    title: "Design Today",
-                    description: "Recognized for innovative design approach",
-                    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80"
+                    title: 'Interior Designing',
+                    description: 'We extend our philosophy into our approach to Interior Design, where spaces are conceived as fluid environments that seamlessly integrate with the architecture, enriching the human experience through thoughtful spatial compositions and material selections.'
                 },
                 {
-                    id: 3,
-                    title: "Interior Design Magazine",
-                    description: "Showcased in leading interior design publication",
-                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-                },
-                {
-                    id: 4,
-                    title: "Home & Garden",
-                    description: "Featured for exceptional residential projects",
-                    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80"
-                },
-                {
-                    id: 5,
-                    title: "Design Week",
-                    description: "Highlighted for sustainable design practices",
-                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-                },
-                {
-                    id: 6,
-                    title: "Architecture Now",
-                    description: "Recognized for contemporary architectural solutions",
-                    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80"
+                    title: 'Urban Designing',
+                    description: 'In Urban Design, our focus is on fostering vibrant, inclusive communities by reimagining urban landscapes as interconnected ecosystems that prioritize sustainability and social well-being.'
                 }
             ]
+        }
+    },
+    methods: {
+        toggle(idx) {
+            this.openIndex = this.openIndex === idx ? -1 : idx;
         }
     }
 };
@@ -169,7 +217,7 @@ const FeaturesSection = {
 // Testimonials Section Component
 const TestimonialsSection = {
     template: `
-        <section class="w-full py-12 md:py-24 lg:py-32 px-6 sm:px-0">
+        <section class="w-full px-6 sm:px-0">
             <div class="container grid items-center justify-center gap-4 px-4 md:px-6 lg:gap-10">
                 <div class="space-y-3 text-center">
                     <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -241,6 +289,7 @@ createApp({
         'navbar-component': Navbar,
         'footer-component': Footer,
         'spotlight-carousel': SpotlightCarousel,
+        'services-accordion': ServicesAccordion,
         'features-section': FeaturesSection,
         'testimonials-section': TestimonialsSection
     }

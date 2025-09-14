@@ -53,41 +53,41 @@
                             </div>
                         </div>
 
-                        <!-- Background Image Section -->
-                        <div class="relative h-96 md:h-[500px] w-full rounded-lg overflow-hidden"
-                             style="background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;">
-                            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-                            <div class="absolute bottom-6 left-6 text-white">
-                                <h2 class="text-2xl md:text-4xl font-bold mb-2">Creating Possibilities for Life</h2>
-                                <p class="text-lg">Through innovative design and thoughtful architecture</p>
+                        <!-- Background Metrics Section (exact layout) -->
+                        <div
+                            style="background: url('public/images/head.webp') no-repeat center center/cover fixed"
+                            class="w-full max-h-[80vh] md:aspect-[16/9] flex flex-col md:flex-row pb-20 items-end relative">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                            <div class="text-white md:w-4/5 px-2 py-4 md:pl-8 z-10 flex flex-col gap-4 min-h-96">
+                                <p class="text-2xl md:text-5xl tracking-wide font-bold leading-9 mt-auto">6M+ sq ft</p>
+                                <p class="text-xl tracking-wide">Built up area</p>
+                                <p class="font-light leading-5 text-lg">Carefully following the Legacy of Regional architecture with the unique touch of the architect.</p>
+                            </div>
+                            <div class="bg-white py-8 md:px-12 z-10 grid grid-cols-2 gap-4 w-full">
+                                <div class="border-t-4 border-red-600 py-4">
+                                    <h2 class="text-5xl mb-2 font-semibold tracking-wide hover-underline-animation text-red-600">17+</h2>
+                                    <p class="text-xl font-bold">Years of Experience</p>
+                                    <p>Delivering exceptional construction solutions, combining expertise with innovation to surpass client expectations.</p>
+                                </div>
+                                <div class="border-t-4 border-red-600 py-4">
+                                    <h2 class="text-5xl mb-2 hover-underline-animation text-red-600 font-semibold tracking-wide">180+</h2>
+                                    <p class="text-xl font-bold">Successfully Completed Projects</p>
+                                    <p>Our commitment to excellence is evident in every endeavor we undertake, ensuring quality and client satisfaction at every step.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Services Section -->
-                <section class="py-12">
-                    <div class="space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <div class="space-y-4">
-                                <h3 class="text-2xl font-bold text-gray-900">Architecture</h3>
-                                <p class="text-gray-600 leading-relaxed">
-                                    We in genre of design strongly believe in blurring the typological boundaries of architecture and creating an architecture which is not stamped as 'something' based on a functionalist approach but evolves 'for' and 'from' life.
-                                </p>
-                            </div>
-                            <div class="space-y-4">
-                                <h3 class="text-2xl font-bold text-gray-900">Interior Designing</h3>
-                                <p class="text-gray-600 leading-relaxed">
-                                    We extend our philosophy into our approach to Interior Design, where spaces are conceived as fluid environments that seamlessly integrate with the architecture, enriching the human experience through thoughtful spatial compositions and material selections.
-                                </p>
-                            </div>
-                            <div class="space-y-4">
-                                <h3 class="text-2xl font-bold text-gray-900">Urban Designing</h3>
-                                <p class="text-gray-600 leading-relaxed">
-                                    In Urban Design, our focus is on fostering vibrant, inclusive communities by reimagining urban landscapes as interconnected ecosystems that prioritize sustainability and social well-being.
-                                </p>
-                            </div>
+                <!-- Services Section (exact layout with accordion) -->
+                <section class="w-full my-44">
+                    <div>
+                        <div class="grid grid-cols-1 xl:grid-cols-2 py-8">
+                            <div class="block sm:hidden font-medium text-6xl text-center xl:text-right md:text-[110px] text-red-600">Services</div>
+                            <p class="px-6 py-4 text-lg text-center sm:text-left">Our dedication to precision and craftsmanship reflects in our proficiency in shaping architectural landscapes.</p>
+                            <div class="hidden sm:block font-medium text-6xl text-center xl:text-right md:text-[110px] text-red-600">Services</div>
                         </div>
+                        <services-accordion></services-accordion>
                     </div>
                 </section>
 
@@ -119,14 +119,17 @@
                     <features-section></features-section>
                 </section>
 
+                <!-- Logo Cloud Section -->
+                <logo-cloud></logo-cloud>
+
                 <!-- Testimonials Section -->
                 <testimonials-section></testimonials-section>
 
                 <!-- CTA Section -->
-                <section class="py-12 md:py-24">
+                <section class="pt-[30px]">
                     <div class="flex flex-col items-center justify-center">
-                        <h2 class="mb-6 text-3xl font-bold md:text-7xl md:text-center">
-                            Let's shape spaces and create inspiring environments{" "}
+                        <h2 class="text-3xl font-bold md:text-6xl md:text-center">
+                            Let's shape spaces and create inspiring environments
                             <span class="text-red-600">Let's Talk</span>
                         </h2>
                     </div>
