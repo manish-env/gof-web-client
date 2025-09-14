@@ -63,6 +63,7 @@ const app = createApp({
                         content = '<p>No content available for this blog post.</p>';
                     }
                     
+                    const isPlain = !(content && /<\s*[a-z][\s\S]*>/i.test(content.trim()));
                     this.blog = {
                         id: b.id || b.slug,
                         title: b.title,
@@ -70,7 +71,8 @@ const app = createApp({
                         date: b.publishedAt || b.published_at || b.createdAt || b.created_at,
                         readTime: b.readTime || b.read_time || 5,
                         cover: this.resolveCoverUrl(coverPath),
-                        content: content
+                        content: content,
+                        isPlain
                     };
                     this.blogContent = content; // render as-is
 
@@ -81,7 +83,13 @@ const app = createApp({
                         if (relData && relData.success && Array.isArray(relData.data)) {
                             const currentId = this.blog.id;
                             this.relatedBlogs = relData.data
-                                .filter(r => (r.id !== currentId))
+                                .map(r => ({
+                                    id: r.id || r.slug,
+                                    title: r.title,
+                                    publishedAt: r.publishedAt || r.published_at || r.createdAt || r.created_at,
+                                    cover: this.resolveCoverUrl(r.coverImage || r.cover_image || r.cover || ''),
+                                }))
+                                .filter(r => r.id !== currentId)
                                 .slice(0, 4);
                         }
                     } catch (_) {}

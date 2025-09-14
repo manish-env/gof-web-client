@@ -68,7 +68,11 @@
           <section class="py-6">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
               <!-- Main content (70%) -->
-              <div class="md:col-span-8" v-html="blogContent"></div>
+              <div class="md:col-span-8">
+                <!-- If plain text, preserve whitespace/line-breaks -->
+                <pre v-if="blog && blog.isPlain" class="whitespace-pre-wrap break-words text-gray-900">{{ blogContent }}</pre>
+                <div v-else v-html="blogContent"></div>
+              </div>
               
               <!-- Sidebar: related blogs (30%) -->
               <aside class="md:col-span-4">

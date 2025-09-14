@@ -1,12 +1,13 @@
-// Clean URLs Handler for Landing Pages
-// This script handles clean URLs like /landing-page-slug
+// Clean URLs Handler for Landing Pages and Blogs
+// This script handles clean URLs like /landing-page-slug and /blog/blog-slug
 
 (function() {
     'use strict';
     
     // Configuration
     const LANDING_PAGE_BASE = 'landing-page.html';
-    const KNOWN_PAGES = ['index', 'about', 'contact', 'careers', 'blogs', 'projects', 'landing-pages'];
+    const BLOG_PAGE_BASE = 'blog.html';
+    const KNOWN_PAGES = ['index', 'about', 'contact', 'careers', 'blogs', 'projects', 'landing-pages', 'blog'];
     
     // Check if current URL is a clean landing page URL
     function isLandingPageCleanUrl() {
@@ -39,6 +40,16 @@
         return true;
     }
     
+    // Check if current URL is a clean blog URL (/blog/slug)
+    function isBlogCleanUrl() {
+        const path = window.location.pathname;
+        const segments = path.split('/').filter(Boolean);
+        if (segments.length !== 2) return false;
+        if (segments[0] !== 'blog') return false;
+        if (segments[1].includes('.')) return false;
+        return true;
+    }
+    
     // Redirect clean URL to query parameter format
     function handleCleanUrl() {
         if (isLandingPageCleanUrl()) {
@@ -47,6 +58,13 @@
             const newUrl = `${LANDING_PAGE_BASE}?slug=${encodeURIComponent(slug)}`;
             
             // Use replace to avoid adding to browser history
+            window.location.replace(newUrl);
+            return;
+        }
+        if (isBlogCleanUrl()) {
+            const segments = window.location.pathname.split('/').filter(Boolean);
+            const slug = segments[1];
+            const newUrl = `${BLOG_PAGE_BASE}?id=${encodeURIComponent(slug)}`;
             window.location.replace(newUrl);
         }
     }
@@ -65,6 +83,16 @@
                 link.setAttribute('href', `/${slug}`);
             }
         });
+        // Convert blog links blog.html?id=slug to /blog/slug
+        const blogLinks = document.querySelectorAll('a[href*="blog.html?id="]');
+        blogLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            const match = href.match(/blog\.html\?id=([^&]+)/);
+            if (match) {
+                const slug = decodeURIComponent(match[1]);
+                link.setAttribute('href', `/blog/${slug}`);
+            }
+        });
     }
     
     // Initialize
@@ -72,7 +100,7 @@
         // Only run on landing page or when we detect a clean URL
         const currentPage = window.location.pathname.split('/').pop();
         const isLandingPage = currentPage === 'landing-page.html' || currentPage === 'landing-page';
-        const isCleanUrl = isLandingPageCleanUrl();
+        const isCleanUrl = isLandingPageCleanUrl() || isBlogCleanUrl();
         
         if (isLandingPage || isCleanUrl) {
             // Handle clean URLs
