@@ -70,5 +70,11 @@ if (typeof Footer !== 'undefined') {
     console.error('Footer component not found');
 }
 
+if (typeof WhatsApp !== 'undefined') {
+    app.component('whatsapp-component', WhatsApp);
+} else {
+    console.error('WhatsApp component not found');
+}
+
 // Mount the app
 app.mount('#app');

@@ -131,6 +131,7 @@ const app = createApp({
 // Register components
 app.component('navbar-component', Navbar);
 app.component('footer-component', Footer);
+app.component('whatsapp-component', WhatsApp);
 
 // Mount the app
 app.mount('#app');

@@ -294,6 +294,7 @@ const app = createApp({
 app.component('navbar-component', Navbar);
 app.component('footer-component', Footer);
 app.component('logo-component', Logo);
+app.component('whatsapp-component', WhatsApp);
 
 // Mount the app
 console.log('About to mount Vue app...');

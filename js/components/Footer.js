@@ -12,46 +12,46 @@ const Footer = {
                         <div>
                             <h5 class="text-md font-medium text-white mb-3">Follow Us</h5>
                             <div class="flex items-center space-x-4">
-                                <!-- YouTube -->
-                                <a href="https://youtube.com/@genreofdesign" target="_blank" 
-                                   class="text-gray-300 hover:text-[#ED1A23] transition-colors duration-300 text-2xl"
-                                   aria-label="YouTube">
-                                    <i class="fab fa-youtube"></i>
-                                </a>
-                                
-                                <!-- Facebook -->
-                                <a href="https://facebook.com/genreofdesign" target="_blank" 
-                                   class="text-gray-300 hover:text-[#ED1A23] transition-colors duration-300 text-2xl"
-                                   aria-label="Facebook">
-                                    <i class="fab fa-facebook"></i>
-                                </a>
-                                
                                 <!-- Instagram -->
-                                <a href="https://instagram.com/genreofdesign" target="_blank" 
-                                   class="text-gray-300 hover:text-[#ED1A23] transition-colors duration-300 text-2xl"
+                                <a href="https://www.instagram.com/genreofdesign/" target="_blank" 
+                                   class="text-gray-300 hover:text-[#E4405F] transition-colors duration-300 text-2xl"
                                    aria-label="Instagram">
                                     <i class="fab fa-instagram"></i>
                                 </a>
                                 
+                                <!-- YouTube -->
+                                <a href="https://m.youtube.com/channel/UCSvIFtFmaxvO4uSwhY9OKQg" target="_blank" 
+                                   class="text-gray-300 hover:text-[#FF0000] transition-colors duration-300 text-2xl"
+                                   aria-label="YouTube">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                                
                                 <!-- Pinterest -->
-                                <a href="https://pinterest.com/genreofdesign" target="_blank" 
-                                   class="text-gray-300 hover:text-[#ED1A23] transition-colors duration-300 text-2xl"
+                                <a href="https://in.pinterest.com/genreofdesign/" target="_blank" 
+                                   class="text-gray-300 hover:text-[#BD081C] transition-colors duration-300 text-2xl"
                                    aria-label="Pinterest">
                                     <i class="fab fa-pinterest"></i>
                                 </a>
                                 
-                                <!-- WhatsApp -->
-                                <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
-                                   class="text-gray-300 hover:text-[#ED1A23] transition-colors duration-300 text-2xl"
-                                   aria-label="WhatsApp">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                                
                                 <!-- LinkedIn -->
-                                <a href="https://linkedin.com/company/genreofdesign" target="_blank" 
-                                   class="text-gray-300 hover:text-[#ED1A23] transition-colors duration-300 text-2xl"
+                                <a href="https://in.linkedin.com/company/genre-of-design" target="_blank" 
+                                   class="text-gray-300 hover:text-[#0077B5] transition-colors duration-300 text-2xl"
                                    aria-label="LinkedIn">
                                     <i class="fab fa-linkedin"></i>
+                                </a>
+                                
+                                <!-- Facebook -->
+                                <a href="https://m.facebook.com/GenreOfDesign/" target="_blank" 
+                                   class="text-gray-300 hover:text-[#1877F2] transition-colors duration-300 text-2xl"
+                                   aria-label="Facebook">
+                                    <i class="fab fa-facebook"></i>
+                                </a>
+                                
+                                <!-- WhatsApp -->
+                                <a href="https://wa.me/+919599801061?text=Hi" target="_blank" 
+                                   class="text-gray-300 hover:text-[#25D366] transition-colors duration-300 text-2xl"
+                                   aria-label="WhatsApp">
+                                    <i class="fab fa-whatsapp"></i>
                                 </a>
                             </div>
                         </div>

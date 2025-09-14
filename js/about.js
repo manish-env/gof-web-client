@@ -288,6 +288,7 @@ createApp({
     components: {
         'navbar-component': Navbar,
         'footer-component': Footer,
+        'whatsapp-component': WhatsApp,
         'spotlight-carousel': SpotlightCarousel,
         'services-accordion': ServicesAccordion,
         'features-section': FeaturesSection,
