@@ -9,7 +9,7 @@ const templatePath = path.join(__dirname, 'landing-page.html');
 const template = fs.readFileSync(templatePath, 'utf8');
 
 // API endpoint to get all landing pages
-const API_BASE_URL = 'https://god-public-api.restless-mountain-f968.workers.dev/api';
+const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
 
 async function generateLandingPages() {
     try {
