@@ -5,7 +5,7 @@ function getQueryParam(key) {
     return params.get(key);
 }
 
-const API_BASE_URL = 'https://god-public-api.restless-mountain-f968.workers.dev/api';
+const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
 const FILE_BASE_URL = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 
 const app = createApp({
