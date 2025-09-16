@@ -184,7 +184,7 @@ body.loaded #app {
 }
 
 .blog-content {
-    @apply text-gray-700 leading-relaxed text-base md:text-lg;
+    @apply text-gray-700 leading-relaxed text-base md:text-lg font-josefin;
     line-height: 1.7;
 }
 
@@ -194,7 +194,7 @@ body.loaded #app {
 .blog-content h4,
 .blog-content h5,
 .blog-content h6 {
-    @apply text-gray-900 font-bold mb-4 mt-8 first:mt-0;
+    @apply text-gray-900 font-bold mb-4 mt-8 first:mt-0 font-josefin;
 }
 
 .blog-content h1 {
@@ -210,7 +210,7 @@ body.loaded #app {
 }
 
 .blog-content p {
-    @apply mb-6 text-gray-700;
+    @apply mb-6 text-gray-700 font-josefin;
 }
 
 .blog-content ul,
@@ -220,7 +220,7 @@ body.loaded #app {
 }
 
 .blog-content li {
-    @apply mb-2 text-gray-700;
+    @apply mb-2 text-gray-700 font-josefin;
 }
 
 /* Ensure ordered and unordered list markers show consistently */
@@ -238,7 +238,7 @@ body.loaded #app {
 .blog-content .ql-indent-8 { padding-left: 12rem; }
 
 .blog-content blockquote {
-    @apply border-l-4 border-red-600 pl-6 italic text-gray-600 my-8 bg-gray-50 py-4 rounded-r-lg;
+    @apply border-l-4 border-red-600 pl-6 italic text-gray-600 my-8 bg-gray-50 py-4 rounded-r-lg font-josefin;
     font-style: italic;
 }
 
@@ -249,11 +249,11 @@ body.loaded #app {
 }
 
 .blog-content a {
-    @apply text-red-600 hover:text-red-700 hover:underline font-medium transition-colors duration-200;
+    @apply text-red-600 hover:text-red-700 hover:underline font-medium transition-colors duration-200 font-josefin;
 }
 
 .blog-content strong {
-    @apply font-semibold text-gray-900;
+    @apply font-semibold text-gray-900 font-josefin;
 }
 
 .blog-content code {
@@ -261,11 +261,53 @@ body.loaded #app {
 }
 
 .blog-content pre {
-    @apply bg-gray-100 p-4 rounded-lg overflow-x-auto my-6;
+    @apply bg-gray-100 p-4 rounded-lg overflow-x-auto my-6 font-josefin;
+    font-family: 'Josefin Sans', sans-serif !important;
 }
 
 .blog-content pre code {
     @apply bg-transparent p-0;
+}
+
+/* Specific styling for blog content pre elements (plain text content) */
+.blog-content.whitespace-pre-wrap {
+    font-family: 'Josefin Sans', sans-serif !important;
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+    color: #374151 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+}
+
+/* Override any pre element styling within blog content */
+.blog-content pre {
+    font-family: 'Josefin Sans', sans-serif !important;
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+    color: #374151 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+}
+
+/* Force Josefin Sans on all blog content elements */
+.blog-content,
+.blog-content * {
+    font-family: 'Josefin Sans', sans-serif !important;
+}
+
+/* Exception for code elements - keep monospace */
+.blog-content code {
+    font-family: 'Courier New', monospace !important;
 }
 
 .fa-brands {
