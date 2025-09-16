@@ -46,10 +46,10 @@ const Navbar = {
                             <nav class="flex flex-col gap-2 h-full overflow-y-auto pb-24">
                                 <a href="index.html" :class="['mobile-nav-link', { 'active-link': isActive('index.html') } ]" @click="closeMobileMenu">Projects</a>
                                 <a href="blogs.html" :class="['mobile-nav-link', { 'active-link': isActive('blogs.html') } ]" @click="closeMobileMenu">Blogs</a>
-                                <a href="landing-pages.html" :class="['mobile-nav-link', { 'active-link': isActive('landing-pages.html') } ]" @click="closeMobileMenu">Landing Pages</a>
+                                <a href="landing-pages.html" :class="['mobile-nav-link', { 'active-link': isActive('landing-pages.html') } ]" @click="closeMobileMenu">Discover More</a>
                                 <a href="careers.html" :class="['mobile-nav-link', { 'active-link': isActive('careers.html') } ]" @click="closeMobileMenu">Careers</a>
                                 <a href="contact.html" :class="['mobile-nav-link', { 'active-link': isActive('contact.html') } ]" @click="closeMobileMenu">Contact</a>
-                                <a href="about.html" :class="['mobile-nav-link', { 'active-link': isActive('about.html') } ]" @click="closeMobileMenu">About Me</a>
+                                <a href="about.html" :class="['mobile-nav-link', { 'active-link': isActive('about.html') } ]" @click="closeMobileMenu">About Us</a>
                             </nav>
                             <div class="absolute left-0 right-0 bottom-0 bg-white border-t p-3 text-sm text-gray-500">
                                 <div class="mb-2 px-1">Connect with us</div>
