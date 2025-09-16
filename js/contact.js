@@ -35,6 +35,29 @@ const apiService = {
             method: 'POST',
             data: vendorData
         });
+    },
+
+    async uploadVendorFile(file, key) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('key', key);
+        
+        const response = await fetch(`${API_BASE_URL}/vendor/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Upload failed: ${response.statusText} - ${errorText}`);
+        }
+        
+        const result = await response.json();
+        if (!result.success) {
+            throw new Error(result.message || 'Upload failed');
+        }
+        
+        return result.key;
     }
 };
 
@@ -57,7 +80,8 @@ const app = createApp({
                 address: '',
                 category: '',
                 experience: '',
-                description: ''
+                description: '',
+                file: null
             },
             contactLoading: false,
             vendorLoading: false,
@@ -95,13 +119,37 @@ const app = createApp({
             }
         },
 
+        handleVendorFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.vendorForm.file = file;
+            }
+        },
+
         async submitVendorForm() {
             try {
                 this.vendorLoading = true;
                 this.vendorSuccessMessage = '';
                 this.vendorErrorMessage = '';
 
-                const response = await apiService.sendVendorRegistration(this.vendorForm);
+                // Step 1: Upload file if provided
+                let fileUrl = null;
+                if (this.vendorForm.file) {
+                    const timestamp = Date.now();
+                    const randomId = Math.random().toString(36).substring(2, 15);
+                    const key = `vendors/${this.vendorForm.companyName}_${timestamp}_${randomId}_${this.vendorForm.file.name}`;
+                    
+                    fileUrl = await apiService.uploadVendorFile(this.vendorForm.file, key);
+                }
+
+                // Step 2: Submit vendor registration with file URL
+                const payload = {
+                    ...this.vendorForm,
+                    file: fileUrl
+                };
+                delete payload.file; // Remove the file object, keep only the URL
+
+                const response = await apiService.sendVendorRegistration(payload);
                 
                 if (response.success) {
                     this.vendorSuccessMessage = 'Registration submitted successfully! We\'ll review your application and get back to you soon.';
@@ -113,7 +161,8 @@ const app = createApp({
                         address: '',
                         category: '',
                         experience: '',
-                        description: ''
+                        description: '',
+                        file: null
                     };
                 } else {
                     this.vendorErrorMessage = 'Failed to submit registration. Please try again.';
