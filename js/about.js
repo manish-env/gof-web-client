@@ -10,7 +10,11 @@ const SpotlightCarousel = {
     },
     template: `
         <div class="relative">
-            <div class="overflow-hidden">
+            <div class="overflow-hidden cursor-grab active:cursor-grabbing"
+                 @mousedown="startDrag"
+                 @mousemove="drag"
+                 @mouseup="endDrag"
+                 @mouseleave="endDrag">
                 <div class="flex transition-transform duration-500 ease-in-out" :style="{ transform: \`translateX(-\${currentIndex * slideWidth}%)\` }">
                     <div v-for="(project, index) in projects" :key="project.id" 
                          :class="['flex-shrink-0 relative mr-2 md:mr-4', isMobile ? 'w-[90%]' : 'w-[70%]']">
@@ -70,7 +74,10 @@ const SpotlightCarousel = {
                 { id: "6", image: "public/images/projects/SeaLeaf1.jpg", name: "Sea Leaf" },
                 { id: "7", image: "public/images/projects/SeaLeaf2.jpg", name: "Sea Leaf" }
             ],
-            windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1024
+            windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1024,
+            isDragging: false,
+            startX: 0,
+            currentTranslate: 0
         }
     },
     computed: {
@@ -88,6 +95,30 @@ const SpotlightCarousel = {
         previousSlide() {
             this.currentIndex = this.currentIndex === 0 ? this.projects.length - 1 : this.currentIndex - 1;
         },
+        startDrag(e) {
+            this.isDragging = true;
+            this.startX = e.pageX;
+            this.currentTranslate = this.currentIndex * this.slideWidth;
+        },
+        drag(e) {
+            if (!this.isDragging) return;
+            e.preventDefault();
+            const currentX = e.pageX;
+            const diffX = this.startX - currentX;
+            const threshold = 50; // Minimum drag distance to change slide
+            
+            if (Math.abs(diffX) > threshold) {
+                if (diffX > 0) {
+                    this.nextSlide();
+                } else {
+                    this.previousSlide();
+                }
+                this.isDragging = false;
+            }
+        },
+        endDrag() {
+            this.isDragging = false;
+        }
     },
     mounted() {
         // Auto-play carousel
@@ -108,16 +139,20 @@ const SpotlightCarousel = {
 const FeaturesSection = {
     template: `
       <div class="relative">
-        <div class="overflow-x-auto scrollbar-hide"
+        <div class="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
              ref="scrollContainer"
-             @scroll="onScroll">
+             @scroll="onScroll"
+             @mousedown="startDrag"
+             @mousemove="drag"
+             @mouseup="endDrag"
+             @mouseleave="endDrag">
           <div class="flex pb-4" style="width: max-content;">
             
             <div v-for="feature in features" :key="feature.id"
                  class="feature-card flex-shrink-0 flex items-center justify-center px-2">
               <img :src="feature.image"
                    :alt="feature.title"
-                   :class="['w-auto object-contain', isMobile ? 'h-[50vh]' : 'h-[80vh]']"
+                   :class="['w-auto object-contain select-none', isMobile ? 'h-[50vh]' : 'h-[80vh]']"
                    loading="lazy" />
             </div>
   
@@ -167,7 +202,10 @@ const FeaturesSection = {
             image: "public/features/ToR.png"
           }
         ],
-        windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1024
+        windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1024,
+        isDragging: false,
+        startX: 0,
+        scrollLeft: 0
       }
     },
     computed: {
@@ -196,6 +234,23 @@ const FeaturesSection = {
       },
       onScroll(e) {
         // Optional: track active slide here if needed
+      },
+      startDrag(e) {
+        this.isDragging = true;
+        this.startX = e.pageX - this.$refs.scrollContainer.offsetLeft;
+        this.scrollLeft = this.$refs.scrollContainer.scrollLeft;
+        this.$refs.scrollContainer.style.cursor = 'grabbing';
+      },
+      drag(e) {
+        if (!this.isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - this.$refs.scrollContainer.offsetLeft;
+        const walk = (x - this.startX) * 2; // Scroll speed multiplier
+        this.$refs.scrollContainer.scrollLeft = this.scrollLeft - walk;
+      },
+      endDrag() {
+        this.isDragging = false;
+        this.$refs.scrollContainer.style.cursor = 'grab';
       }
     }
   };
