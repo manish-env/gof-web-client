@@ -3,8 +3,8 @@ const Footer = {
     template: `
         <footer class="bg-gray-900 text-white py-12">
             <div class="max-w-full mx-auto px-2.5">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-4">
                         <h3 class="text-xl font-bold mb-4">Genre of Design</h3>
                         <p class="text-gray-300 mb-6">Genre Of Design is a multi-disciplinary platform for Architecture, Urbanism, and Landscape, creating possibilities for life through diverse expertise in Architecture, Structures, Hospitality, Healthcare, Master Planning, Urban Design, Landscape, Interior, and Product.</p>
                         
@@ -56,17 +56,29 @@ const Footer = {
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <h4 class="text-lg font-semibold mb-4">Discover More</h4>
+                    <div class="lg:col-span-2">
+                        <h4 class="text-lg font-semibold mb-4">Expertise</h4>
                         <ul class="space-y-2">
-                            <li><a href="projects.html?category=Residential" class="text-gray-300 hover:text-white transition-colors duration-300">Residential</a></li>
-                            <li><a href="projects.html?category=Healthcare" class="text-gray-300 hover:text-white transition-colors duration-300">Healthcare</a></li>
-                            <li><a href="projects.html?category=Hospitality" class="text-gray-300 hover:text-white transition-colors duration-300">Hospitality</a></li>
-                            <li><a href="projects.html?category=Commercial" class="text-gray-300 hover:text-white transition-colors duration-300">Commercial</a></li>
-                            <li><a href="projects.html?category=Institution" class="text-gray-300 hover:text-white transition-colors duration-300">Institution</a></li>
+                            <li><span class="text-gray-300">Hospitality</span></li>
+                            <li><span class="text-gray-300">Residential</span></li>
+                            <li><span class="text-gray-300">Township</span></li>
+                            <li><span class="text-gray-300">Commercial</span></li>
+                            <li><span class="text-gray-300">Healthcare</span></li>
+                            <li><span class="text-gray-300">Offices</span></li>
+                            <li><span class="text-gray-300">Retail</span></li>
+                            <li><span class="text-gray-300">Institutional</span></li>
+                            <li><span class="text-gray-300">Builder's Project</span></li>
                         </ul>
                     </div>
-                    <div>
+                    <div class="lg:col-span-2">
+                        <h4 class="text-lg font-semibold mb-4">Services</h4>
+                        <ul class="space-y-2">
+                            <li><span class="text-gray-300">Architecture</span></li>
+                            <li><span class="text-gray-300">Interior Design</span></li>
+                            <li><span class="text-gray-300">Urban Design</span></li>
+                        </ul>
+                    </div>
+                    <div class="lg:col-span-2">
                         <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
                         <ul class="space-y-2">
                             <li><a href="projects.html" class="text-gray-300 hover:text-white transition-colors duration-300">Projects</a></li>
@@ -74,9 +86,10 @@ const Footer = {
                             <li><a href="careers.html" class="text-gray-300 hover:text-white transition-colors duration-300">Careers</a></li>
                             <li><a href="contact.html" class="text-gray-300 hover:text-white transition-colors duration-300">Contact</a></li>
                             <li><a href="about.html" class="text-gray-300 hover:text-white transition-colors duration-300">About Us</a></li>
+                            <li><a href="landing-pages.html" class="text-gray-300 hover:text-white transition-colors duration-300">Discover More</a></li>
                         </ul>
                     </div>
-                    <div>
+                    <div class="lg:col-span-2">
                         <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
                         <p class="text-gray-300">Phone: +91 95996 95099</p>
                         <p class="text-gray-300">Email: info@genreofdesign.com</p>
