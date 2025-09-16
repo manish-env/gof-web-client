@@ -99,7 +99,7 @@ const app = createApp({
         columnCount() {
             if (window.innerWidth >= 1024) return 3;
             if (window.innerWidth >= 640) return 2;
-            return 1;
+            return 2; // Mobile now shows 2 columns
         }
     },
     watch: {

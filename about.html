@@ -35,12 +35,13 @@
                 <!-- Hero Section -->
                 <section class="w-full">
                     <div class="space-y-6">
+                        <!-- Text Content -->
                         <div class="">
                             <div class="flex flex-col justify-center space-y-4">
                                 <div class="space-y-2">
                                     <h1 class="text-4xl md:text-9xl text-red-600 font-semibold tracking-normal sm:text-5xl xl:text-8xl/none">
                                         Genre Of Design
-                    </h1>
+                                    </h1>
                                     <p class="max-w-[700px] text-neutral-500 md:text-xl leading-7 tracking-normal dark:text-neutral-400">
                                         Genre Of Design is a multi-disciplinary platform for
                                         Architecture, Urbanism, and Landscape, creating
@@ -48,32 +49,64 @@
                                         Architecture, Structures, Hospitality, Healthcare, Master
                                         Planning, Urban Design, Landscape, Interior, and Product.
                                     </p>
-                                    <p class="text-right">Since 2010</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Background Metrics Section (exact layout) -->
-                        <div
-                            style="background: url('public/images/head.webp') no-repeat center center/cover fixed"
-                            class="w-full max-h-[80vh] md:aspect-[16/9] flex flex-col md:flex-row pb-20 items-end relative">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-                            <div class="text-white md:w-4/5 px-2 py-4 md:pl-8 z-10 flex flex-col gap-4 min-h-96">
-                                <p class="text-2xl md:text-5xl tracking-wide font-bold leading-9 mt-auto">6M+ sq ft</p>
-                                <p class="text-xl tracking-wide">Built up area</p>
-                                <p class="font-light leading-5 text-lg">Carefully following the Legacy of Regional architecture with the unique touch of the architect.</p>
+                        <!-- Mobile-only Banner Image -->
+                        <div class="block md:hidden">
+                            <div
+                                style="background: url('public/images/head.webp') no-repeat center center/cover"
+                                class="w-full h-64">
                             </div>
-                            <div class="bg-white py-8 md:px-12 z-10 grid grid-cols-2 gap-4 w-full">
-                                <div class="border-t-4 border-red-600 py-4">
-                                    <h2 class="text-5xl mb-2 font-semibold tracking-wide hover-underline-animation text-red-600">17+</h2>
-                                    <p class="text-xl font-bold">Years of Experience</p>
-                                    <p>Delivering exceptional construction solutions, combining expertise with innovation to surpass client expectations.</p>
+                        </div>
+
+                        <!-- Mobile-only Text Content Below Banner -->
+                        <div class="block md:hidden bg-gray-50 py-8 px-4">
+                            <div class="text-center space-y-4">
+                                <p class="text-2xl tracking-wide font-bold text-gray-900">6M+ sq ft</p>
+                                <p class="text-xl tracking-wide text-gray-700">Built up area</p>
+                                <p class="font-light leading-5 text-lg text-gray-600">Carefully following the Legacy of Regional architecture with the unique touch of the architect.</p>
+                            </div>
+                        </div>
+
+                        <!-- Desktop Banner Image (original layout) -->
+                        <div class="hidden md:block">
+                            <div
+                                style="background: url('public/images/head.webp') no-repeat center center/cover fixed"
+                                class="w-full max-h-[80vh] aspect-[16/9] flex flex-col md:flex-row pb-20 items-end relative">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                                <div class="text-white md:w-4/5 px-2 py-4 md:pl-8 z-10 flex flex-col gap-4 min-h-96">
+                                    <p class="text-2xl md:text-5xl tracking-wide font-bold leading-9 mt-auto">6M+ sq ft</p>
+                                    <p class="text-xl tracking-wide">Built up area</p>
+                                    <p class="font-light leading-5 text-lg">Carefully following the Legacy of Regional architecture with the unique touch of the architect.</p>
                                 </div>
-                                <div class="border-t-4 border-red-600 py-4">
-                                    <h2 class="text-5xl mb-2 hover-underline-animation text-red-600 font-semibold tracking-wide">180+</h2>
-                                    <p class="text-xl font-bold">Successfully Completed Projects</p>
-                                    <p>Our commitment to excellence is evident in every endeavor we undertake, ensuring quality and client satisfaction at every step.</p>
+                                <div class="bg-white py-8 md:px-12 z-10 grid grid-cols-2 gap-4 w-full">
+                                    <div class="border-t-4 border-red-600 py-4">
+                                        <h2 class="text-5xl mb-2 font-semibold tracking-wide hover-underline-animation text-red-600">17+</h2>
+                                        <p class="text-xl font-bold">Years of Experience</p>
+                                        <p>Delivering exceptional construction solutions, combining expertise with innovation to surpass client expectations.</p>
+                                    </div>
+                                    <div class="border-t-4 border-red-600 py-4">
+                                        <h2 class="text-5xl mb-2 hover-underline-animation text-red-600 font-semibold tracking-wide">180+</h2>
+                                        <p class="text-xl font-bold">Successfully Completed Projects</p>
+                                        <p>Our commitment to excellence is evident in every endeavor we undertake, ensuring quality and client satisfaction at every step.</p>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile-only Statistics Section -->
+                        <div class="block md:hidden bg-white py-8 px-4 flex flex-col gap-6 w-full">
+                            <div class="border-t-4 border-red-600 py-4">
+                                <h2 class="text-3xl mb-2 font-semibold tracking-wide text-red-600">17+</h2>
+                                <p class="text-lg font-bold">Years of Experience</p>
+                                <p class="text-sm">Delivering exceptional construction solutions, combining expertise with innovation to surpass client expectations.</p>
+                            </div>
+                            <div class="border-t-4 border-red-600 py-4">
+                                <h2 class="text-3xl mb-2 text-red-600 font-semibold tracking-wide">180+</h2>
+                                <p class="text-lg font-bold">Successfully Completed Projects</p>
+                                <p class="text-sm">Our commitment to excellence is evident in every endeavor we undertake, ensuring quality and client satisfaction at every step.</p>
                             </div>
                         </div>
                     </div>
