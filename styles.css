@@ -1565,6 +1565,31 @@ footer .fab:hover {
     padding: 1rem 0 2rem 0;
 }
 
+/* Mobile Accordion Optimizations */
+@media (max-width: 768px) {
+    .accordion-trigger {
+        padding: 0.75rem 0;
+    }
+    
+    .accordion-trigger-content {
+        gap: 0.5rem;
+    }
+    
+    .accordion-number {
+        font-size: 0.875rem;
+        padding: 0 0.25rem;
+    }
+    
+    .accordion-title {
+        font-size: 1.125rem;
+        line-height: 1.4;
+    }
+    
+    .accordion-content-inner {
+        padding: 0.75rem 0 1.5rem 0;
+    }
+}
+
 /* Form Styles */
 .form-group {
     margin-bottom: 1rem;

@@ -39,10 +39,10 @@
                         <div class="">
                             <div class="flex flex-col justify-center space-y-4">
                                 <div class="space-y-2">
-                                    <h1 class="text-4xl md:text-9xl text-red-600 font-semibold tracking-normal sm:text-5xl xl:text-8xl/none">
+                                    <h1 class="text-3xl sm:text-4xl md:text-9xl text-red-600 font-semibold tracking-normal xl:text-8xl/none">
                                         Genre Of Design
                                     </h1>
-                                    <p class="max-w-[700px] text-neutral-500 md:text-xl leading-7 tracking-normal dark:text-neutral-400">
+                                    <p class="max-w-[700px] text-sm sm:text-base md:text-xl text-neutral-500 leading-6 md:leading-7 tracking-normal dark:text-neutral-400">
                                         Genre Of Design is a multi-disciplinary platform for
                                         Architecture, Urbanism, and Landscape, creating
                                         possibilities for life through diverse expertise in
@@ -62,7 +62,7 @@
                         </div>
 
                         <!-- Mobile-only Text Content Below Banner -->
-                        <div class="block md:hidden bg-gray-50 py-8 px-4">
+                        <div class="block md:hidden bg-gray-50 py-8">
                             <div class="text-center space-y-4">
                                 <p class="text-2xl tracking-wide font-bold text-gray-900">6M+ sq ft</p>
                                 <p class="text-xl tracking-wide text-gray-700">Built up area</p>
@@ -97,7 +97,7 @@
                         </div>
 
                         <!-- Mobile-only Statistics Section -->
-                        <div class="block md:hidden bg-white py-8 px-4 flex flex-col gap-6 w-full">
+                        <div class="block md:hidden bg-white py-8 flex flex-col gap-6 w-full">
                             <div class="border-t-4 border-red-600 py-4">
                                 <h2 class="text-3xl mb-2 font-semibold tracking-wide text-red-600">17+</h2>
                                 <p class="text-lg font-bold">Years of Experience</p>
@@ -113,43 +113,47 @@
                 </section>
 
                 <!-- Services Section (exact layout with accordion) -->
-                <section class="w-full my-44">
+                <section class="w-full py-16 md:py-24">
                     <div>
-                        <div class="grid grid-cols-1 xl:grid-cols-2 py-8">
-                            <div class="block sm:hidden font-medium text-6xl text-center xl:text-right md:text-[110px] text-red-600">Services</div>
-                            <p class="px-6 py-4 text-lg text-center sm:text-left">Our dedication to precision and craftsmanship reflects in our proficiency in shaping architectural landscapes.</p>
-                            <div class="hidden sm:block font-medium text-6xl text-center xl:text-right md:text-[110px] text-red-600">Services</div>
+                        <div class="grid grid-cols-1 xl:grid-cols-2 py-6 md:py-8">
+                            <div class="block sm:hidden font-medium text-2xl md:text-6xl text-center xl:text-right text-red-600">Services</div>
+                            <p class="py-2 md:py-4 text-base md:text-lg text-center sm:text-left">Our dedication to precision and craftsmanship reflects in our proficiency in shaping architectural landscapes.</p>
+                            <div class="hidden sm:block font-medium text-4xl md:text-6xl text-center xl:text-right text-red-600">Services</div>
                         </div>
                         <services-accordion></services-accordion>
                     </div>
                 </section>
 
                 <!-- Spotlight Section -->
-                <section class="flex flex-col gap-10">
-                    <div class="flex flex-col md:flex-row text-xl py-4 justify-center items-center">
-                        <div class="font-medium text-6xl text-center xl:text-right md:text-[110px] text-red-600">
-                            Spotlight
+                <section class="w-full py-16 md:py-24">
+                    <div class="flex flex-col gap-6 md:gap-10">
+                        <div class="flex flex-col md:flex-row text-lg md:text-xl py-4 justify-center items-center">
+                            <div class="font-medium text-4xl md:text-6xl text-center xl:text-right text-red-600">
+                                Spotlight
+                            </div>
+                            <div class="w-full text-center sm:text-right md:mt-0 mt-6 md:mt-12">
+                                Some of our best works.
+                            </div>
                         </div>
-                        <div class="w-full text-center sm:text-right md:mt-0 mt-12">
-                            Some of our best works.
+                        <div>
+                            <spotlight-carousel></spotlight-carousel>
                         </div>
-                    </div>
-                    <div>
-                        <spotlight-carousel></spotlight-carousel>
                     </div>
                 </section>
 
                 <!-- Features Section -->
-                <section class="flex flex-col gap-10 py-12">
-                    <div class="flex flex-col-reverse md:flex-row text-xl py-4 justify-center items-center">
-                        <div class="w-full text-center md:text-left sm:text-left md:mt-0 mt-12">
-                            Magazines that appreciated Genre of Design.
+                <section class="w-full py-16 md:py-24">
+                    <div class="flex flex-col gap-6 md:gap-10">
+                        <div class="flex flex-col-reverse md:flex-row text-lg md:text-xl py-4 justify-center items-center">
+                            <div class="w-full text-center md:text-left sm:text-left md:mt-0 mt-6 md:mt-12">
+                                Magazines that appreciated Genre of Design.
+                            </div>
+                            <div class="font-medium text-4xl md:text-6xl text-center xl:text-right text-red-600">
+                                Features
+                            </div>
                         </div>
-                        <div class="font-medium text-6xl text-center xl:text-right md:text-[110px] text-red-600">
-                            Features
-                        </div>
+                        <features-section></features-section>
                     </div>
-                    <features-section></features-section>
                 </section>
 
                 <!-- Logo Cloud Section -->
@@ -159,11 +163,11 @@
                 <testimonials-section></testimonials-section>
 
                 <!-- CTA Section -->
-                <section class="pt-[30px]">
-                    <div class="flex flex-col items-center justify-center">
-                        <h2 class="text-3xl font-bold md:text-6xl md:text-center">
+                <section class="w-full py-16 md:py-24">
+                    <div class="flex flex-col items-center justify-center text-center">
+                        <h2 class="text-2xl sm:text-3xl md:text-6xl font-bold leading-tight">
                             Let's shape spaces and create inspiring environments
-                            <span class="text-red-600">Let's Talk</span>
+                            <span class="text-red-600 block mt-2">Let's Talk</span>
                         </h2>
                     </div>
                 </section>
