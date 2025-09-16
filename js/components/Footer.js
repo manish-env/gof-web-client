@@ -6,7 +6,7 @@ const Footer = {
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div>
                         <h3 class="text-xl font-bold mb-4">Genre of Design</h3>
-                        <p class="text-gray-300 mb-6">Creating beautiful, functional spaces that reflect your unique style and enhance your lifestyle.</p>
+                        <p class="text-gray-300 mb-6">Genre Of Design is a multi-disciplinary platform for Architecture, Urbanism, and Landscape, creating possibilities for life through diverse expertise in Architecture, Structures, Hospitality, Healthcare, Master Planning, Urban Design, Landscape, Interior, and Product.</p>
                         
                         <!-- Social Media Icons -->
                         <div>
@@ -73,7 +73,7 @@ const Footer = {
                             <li><a href="blogs.html" class="text-gray-300 hover:text-white transition-colors duration-300">Blogs</a></li>
                             <li><a href="careers.html" class="text-gray-300 hover:text-white transition-colors duration-300">Careers</a></li>
                             <li><a href="contact.html" class="text-gray-300 hover:text-white transition-colors duration-300">Contact</a></li>
-                            <li><a href="about.html" class="text-gray-300 hover:text-white transition-colors duration-300">About Me</a></li>
+                            <li><a href="about.html" class="text-gray-300 hover:text-white transition-colors duration-300">About Us</a></li>
                         </ul>
                     </div>
                     <div>
