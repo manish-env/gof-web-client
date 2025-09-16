@@ -1,7 +1,7 @@
 // WhatsApp Floating Button Component
 const WhatsApp = {
     template: `
-        <a href="https://wa.me/+919599801061?text=Hi" 
+        <a href="https://wa.me/+919599695099?text=Hi" 
            target="_blank" 
            class="whatsapp-float"
            aria-label="Contact us on WhatsApp"

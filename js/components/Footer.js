@@ -78,7 +78,7 @@ const Footer = {
                     </div>
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
-                        <p class="text-gray-300">Phone: +91 95998 01061</p>
+                        <p class="text-gray-300">Phone: +91 95996 95099</p>
                         <p class="text-gray-300">Email: info@genreofdesign.com</p>
                         
                         <!-- Address -->
