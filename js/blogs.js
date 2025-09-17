@@ -10,7 +10,6 @@ const app = createApp({
     data() {
         return {
             blogs: [],
-            selectedBlog: null,
             loading: false,
             error: null
         };
@@ -64,12 +63,6 @@ const app = createApp({
             const d = new Date(dateStr);
             return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
         },
-        openModal(blog) {
-            this.selectedBlog = blog;
-        },
-        closeModal() {
-            this.selectedBlog = null;
-        }
     }
 });
 

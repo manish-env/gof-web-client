@@ -62,19 +62,24 @@
               <span>{{ blog.author || 'Genre of Design' }}</span>
                         </div>
                     </section>
+        </div>
+      </div>
 
-          <!-- Cover Image -->
-          <section class="mb-8" v-if="blog.cover">
-            <div class="relative h-64 md:h-80 w-full rounded-xl overflow-hidden shadow-lg">
-              <img 
-                :src="blog.cover" 
-                :alt="blog.title" 
-                class="w-full h-full object-cover"
-                @error="handleImageError"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                        </div>
-                    </section>
+      <!-- Cover Image - Full Width -->
+      <section class="mb-8" v-if="blog && blog.cover">
+        <div class="relative h-80 md:h-96 w-full overflow-hidden">
+          <img 
+            :src="blog.cover" 
+            :alt="blog.title" 
+            class="w-full h-full object-contain"
+            @error="handleImageError"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+        </div>
+      </section>
+
+      <div class="w-full px-4 md:px-6">
+        <div v-if="blog">
 
           <!-- Content -->
           <!-- Content + Related -->

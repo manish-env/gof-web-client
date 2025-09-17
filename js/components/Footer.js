@@ -6,6 +6,15 @@ const Footer = {
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
                     <div class="lg:col-span-4">
                         <h3 class="text-xl font-bold mb-4">Genre of Design</h3>
+                        
+                        <!-- Quote Section -->
+                        <div class="mb-6">
+                            <blockquote class="text-gray-200 italic text-sm leading-relaxed mb-2">
+                                "To create architecture is to create possibilities — possibilities for life to happen and flourish"
+                            </blockquote>
+                            <cite class="text-gray-400 text-xs">— Rakesh Sharma, Director and Principal Architect</cite>
+                        </div>
+                        
                         <p class="text-gray-300 mb-6">Genre Of Design is a multi-disciplinary platform for Architecture, Urbanism, and Landscape, creating possibilities for life through diverse expertise in Architecture, Structures, Hospitality, Healthcare, Master Planning, Urban Design, Landscape, Interior, and Product.</p>
                         
                         <!-- Social Media Icons -->
