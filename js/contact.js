@@ -74,7 +74,10 @@ const app = createApp({
             },
             vendorForm: {
                 companyName: '',
+                companyWebsite: '',
                 contactPerson: '',
+                directorName: '',
+                personDesignation: '',
                 email: '',
                 phone: '',
                 address: '',
@@ -145,10 +148,19 @@ const app = createApp({
 
                 // Step 2: Submit vendor registration with file path
                 const payload = {
-                    ...this.vendorForm,
-                    file: filePath
+                    companyName: this.vendorForm.companyName,
+                    companyWebsite: this.vendorForm.companyWebsite,
+                    contactPerson: this.vendorForm.contactPerson,
+                    directorName: this.vendorForm.directorName,
+                    personDesignation: this.vendorForm.personDesignation,
+                    email: this.vendorForm.email,
+                    phone: this.vendorForm.phone,
+                    address: this.vendorForm.address,
+                    category: this.vendorForm.category,
+                    experience: this.vendorForm.experience,
+                    description: this.vendorForm.description,
+                    file: filePath // Include the file path
                 };
-                delete payload.file; // Remove the file object, keep only the path
 
                 const response = await apiService.sendVendorRegistration(payload);
                 
@@ -156,7 +168,10 @@ const app = createApp({
                     this.vendorSuccessMessage = 'Registration submitted successfully! We\'ll review your application and get back to you soon.';
                     this.vendorForm = {
                         companyName: '',
+                        companyWebsite: '',
                         contactPerson: '',
+                        directorName: '',
+                        personDesignation: '',
                         email: '',
                         phone: '',
                         address: '',

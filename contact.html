@@ -156,8 +156,33 @@
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                 </div>
                                 <div>
+                                    <label for="vendor-company-website" class="block text-sm font-medium text-gray-700 mb-2">Company Website</label>
+                                    <input type="url" id="vendor-company-website" v-model="vendorForm.companyWebsite"
+                                           placeholder="https://example.com"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
                                     <label for="vendor-contact-person" class="block text-sm font-medium text-gray-700 mb-2">Contact Person *</label>
                                     <input type="text" id="vendor-contact-person" v-model="vendorForm.contactPerson" required
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                </div>
+                                <div>
+                                    <!-- Empty div for layout balance -->
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="vendor-director-name" class="block text-sm font-medium text-gray-700 mb-2">Director Name *</label>
+                                    <input type="text" id="vendor-director-name" v-model="vendorForm.directorName" required
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label for="vendor-person-designation" class="block text-sm font-medium text-gray-700 mb-2">Person Designation *</label>
+                                    <input type="text" id="vendor-person-designation" v-model="vendorForm.personDesignation" required
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                 </div>
                             </div>
@@ -174,6 +199,7 @@
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                 </div>
                             </div>
+                            
                             
                             <div>
                                 <label for="vendor-address" class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
