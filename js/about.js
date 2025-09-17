@@ -304,20 +304,101 @@ const ServicesAccordion = {
 const LogoCloud = {
     template: `
         <section class="w-full py-16 md:py-24 bg-gray-50">
-            <div class="container mx-auto">
+            <div class="max-w-full mx-auto px-2.5">
                 <div class="text-center mb-8">
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Trusted by Leading Brands</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Trusted by Leading Brands</h2>
                     <p class="text-gray-600">We're proud to work with industry leaders</p>
                 </div>
-                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-60">
-                    <div class="text-2xl md:text-3xl font-bold text-gray-400">Brand 1</div>
-                    <div class="text-2xl md:text-3xl font-bold text-gray-400">Brand 2</div>
-                    <div class="text-2xl md:text-3xl font-bold text-gray-400">Brand 3</div>
-                    <div class="text-2xl md:text-3xl font-bold text-gray-400">Brand 4</div>
+                <div class="relative">
+                    <div class="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing" ref="scroller">
+                        <div class="grid grid-rows-2 grid-flow-col auto-cols-max gap-4 md:gap-6 pr-4" style="width: max-content;">
+                            <div v-for="logo in sortedLogos" :key="logo.name" class="flex items-center justify-center">
+                                <div class="aspect-[1/1] w-36 sm:w-44 md:w-52 lg:w-60 bg-white border border-gray-200 rounded-sm flex items-center justify-center">
+                                    <img :src="logo.src" :alt="logo.name" class="w-full h-full object-contain" loading="lazy" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button @click="scrollLeft" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-gray-200 p-2 rounded-full shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button @click="scrollRight" class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-gray-200 p-2 rounded-full shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </section>
-    `
+    `,
+    methods: {
+        scrollLeft() {
+            const scroller = this.$refs.scroller;
+            if (!scroller) return;
+            const amount = Math.max(200, scroller.clientWidth * 0.9);
+            scroller.scrollBy({ left: -amount, behavior: 'smooth' });
+        },
+        scrollRight() {
+            const scroller = this.$refs.scroller;
+            if (!scroller) return;
+            const amount = Math.max(200, scroller.clientWidth * 0.9);
+            scroller.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+    },
+    data() {
+        const base = 'public/Client logos/';
+        const files = [
+            'Aarone Group.png',
+            'Chima.png',
+            'Cross Country.png',
+            'Friends Group.png',
+            'Gyanesh Builders.png',
+            'Himgiri Group.png',
+            'Hitech Solution.png',
+            'Horizon.png',
+            'IHCL.png',
+            "Krishna's Group.png",
+            'Lemon Tree Hotels.png',
+            'LKG Infra.png',
+            'Maheshwari Samaj.png',
+            'Mangaldeep Darshan.png',
+            'Manohar Jewellers.png',
+            'Metro Buildtech.png',
+            'Myna Homes.png',
+            'Opulo.png',
+            'PIMS.png',
+            'Plastene India Limited.png',
+            'Priti International Ltd.png',
+            'Ratnamani Healthcare.png',
+            'RCC Group.png',
+            'Salcon.png',
+            'Sanjay Satpal &  Associates.png',
+            'sarovar hotels & resorts.png',
+            'Sea Leaf Resort.png',
+            'Shree Ram Industries.png',
+            'square ft.png',
+            'Taj.png',
+            'Thar office.png',
+            'The woodpecker.png',
+            'Trishul Industries.png',
+            'UMA Group.png',
+            'Untitled Design.png',
+            'Uppal Group.png',
+            'Varaha Infra ltd.png'
+        ];
+        const logos = files.map(f => ({
+            name: f.replace(/\.png$/i, ''),
+            src: encodeURI(base + f)
+        }));
+        return { logos };
+    },
+    computed: {
+        sortedLogos() {
+            return this.logos.slice().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+        }
+    }
 };
 
 // Testimonials Section Component
