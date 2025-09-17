@@ -133,21 +133,22 @@ const app = createApp({
                 this.vendorErrorMessage = '';
 
                 // Step 1: Upload file if provided
-                let fileUrl = null;
+                let filePath = null;
                 if (this.vendorForm.file) {
                     const timestamp = Date.now();
                     const randomId = Math.random().toString(36).substring(2, 15);
-                    const key = `vendors/${this.vendorForm.companyName}_${timestamp}_${randomId}_${this.vendorForm.file.name}`;
+                    const fileName = this.vendorForm.file.name.replace(/[^a-zA-Z0-9.-]/g, '_'); // Sanitize filename
+                    const key = `vendor/${this.vendorForm.companyName}_${timestamp}_${randomId}_${fileName}`;
                     
-                    fileUrl = await apiService.uploadVendorFile(this.vendorForm.file, key);
+                    filePath = await apiService.uploadVendorFile(this.vendorForm.file, key);
                 }
 
-                // Step 2: Submit vendor registration with file URL
+                // Step 2: Submit vendor registration with file path
                 const payload = {
                     ...this.vendorForm,
-                    file: fileUrl
+                    file: filePath
                 };
-                delete payload.file; // Remove the file object, keep only the URL
+                delete payload.file; // Remove the file object, keep only the path
 
                 const response = await apiService.sendVendorRegistration(payload);
                 
