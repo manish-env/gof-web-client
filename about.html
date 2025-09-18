@@ -53,14 +53,10 @@
                             <div class="flex flex-col justify-center space-y-4">
                                 <div class="space-y-2">
                                     <h1 class="text-3xl sm:text-4xl md:text-9xl text-red-600 font-semibold tracking-normal xl:text-8xl/none">
-                                        Genre Of Design
+                                        {{ settings.hero.title }}
                                     </h1>
                                     <p class="max-w-[700px] text-sm sm:text-base md:text-xl text-neutral-500 leading-6 md:leading-7 tracking-normal dark:text-neutral-400">
-                                        Genre Of Design is a multi-disciplinary platform for
-                                        Architecture, Urbanism, and Landscape, creating
-                                        possibilities for life through diverse expertise in
-                                        Architecture, Structures, Hospitality, Healthcare, Master
-                                        Planning, Urban Design, Landscape, Interior, and Product.
+                                        {{ settings.hero.description }}
                                     </p>
                                 </div>
                             </div>
@@ -69,7 +65,7 @@
                         <!-- Mobile-only Banner Image -->
                         <div class="block md:hidden">
                             <div
-                                style="background: url('public/images/founder-profile.jpg') no-repeat center center/cover"
+                                :style="{ background: `url('${settings.hero.bannerImage}') no-repeat center center/cover` }"
                                 class="w-full h-64">
                             </div>
                         </div>
@@ -86,24 +82,24 @@
                         <!-- Desktop Banner Image (original layout) -->
                         <div class="hidden md:block">
                             <div
-                                style="background: url('public/images/founder-profile.jpg') no-repeat center center/cover fixed"
+                                :style="{ background: `url('${settings.hero.bannerImage}') no-repeat center center/cover fixed` }"
                                 class="w-full max-h-[80vh] aspect-[16/9] flex flex-col md:flex-row pb-20 items-end relative">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
                                 <div class="text-white md:w-4/5 px-2 py-4 md:pl-8 z-10 flex flex-col gap-4 min-h-96">
-                                    <p class="text-2xl md:text-5xl tracking-wide font-bold leading-9 mt-auto">6M+ sq ft</p>
-                                    <p class="text-xl tracking-wide">Built up area</p>
-                                    <p class="font-light leading-5 text-lg">Carefully following the Legacy of Regional architecture with the unique touch of the architect.</p>
+                                    <p class="text-2xl md:text-5xl tracking-wide font-bold leading-9 mt-auto">{{ settings.stats.builtUpArea.value }}</p>
+                                    <p class="text-xl tracking-wide">{{ settings.stats.builtUpArea.subtitle }}</p>
+                                    <p class="font-light leading-5 text-lg">{{ settings.stats.builtUpArea.description }}</p>
                                 </div>
                                 <div class="bg-white py-8 md:px-12 z-10 grid grid-cols-2 gap-4 w-full">
                                     <div class="border-t-4 border-red-600 py-4">
-                                        <h2 class="text-5xl mb-2 font-semibold tracking-wide hover-underline-animation text-red-600">17+</h2>
-                                        <p class="text-xl font-bold">Years of Experience</p>
-                                        <p>Delivering exceptional construction solutions, combining expertise with innovation to surpass client expectations.</p>
+                                        <h2 class="text-5xl mb-2 font-semibold tracking-wide hover-underline-animation text-red-600">{{ settings.stats.experience.value }}</h2>
+                                        <p class="text-xl font-bold">{{ settings.stats.experience.subtitle }}</p>
+                                        <p>{{ settings.stats.experience.description }}</p>
                                     </div>
                                     <div class="border-t-4 border-red-600 py-4">
-                                        <h2 class="text-5xl mb-2 hover-underline-animation text-red-600 font-semibold tracking-wide">180+</h2>
-                                        <p class="text-xl font-bold">Successfully Completed Projects</p>
-                                        <p>Our commitment to excellence is evident in every endeavor we undertake, ensuring quality and client satisfaction at every step.</p>
+                                        <h2 class="text-5xl mb-2 hover-underline-animation text-red-600 font-semibold tracking-wide">{{ settings.stats.completedProjects.value }}</h2>
+                                        <p class="text-xl font-bold">{{ settings.stats.completedProjects.subtitle }}</p>
+                                        <p>{{ settings.stats.completedProjects.description }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -129,11 +125,11 @@
                 <section class="w-full py-16 md:py-24">
                     <div>
                         <div class="grid grid-cols-1 xl:grid-cols-2 py-6 md:py-8">
-                            <div class="block sm:hidden font-medium text-2xl md:text-6xl text-center xl:text-right text-red-600">Services</div>
-                            <p class="py-2 md:py-4 text-base md:text-lg text-center sm:text-left">Our dedication to precision and craftsmanship reflects in our proficiency in shaping architectural landscapes.</p>
-                            <div class="hidden sm:block font-medium text-4xl md:text-6xl text-center xl:text-right text-red-600">Services</div>
+                            <div class="block sm:hidden font-medium text-2xl md:text-6xl text-center xl:text-right text-red-600">{{ settings.services.title }}</div>
+                            <p class="py-2 md:py-4 text-base md:text-lg text-center sm:text-left">{{ settings.services.subtitle }}</p>
+                            <div class="hidden sm:block font-medium text-4xl md:text-6xl text-center xl:text-right text-red-600">{{ settings.services.title }}</div>
                         </div>
-                        <services-accordion></services-accordion>
+                        <services-accordion :items="settings.services.items"></services-accordion>
                     </div>
                 </section>
 
@@ -142,14 +138,14 @@
                     <div class="flex flex-col gap-6 md:gap-10">
                         <div class="flex flex-col md:flex-row text-lg md:text-xl py-4 justify-center items-center">
                             <div class="font-medium text-4xl md:text-6xl text-center xl:text-right text-red-600">
-                                Spotlight
+                                {{ settings.spotlight.title }}
                             </div>
                             <div class="w-full text-center sm:text-right md:mt-0 mt-6 md:mt-12">
-                                Some of our best works.
+                                {{ settings.spotlight.subtitle }}
                             </div>
                         </div>
                         <div>
-                            <spotlight-carousel></spotlight-carousel>
+                            <spotlight-carousel :images="settings.spotlight.projects"></spotlight-carousel>
                         </div>
                     </div>
                 </section>
@@ -159,31 +155,47 @@
                     <div class="flex flex-col gap-6 md:gap-10">
                         <div class="flex flex-col-reverse md:flex-row text-lg md:text-xl py-4 justify-center items-center">
                             <div class="w-full text-center md:text-left sm:text-left md:mt-0 mt-6 md:mt-12">
-                                Magazines that appreciated Genre of Design.
+                                {{ settings.features.subtitle }}
                             </div>
                             <div class="font-medium text-4xl md:text-6xl text-center xl:text-right text-red-600">
-                                Features
+                                {{ settings.features.title }}
                             </div>
                         </div>
-                        <features-section></features-section>
+                        <features-section
+                            :title="settings.features.title"
+                            :subtitle="settings.features.subtitle"
+                            :items="settings.features.items">
+                        </features-section>
                     </div>
                 </section>
 
                 <!-- Logo Cloud Section -->
-                <logo-cloud></logo-cloud>
+                <logo-cloud 
+                    :title="settings.clients.title"
+                    :subtitle="settings.clients.subtitle"
+                    :logos="settings.clients.logos">
+                </logo-cloud>
 
                 <!-- Beyond The Finish Section -->
-                <beyond-finish-section></beyond-finish-section>
+                <beyond-finish-section
+                    :title="settings.beyondFinish.title"
+                    :subtitle="settings.beyondFinish.subtitle"
+                    :video-url="settings.beyondFinish.videoUrl">
+                </beyond-finish-section>
 
                 <!-- Testimonials Section -->
-                <testimonials-section></testimonials-section>
+                <testimonials-section
+                    :title="settings.testimonials.title"
+                    :subtitle="settings.testimonials.subtitle"
+                    :videos="settings.testimonials.videos">
+                </testimonials-section>
 
                 <!-- CTA Section -->
                 <section class="w-full py-16 md:py-24">
                     <div class="flex flex-col items-center justify-center text-center">
                         <h2 class="text-2xl sm:text-3xl md:text-6xl font-bold leading-tight">
-                            Let's shape spaces and create inspiring environments
-                            <span class="text-red-600 block mt-2">Let's Talk</span>
+                            {{ settings.cta.title }}
+                            <span class="text-red-600 block mt-2">{{ settings.cta.subtitle }}</span>
                         </h2>
                     </div>
                 </section>
