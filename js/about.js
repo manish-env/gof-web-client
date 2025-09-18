@@ -483,6 +483,42 @@ const TestimonialsSection = {
     }
 };
 
+// Beyond The Finish Section Component
+const BeyondFinishSection = {
+    template: `
+        <section class="w-full py-16 md:py-24">
+            <div class="container grid items-center justify-center gap-4 md:px-6 lg:gap-10">
+                <div class="space-y-3 text-center">
+                    <h2 class="text-2xl md:text-3xl font-bold tracking-tighter sm:text-4xl lg:text-5xl">
+                        Beyond The Finish
+                    </h2>
+                    <p class="mx-auto max-w-[700px] text-sm md:text-base text-gray-500 lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                        Project Walkthroughs: Experience the completed projects as it truly stands - Raw and Real
+                    </p>
+                </div>
+                <div class="relative">
+                    <div class="overflow-hidden">
+                        <div class="flex justify-center">
+                            <div class="w-full md:w-3/4 lg:w-2/3 px-2">
+                                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                                    <div class="aspect-video bg-gray-100 relative">
+                                        <iframe src="https://www.youtube.com/embed/uSh9y2aBCsQ" 
+                                                frameborder="0" 
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                allowfullscreen
+                                                class="w-full h-full">
+                                        </iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `
+};
+
 // Main Vue App
 createApp({
     components: {
@@ -493,6 +529,7 @@ createApp({
         'services-accordion': ServicesAccordion,
         'features-section': FeaturesSection,
         'testimonials-section': TestimonialsSection,
+        'beyond-finish-section': BeyondFinishSection,
         'logo-cloud': LogoCloud
     }
 }).mount('#app');
