@@ -9,12 +9,35 @@ const FILE_BASE_URL = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 const settingsService = {
     async getBlogsSettings() {
         try {
-            const res = await fetch(`${ADMIN_API_BASE_URL}/site-settings?section=blogs`);
+            const res = await fetch(`${ADMIN_API_BASE_URL}/site-settings?section=blogs&_=${Date.now()}`);
             if (!res.ok) throw new Error(`Failed: ${res.status}`);
             const data = await res.json();
-            return data && data.success ? (data.data || {}) : {};
+            if (data && data.success) {
+                console.log('[Blogs] Loaded site-settings blogs:', data.data);
+                return data.data || {};
+            }
+            return {};
         } catch (e) {
             console.error('Error fetching blogs settings:', e);
+            // Fallback: try public settings map (blogs.* keys)
+            try {
+                const pub = await fetch(`${ADMIN_API_BASE_URL}/settings/public?_=${Date.now()}`);
+                if (pub.ok) {
+                    const pubData = await pub.json();
+                    if (pubData && pubData.success && pubData.data) {
+                        const map = pubData.data;
+                        const fallback = {
+                            title: map['blogs.title'],
+                            description: map['blogs.description'],
+                            coverImage: map['blogs.coverImage'] || map['blogs.cover_image']
+                        };
+                        console.log('[Blogs] Fallback public settings:', fallback);
+                        return fallback;
+                    }
+                }
+            } catch (e2) {
+                console.warn('Fallback public settings failed:', e2);
+            }
             return {};
         }
     }
