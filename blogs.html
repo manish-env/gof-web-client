@@ -52,13 +52,10 @@
                             <div class="flex flex-col justify-center space-y-4">
                                 <div class="space-y-2">
                                     <h1 class="text-4xl md:text-9xl text-red-600 font-semibold tracking-normal sm:text-5xl xl:text-8xl/none">
-                                        Design Journal
+                                        {{ settings.title }}
                                     </h1>
                                     <p class="max-w-[700px] text-neutral-500 md:text-xl leading-7 tracking-normal dark:text-neutral-400">
-                                        Insights, process notes, and lessons from our projects. 
-                                        Explore our design philosophy through detailed case studies, 
-                                        innovative approaches, and the stories behind our most 
-                                        impactful architectural and interior design solutions.
+                                        {{ settings.description }}
                                     </p>
                                 </div>
                             </div>
@@ -98,7 +95,7 @@
                 <!-- Background Image Section -->
                 <section>
                     <div class="relative h-96 md:h-[500px] w-full rounded-lg overflow-hidden"
-                         style="background: url('public/images/main-blog.jpg') no-repeat center center/cover;">
+                         :style="{ background: settings.coverImage ? `url('${settings.coverImage}') no-repeat center center/cover` : `url('public/images/main-blog.jpg') no-repeat center center/cover` }">
                         <div class="absolute inset-0 bg-black bg-opacity-30"></div>
                         <div class="absolute bottom-6 left-6 text-white">
                             <h2 class="text-2xl md:text-4xl font-bold mb-2">Design Stories & Insights</h2>

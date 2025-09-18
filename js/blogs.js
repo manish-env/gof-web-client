@@ -3,7 +3,22 @@ const { createApp } = Vue;
 
 // API Configuration
 const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const ADMIN_API_BASE_URL = window.ADMIN_API_BASE_URL || 'https://god-admin-worker.restless-mountain-f968.workers.dev/api';
 const FILE_BASE_URL = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
+
+const settingsService = {
+    async getBlogsSettings() {
+        try {
+            const res = await fetch(`${ADMIN_API_BASE_URL}/site-settings?section=blogs`);
+            if (!res.ok) throw new Error(`Failed: ${res.status}`);
+            const data = await res.json();
+            return data && data.success ? (data.data || {}) : {};
+        } catch (e) {
+            console.error('Error fetching blogs settings:', e);
+            return {};
+        }
+    }
+};
 
 // Main App
 const app = createApp({
@@ -11,13 +26,22 @@ const app = createApp({
         return {
             blogs: [],
             loading: false,
-            error: null
+            error: null,
+            settings: {
+                title: 'Design Journal',
+                description: 'Insights, process notes, and lessons from our projects. Explore our design philosophy through detailed case studies, innovative approaches, and the stories behind our most impactful architectural and interior design solutions.',
+                coverImage: ''
+            }
         };
     },
     async mounted() {
-        await this.loadBlogs();
+        await Promise.all([this.loadSettings(), this.loadBlogs()]);
     },
     methods: {
+        async loadSettings() {
+            const s = await settingsService.getBlogsSettings();
+            this.settings = { ...this.settings, ...s };
+        },
         resolveCoverUrl(path) {
             if (!path) return '';
             // If full URL, return as-is
