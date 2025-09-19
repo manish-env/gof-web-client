@@ -3,6 +3,7 @@ const { createApp } = Vue;
 
 // API Configuration
 const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const ADMIN_API_BASE_URL = window.ADMIN_API_BASE_URL || 'https://god-admin-worker.restless-mountain-f968.workers.dev/api';
 const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'http://localhost:4001'
     : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
@@ -13,13 +14,30 @@ const app = createApp({
         return {
             landingPages: [],
             loading: false,
-            error: null
+            error: null,
+            settings: {
+                title: 'Design Solutions',
+                subtitle: 'Explore our specialized design services tailored for different project types. From residential spaces to commercial environments, each solution is crafted to meet your unique needs and vision.',
+                coverImage: ''
+            }
         };
     },
     async mounted() {
-        await this.loadLandingPages();
+        await Promise.all([this.loadSettings(), this.loadLandingPages()]);
     },
     methods: {
+        async loadSettings() {
+            try {
+                const res = await fetch(`${ADMIN_API_BASE_URL}/site-settings?section=landing&_=${Date.now()}`);
+                if (!res.ok) throw new Error(`Failed: ${res.status}`);
+                const data = await res.json();
+                if (data && data.success) {
+                    this.settings = { ...this.settings, ...(data.data || {}) };
+                }
+            } catch (e) {
+                console.warn('Landing settings load failed:', e.message);
+            }
+        },
         resolveImageUrl(path) {
             if (!path) return '';
             // If full URL, return as-is

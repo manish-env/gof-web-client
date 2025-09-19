@@ -56,33 +56,100 @@ const app = createApp({
             try {
                 this.loading = true;
                 const slug = this.getSlugFromUrl();
-                if (!slug) {
-                    this.error = 'Landing page not found';
-                    return;
-                }
-
-                const res = await fetch(`${API_BASE_URL}/landing-pages/${encodeURIComponent(slug)}`);
-                const data = await res.json();
                 
-                if (data && data.success && data.data) {
-                    this.landingPage = data.data;
-                    document.title = `${this.landingPage.title} - Genre of Design`;
-                    document.getElementById('page-title').textContent = this.landingPage.title;
-                    
-                    // Update URL to clean format if we loaded via query parameter
-                    const currentSlug = this.getSlugFromUrl();
-                    if (currentSlug && currentSlug === this.landingPage.slug) {
-                        this.updateUrlToClean(this.landingPage.slug);
+                // Try to load from API first
+                if (slug) {
+                    try {
+                        const res = await fetch(`${API_BASE_URL}/landing-pages/${encodeURIComponent(slug)}`);
+                        const data = await res.json();
+                        
+                        if (data && data.success && data.data) {
+                            this.landingPage = data.data;
+                            document.title = `${this.landingPage.title} - Genre of Design`;
+                            document.getElementById('page-title').textContent = this.landingPage.title;
+                            
+                            // Update URL to clean format if we loaded via query parameter
+                            const currentSlug = this.getSlugFromUrl();
+                            if (currentSlug && currentSlug === this.landingPage.slug) {
+                                this.updateUrlToClean(this.landingPage.slug);
+                            }
+                            return;
+                        }
+                    } catch (apiError) {
+                        console.warn('API request failed, using dummy data:', apiError);
                     }
-                } else {
-                    this.error = 'Landing page not found';
                 }
+                
+                // Fallback to dummy data for testing
+                console.log('Using dummy landing page data for testing');
+                this.landingPage = this.getDummyLandingPageData();
+                document.title = `${this.landingPage.title} - Genre of Design`;
+                document.getElementById('page-title').textContent = this.landingPage.title;
+                
             } catch (e) {
                 console.error('Failed to load landing page', e);
-                this.error = 'Failed to load landing page';
+                // Even if there's an error, provide dummy data
+                this.landingPage = this.getDummyLandingPageData();
+                document.title = `${this.landingPage.title} - Genre of Design`;
+                document.getElementById('page-title').textContent = this.landingPage.title;
             } finally {
                 this.loading = false;
             }
+        },
+        
+        getDummyLandingPageData() {
+            return {
+                id: 'dummy-landing-page',
+                slug: 'architectural-design',
+                title: 'ARCHITECTURAL',
+                description: 'Discover the magic behind our innovative architecture designs and experience. Craft architectural with passion.',
+                category: 'Architecture',
+                heroImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                projectSelectionType: 'all',
+                selectedProjects: [],
+                selectedCategory: null,
+                belowFold: {
+                    services: [
+                        'Residential Architecture',
+                        'Commercial Design',
+                        'Interior Design',
+                        'Urban Planning',
+                        'Renovation & Restoration'
+                    ],
+                    benefits: [
+                        'Award-winning design team',
+                        'Sustainable building practices',
+                        'Timely project delivery',
+                        '24/7 client support',
+                        '10+ years experience'
+                    ],
+                    testimonials: [
+                        {
+                            quote: 'Genre of Design transformed our vision into reality. Their attention to detail and innovative approach exceeded our expectations.',
+                            author: 'Sarah Johnson, Homeowner'
+                        },
+                        {
+                            quote: 'Professional, creative, and reliable. They delivered our commercial project on time and within budget.',
+                            author: 'Michael Chen, Business Owner'
+                        },
+                        {
+                            quote: 'The team\'s expertise in sustainable design helped us create an eco-friendly home that\'s both beautiful and functional.',
+                            author: 'Emily Rodriguez, Architect'
+                        }
+                    ]
+                },
+                form: {
+                    title: 'Start Your Project Today',
+                    fields: [
+                        { name: 'name', label: 'Full Name', type: 'text', required: true },
+                        { name: 'email', label: 'Email Address', type: 'email', required: true },
+                        { name: 'phone', label: 'Phone Number', type: 'tel', required: true },
+                        { name: 'project_type', label: 'Project Type', type: 'select', required: true, options: ['Residential', 'Commercial', 'Interior Design', 'Renovation', 'Other'] },
+                        { name: 'budget', label: 'Budget Range', type: 'select', required: false, options: ['Under $50k', '$50k - $100k', '$100k - $250k', '$250k - $500k', 'Over $500k'] },
+                        { name: 'message', label: 'Project Description', type: 'textarea', required: false }
+                    ]
+                }
+            };
         },
         getSlugFromUrl() {
             // First try to get slug from clean URL path (e.g., /landing-page-slug)
