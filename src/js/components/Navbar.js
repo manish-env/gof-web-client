@@ -7,8 +7,8 @@ const Navbar = {
                     <!-- Left Navigation Links -->
                     <div class="hidden md:flex items-center space-x-8 absolute left-0">
                         <a href="index.html" :class="['nav-link-simple', { 'active-link': isActive('index.html') } ]">Projects</a>
-                        <a href="blogs.html" :class="['nav-link-simple', { 'active-link': isActive('blogs.html') } ]">Blogs</a>
-                        <a href="landing-pages.html" :class="['nav-link-simple', { 'active-link': isActive('landing-pages.html') } ]">Discover More</a>
+                        <a href="pages/blogs.html" :class="['nav-link-simple', { 'active-link': isActive('blogs.html') } ]">Blogs</a>
+                        <a href="pages/landing-pages.html" :class="['nav-link-simple', { 'active-link': isActive('landing-pages.html') } ]">Discover More</a>
                     </div>
                     
                     <!-- Center Logo -->
@@ -20,9 +20,9 @@ const Navbar = {
                     
                     <!-- Right Navigation Links -->
                     <div class="hidden md:flex items-center space-x-8 absolute right-0">
-                        <a href="about.html" :class="['nav-link-simple', { 'active-link': isActive('about.html') } ]">About Us</a>
-                        <a href="contact.html" :class="['nav-link-simple', { 'active-link': isActive('contact.html') } ]">Contact</a>
-                        <a href="careers.html" :class="['nav-link-simple', { 'active-link': isActive('careers.html') } ]">Career</a>
+                        <a href="pages/about.html" :class="['nav-link-simple', { 'active-link': isActive('about.html') } ]">About Us</a>
+                        <a href="pages/contact.html" :class="['nav-link-simple', { 'active-link': isActive('contact.html') } ]">Contact</a>
+                        <a href="pages/careers.html" :class="['nav-link-simple', { 'active-link': isActive('careers.html') } ]">Career</a>
                     </div>
                     
                     <!-- Mobile menu button (left) -->
@@ -45,11 +45,11 @@ const Navbar = {
                             </div>
                             <nav class="flex flex-col gap-2 h-full overflow-y-auto pb-24">
                                 <a href="index.html" :class="['mobile-nav-link', { 'active-link': isActive('index.html') } ]" @click="closeMobileMenu">Projects</a>
-                                <a href="blogs.html" :class="['mobile-nav-link', { 'active-link': isActive('blogs.html') } ]" @click="closeMobileMenu">Blogs</a>
-                                <a href="landing-pages.html" :class="['mobile-nav-link', { 'active-link': isActive('landing-pages.html') } ]" @click="closeMobileMenu">Discover More</a>
-                                <a href="about.html" :class="['mobile-nav-link', { 'active-link': isActive('about.html') } ]" @click="closeMobileMenu">About Us</a>
-                                <a href="contact.html" :class="['mobile-nav-link', { 'active-link': isActive('contact.html') } ]" @click="closeMobileMenu">Contact</a>
-                                <a href="careers.html" :class="['mobile-nav-link', { 'active-link': isActive('careers.html') } ]" @click="closeMobileMenu">Careers</a>
+                                <a href="pages/blogs.html" :class="['mobile-nav-link', { 'active-link': isActive('blogs.html') } ]" @click="closeMobileMenu">Blogs</a>
+                                <a href="pages/landing-pages.html" :class="['mobile-nav-link', { 'active-link': isActive('landing-pages.html') } ]" @click="closeMobileMenu">Discover More</a>
+                                <a href="pages/about.html" :class="['mobile-nav-link', { 'active-link': isActive('about.html') } ]" @click="closeMobileMenu">About Us</a>
+                                <a href="pages/contact.html" :class="['mobile-nav-link', { 'active-link': isActive('contact.html') } ]" @click="closeMobileMenu">Contact</a>
+                                <a href="pages/careers.html" :class="['mobile-nav-link', { 'active-link': isActive('careers.html') } ]" @click="closeMobileMenu">Careers</a>
                             </nav>
                             <div class="absolute left-0 right-0 bottom-0 bg-white border-t p-3 text-sm text-gray-500">
                                 <div class="mb-2 px-1">Connect with us</div>

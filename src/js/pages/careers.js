@@ -1,8 +1,8 @@
 // Careers Page Application
 const { createApp } = Vue;
 
-// API Configuration
-const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+// API Configuration - using common config
+const API_BASE_URL = API_CONFIG.BASE_URL;
 
 // API Service
 const apiService = {

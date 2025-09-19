@@ -10,12 +10,12 @@ const Footer = {
                     author: 'Rakesh Sharma, Director and Principal Architect'
                 },
                 quickLinks: [
-                    { name: 'Projects', url: 'projects.html' },
-                    { name: 'Blogs', url: 'blogs.html' },
-                    { name: 'Careers', url: 'careers.html' },
-                    { name: 'Contact', url: 'contact.html' },
-                    { name: 'About Us', url: 'about.html' },
-                    { name: 'Discover More', url: 'landing-pages.html' }
+                    { name: 'Projects', url: 'index.html' },
+                    { name: 'Blogs', url: 'pages/blogs.html' },
+                    { name: 'Careers', url: 'pages/careers.html' },
+                    { name: 'Contact', url: 'pages/contact.html' },
+                    { name: 'About Us', url: 'pages/about.html' },
+                    { name: 'Discover More', url: 'pages/landing-pages.html' }
                 ],
                 contactInfo: {
                     phone: '+91 95996 95099',
@@ -76,7 +76,7 @@ const Footer = {
                     <div class="lg:col-span-2">
                         <h4 class="text-lg font-semibold mb-4">Expertise</h4>
                         <ul class="space-y-2">
-                            <li v-for="item in (settings.expertise || ['Hospitality','Residential','Township','Commercial','Healthcare','Offices','Retail','Institutional','Builder\'s Project'])" :key="item"><span class="text-gray-300">{{ item }}</span></li>
+                            <li v-for="item in (settings.expertise || ['Hospitality','Residential','Township','Commercial','Healthcare','Offices','Retail','Institutional','Builders Project'])" :key="item"><span class="text-gray-300">{{ item }}</span></li>
                         </ul>
                     </div>
                     <div class="lg:col-span-2">

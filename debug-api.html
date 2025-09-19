@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Debug</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>API Debug Console</h1>
+    <p>Check the browser console for API configuration and test results.</p>
+    
+    <button onclick="testAPI()">Test Projects API</button>
+    <div id="result"></div>
+
+    <!-- API Configuration -->
+    <script src="src/js/config/api.js"></script>
+    
+    <script>
+        console.log('=== API Configuration Debug ===');
+        console.log('API_CONFIG:', API_CONFIG);
+        console.log('API_ENDPOINTS:', API_ENDPOINTS);
+        console.log('buildApiUrl function:', buildApiUrl);
+        
+        // Test the buildApiUrl function
+        const testUrl = buildApiUrl('/projects');
+        console.log('Test URL for /projects:', testUrl);
+        console.log('Expected URL should be: https://god-worker.restless-mountain-f968.workers.dev/api/projects');
+        
+        // Test multiple endpoints
+        const endpoints = [
+            '/projects',
+            '/landing-pages',
+            '/blogs'
+        ];
+        
+        endpoints.forEach(endpoint => {
+            const url = buildApiUrl(endpoint);
+            console.log(`URL for ${endpoint}:`, url);
+        });
+        
+        async function testAPI() {
+            try {
+                console.log('Testing API call...');
+                const url = buildApiUrl('/projects');
+                console.log('Calling URL:', url);
+                
+                // Test with different methods
+                console.log('Testing with fetch...');
+                const fetchResponse = await fetch(url);
+                console.log('Fetch response status:', fetchResponse.status);
+                console.log('Fetch response headers:', fetchResponse.headers);
+                
+                if (!fetchResponse.ok) {
+                    throw new Error(`HTTP ${fetchResponse.status}: ${fetchResponse.statusText}`);
+                }
+                
+                const fetchData = await fetchResponse.json();
+                console.log('Fetch data:', fetchData);
+                
+                // Also test with axios
+                console.log('Testing with axios...');
+                const response = await axios.get(url);
+                console.log('Axios Response:', response.data);
+                
+                document.getElementById('result').innerHTML = `
+                    <h3>Success!</h3>
+                    <p>Status: ${response.status}</p>
+                    <p>Projects count: ${Array.isArray(response.data) ? response.data.length : 'Not an array'}</p>
+                    <pre>${JSON.stringify(response.data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                console.error('API Error:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    status: error.response?.status,
+                    statusText: error.response?.statusText,
+                    data: error.response?.data
+                });
+                
+                document.getElementById('result').innerHTML = `
+                    <h3>Error!</h3>
+                    <p><strong>Message:</strong> ${error.message}</p>
+                    <p><strong>Status:</strong> ${error.response?.status || 'No status'}</p>
+                    <p><strong>Status Text:</strong> ${error.response?.statusText || 'No status text'}</p>
+                    <pre>${JSON.stringify(error.response?.data || error, null, 2)}</pre>
+                `;
+            }
+        }
+        
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            console.log('Page loaded, starting auto-test...');
+            testAPI();
+        });
+    </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 // Blogs Page Application
 const { createApp } = Vue;
 
-// API Configuration
-const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+// API Configuration - using common config
+const API_BASE_URL = API_CONFIG.BASE_URL;
 const ADMIN_API_BASE_URL = window.ADMIN_API_BASE_URL || 'https://god-admin-worker.restless-mountain-f968.workers.dev/api';
 const FILE_BASE_URL = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 

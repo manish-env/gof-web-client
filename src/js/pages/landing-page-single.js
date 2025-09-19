@@ -1,8 +1,8 @@
 // Individual Landing Page Application
 const { createApp } = Vue;
 
-// API Configuration
-const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+// API Configuration - using common config
+const API_BASE_URL = API_CONFIG.BASE_URL;
 const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'http://localhost:4001'
     : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
@@ -55,40 +55,34 @@ const app = createApp({
         async loadLandingPage() {
             try {
                 this.loading = true;
-                const slug = this.getSlugFromUrl();
                 
-                // Try to load from API first
-                if (slug) {
+                // For testing purposes, always use dummy data
+                console.log('Loading dummy landing page data for testing');
+                this.landingPage = this.getDummyLandingPageData();
+                document.title = `${this.landingPage.title} - Genre of Design`;
+                document.getElementById('page-title').textContent = this.landingPage.title;
+                
+                // Optional: Try to load from API as well (for future use)
+                const slug = this.getSlugFromUrl();
+                if (slug && slug !== 'architectural-design') {
                     try {
                         const res = await fetch(`${API_BASE_URL}/landing-pages/${encodeURIComponent(slug)}`);
                         const data = await res.json();
                         
                         if (data && data.success && data.data) {
+                            console.log('API data loaded, replacing dummy data');
                             this.landingPage = data.data;
                             document.title = `${this.landingPage.title} - Genre of Design`;
                             document.getElementById('page-title').textContent = this.landingPage.title;
-                            
-                            // Update URL to clean format if we loaded via query parameter
-                            const currentSlug = this.getSlugFromUrl();
-                            if (currentSlug && currentSlug === this.landingPage.slug) {
-                                this.updateUrlToClean(this.landingPage.slug);
-                            }
-                            return;
                         }
                     } catch (apiError) {
-                        console.warn('API request failed, using dummy data:', apiError);
+                        console.warn('API request failed, keeping dummy data:', apiError);
                     }
                 }
                 
-                // Fallback to dummy data for testing
-                console.log('Using dummy landing page data for testing');
-                this.landingPage = this.getDummyLandingPageData();
-                document.title = `${this.landingPage.title} - Genre of Design`;
-                document.getElementById('page-title').textContent = this.landingPage.title;
-                
             } catch (e) {
                 console.error('Failed to load landing page', e);
-                // Even if there's an error, provide dummy data
+                // Fallback to dummy data
                 this.landingPage = this.getDummyLandingPageData();
                 document.title = `${this.landingPage.title} - Genre of Design`;
                 document.getElementById('page-title').textContent = this.landingPage.title;
@@ -152,7 +146,22 @@ const app = createApp({
             };
         },
         getSlugFromUrl() {
-            // First try to get slug from clean URL path (e.g., /landing-page-slug)
+            // Check for marketing parameter first (from /discovermore?marketing=slugname)
+            const params = new URLSearchParams(window.location.search);
+            const marketingSlug = params.get('marketing');
+            if (marketingSlug) {
+                console.log('Found marketing parameter:', marketingSlug);
+                return marketingSlug;
+            }
+            
+            // Check for slug parameter (backward compatibility)
+            const slugParam = params.get('slug');
+            if (slugParam) {
+                console.log('Found slug parameter:', slugParam);
+                return slugParam;
+            }
+            
+            // Check for clean URL path (e.g., /landing-page-slug)
             const path = window.location.pathname;
             const pathSegments = path.split('/').filter(segment => segment);
             
@@ -163,19 +172,20 @@ const app = createApp({
                 if (!lastSegment.includes('.') && 
                     lastSegment !== 'landing-page' && 
                     lastSegment !== 'landing-pages' &&
+                    lastSegment !== 'discovermore' &&
                     lastSegment !== 'index' &&
                     lastSegment !== 'about' &&
                     lastSegment !== 'contact' &&
                     lastSegment !== 'careers' &&
                     lastSegment !== 'blogs' &&
                     lastSegment !== 'projects') {
+                    console.log('Found slug in path:', lastSegment);
                     return lastSegment;
                 }
             }
             
-            // Fallback to query parameter for backward compatibility
-            const params = new URLSearchParams(window.location.search);
-            return params.get('slug');
+            console.log('No slug found in URL');
+            return null;
         },
         // Update browser URL to clean format
         updateUrlToClean(slug) {
@@ -192,68 +202,14 @@ const app = createApp({
             try {
                 console.log('📝 Loading projects for landing page...');
                 
-                if (this.landingPage.projectSelectionType === 'specific' && this.landingPage.selectedProjects) {
-                    // Load specific projects
-                    const projectIds = this.landingPage.selectedProjects;
-                    console.log('📝 Loading specific projects:', projectIds);
-                    
-                    const projectPromises = projectIds.map(async (projectId) => {
-                        try {
-                            const res = await fetch(`${API_BASE_URL}/projects/${projectId}`);
-                            const data = await res.json();
-                            return data.success ? data.data : null;
-                        } catch (error) {
-                            console.error(`Failed to load project ${projectId}:`, error);
-                            return null;
-                        }
-                    });
-                    
-                    const projects = await Promise.all(projectPromises);
-                    this.projects = projects.filter(p => p !== null); // Load all selected projects
-                } else if (this.landingPage.projectSelectionType === 'category' && this.landingPage.selectedCategory) {
-                    // Load projects by category
-                    console.log('📝 Loading projects by category:', this.landingPage.selectedCategory);
-                    
-                    const res = await fetch(`${API_BASE_URL}/projects?type=${encodeURIComponent(this.landingPage.selectedCategory)}`);
-                    const data = await res.json();
-                    
-                    if (data.success) {
-                        this.projects = data.data || [];
-                    } else {
-                        console.error('Failed to load projects by category:', data.message);
-                        this.projects = [];
-                    }
-                } else {
-                    // Fallback: load all projects
-                    console.log('📝 Loading all projects as fallback');
-                    
-                    const res = await fetch(`${API_BASE_URL}/projects`);
-                    const data = await res.json();
-                    
-                    if (data.success) {
-                        this.projects = data.data || [];
-                    } else {
-                        console.error('Failed to load projects:', data.message);
-                        this.projects = [];
-                    }
-                }
+                // For testing, use dummy project data
+                console.log('📝 Using dummy project data for testing');
+                this.projects = this.getDummyProjectData();
                 
                 // Initialize project states for image loading (same as index page)
                 this.projects = this.projects.map(project => {
-                    // Ensure photos is properly parsed
-                    let photos = project.photos;
-                    if (typeof photos === 'string') {
-                        try {
-                            photos = JSON.parse(photos);
-                        } catch (e) {
-                            console.log('Failed to parse photos for project:', project.name, photos);
-                            photos = [];
-                        }
-                    }
-                    
                     return {
                         ...project,
-                        photos: photos, // Ensure photos is an array
                         isLazyLoaded: true, // Set to true immediately like index page
                         imageLoaded: true, // Set to true immediately like index page
                         imageError: false
@@ -264,17 +220,135 @@ const app = createApp({
                 console.log('📝 First project data:', this.projects[0]);
                 if (this.projects[0]) {
                     console.log('📝 First project photos:', this.projects[0].photos);
-                    console.log('📝 First project photos type:', typeof this.projects[0].photos);
-                    console.log('📝 First project imageLoaded:', this.projects[0].imageLoaded);
-                    console.log('📝 First project isLazyLoaded:', this.projects[0].isLazyLoaded);
                     console.log('📝 First project image URL:', this.getProjectImage(this.projects[0]));
                 }
+                
+                // Optional: Try to load from API as well (for future use)
+                try {
+                    const res = await fetch(`${API_BASE_URL}/projects`);
+                    const data = await res.json();
+                    
+                    if (data.success && data.data && data.data.length > 0) {
+                        console.log('📝 API projects loaded, replacing dummy data');
+                        this.projects = data.data.map(project => {
+                            let photos = project.photos;
+                            if (typeof photos === 'string') {
+                                try {
+                                    photos = JSON.parse(photos);
+                                } catch (e) {
+                                    console.log('Failed to parse photos for project:', project.name, photos);
+                                    photos = [];
+                                }
+                            }
+                            
+                            return {
+                                ...project,
+                                photos: photos,
+                                isLazyLoaded: true,
+                                imageLoaded: true,
+                                imageError: false
+                            };
+                        });
+                    }
+                } catch (apiError) {
+                    console.warn('API projects failed, keeping dummy data:', apiError);
+                }
+                
             } catch (error) {
                 console.error('❌ Failed to load projects:', error);
-                this.projects = [];
+                this.projects = this.getDummyProjectData();
             } finally {
                 this.loadingProjects = false;
             }
+        },
+        
+        getDummyProjectData() {
+            return [
+                {
+                    uuid1: 'dummy-project-1',
+                    name: 'Modern Residential Villa',
+                    location: 'Mumbai, India',
+                    type: 'Residential',
+                    clientName: 'Rajesh Kumar',
+                    status: 'Completed',
+                    area: '3500 sq ft',
+                    description: 'A stunning modern villa featuring clean lines, large glass facades, and sustainable design elements.',
+                    photos: [
+                        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    ]
+                },
+                {
+                    uuid1: 'dummy-project-2',
+                    name: 'Corporate Office Complex',
+                    location: 'Delhi, India',
+                    type: 'Commercial',
+                    clientName: 'Tech Solutions Ltd',
+                    status: 'In Progress',
+                    area: '15000 sq ft',
+                    description: 'Contemporary office design with open workspaces, meeting rooms, and employee wellness areas.',
+                    photos: [
+                        'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    ]
+                },
+                {
+                    uuid1: 'dummy-project-3',
+                    name: 'Luxury Hotel Interior',
+                    location: 'Goa, India',
+                    type: 'Hospitality',
+                    clientName: 'Ocean View Resorts',
+                    status: 'Completed',
+                    area: '8000 sq ft',
+                    description: 'Elegant hotel interior design with coastal themes, premium finishes, and guest comfort focus.',
+                    photos: [
+                        'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    ]
+                },
+                {
+                    uuid1: 'dummy-project-4',
+                    name: 'Sustainable Eco-Home',
+                    location: 'Bangalore, India',
+                    type: 'Residential',
+                    clientName: 'Green Living Foundation',
+                    status: 'Completed',
+                    area: '2800 sq ft',
+                    description: 'Environmentally conscious home design with solar panels, rainwater harvesting, and natural materials.',
+                    photos: [
+                        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    ]
+                },
+                {
+                    uuid1: 'dummy-project-5',
+                    name: 'Retail Store Design',
+                    location: 'Pune, India',
+                    type: 'Retail',
+                    clientName: 'Fashion Forward',
+                    status: 'Completed',
+                    area: '2000 sq ft',
+                    description: 'Modern retail space with dynamic lighting, flexible displays, and customer flow optimization.',
+                    photos: [
+                        'https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    ]
+                },
+                {
+                    uuid1: 'dummy-project-6',
+                    name: 'Medical Center',
+                    location: 'Chennai, India',
+                    type: 'Healthcare',
+                    clientName: 'Health Plus Clinic',
+                    status: 'In Progress',
+                    area: '5000 sq ft',
+                    description: 'Patient-centered healthcare facility with calming interiors, efficient layouts, and accessibility features.',
+                    photos: [
+                        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1576091160550-2173dba0ef08?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    ]
+                }
+            ];
         },
         // Image handling methods (same as index page)
         getProjectImage(project) {

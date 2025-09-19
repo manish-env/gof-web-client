@@ -1,44 +1,8 @@
 // Projects Page Application
 const { createApp } = Vue;
 
-// API Configuration
+// Simple API calls with axios
 const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
-
-// API Service
-const apiService = {
-    async request(url, options = {}) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            ...options
-        };
-
-        try {
-            const response = await axios(`${API_BASE_URL}${url}`, config);
-            return response.data;
-        } catch (error) {
-            console.error('API Error:', error);
-            throw error;
-        }
-    },
-
-    async getProjects(params = {}) {
-        const cleanParams = Object.fromEntries(
-            Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== '' )
-        );
-        const queryString = new URLSearchParams(cleanParams).toString();
-        return this.request(`/projects${queryString ? `?${queryString}` : ''}`);
-    },
-
-    async getProjectTypes() {
-        return this.request('/projects/types');
-    },
-
-    async getProject(id) {
-        return this.request(`/projects/${id}`);
-    }
-};
 
 // Main App
 const app = createApp({
@@ -63,6 +27,8 @@ const app = createApp({
     },
     computed: {
         filteredProjects() {
+            console.log('filteredProjects computed - this.projects:', this.projects);
+            console.log('this.projects.length:', this.projects.length);
             let filtered = this.projects;
             
             // Filter by category if selected
@@ -92,6 +58,7 @@ const app = createApp({
             // Note: Projects are already sorted by priority (lowest number first) from the backend API
             // No additional sorting needed here to maintain consistent order
             
+            console.log('filteredProjects returning:', filtered.length, 'projects');
             return filtered;
         },
         
@@ -114,6 +81,9 @@ const app = createApp({
         }
     },
     async mounted() {
+        console.log('=== VUE APP MOUNTED ===');
+        console.log('Loading projects...');
+        
         await this.loadInitialProjects();
         await this.loadProjectTypes();
         this.setupInfiniteScroll();
@@ -149,13 +119,14 @@ const app = createApp({
                 this.error = null;
                 
                 console.log('Loading initial projects...');
-                const response = await apiService.getProjects({ limit: 12, offset: 0, type: this.selectedCategory || undefined });
+                console.log('API URL:', `${API_BASE_URL}/projects`);
+                
+                const response = await axios.get(`${API_BASE_URL}/projects`);
+                console.log('API Response:', response.data);
 
-                console.log('Initial API Response:', response);
-
-                const payload = Array.isArray(response) ? response : (response && response.data) ? response.data : [];
-                if (Array.isArray(payload)) {
-                    this.projects = payload.map(project => ({
+                const projects = response.data.data;
+                if (Array.isArray(projects)) {
+                    this.projects = projects.map(project => ({
                         ...project,
                         imageLoaded: false,
                         imageError: false,
@@ -164,14 +135,12 @@ const app = createApp({
                     }));
 
                     this.currentPage = 0;
-                    this.hasMore = (response && response.pagination && typeof response.pagination.hasMore !== 'undefined')
-                        ? response.pagination.hasMore
-                        : payload.length === 12;
+                    this.hasMore = projects.length >= 12;
                     
-                    console.log('Initial projects loaded:', this.projects.length);
+                    console.log('Projects loaded:', this.projects.length);
                     console.log('Projects data:', this.projects);
-                    console.log('Has more projects:', this.hasMore);
-                    console.log('Filtered projects count:', this.filteredProjects.length);
+                    console.log('Loading state:', this.loading);
+                    console.log('Error state:', this.error);
                     
                     // Setup projects for display
                     this.$nextTick(() => {
@@ -179,7 +148,7 @@ const app = createApp({
                         this.setupLazyLoading();
                     });
                 } else {
-                    console.error('Unexpected API response shape', response);
+                    console.error('Unexpected API response shape', projects);
                     this.error = 'Failed to load projects';
                 }
             } catch (error) {
@@ -205,15 +174,11 @@ const app = createApp({
                 
                 console.log('Loading more projects - page:', nextPage, 'offset:', offset);
                 
-                const response = await apiService.getProjects({ 
-                    limit: 12, 
-                    offset: offset,
-                    type: this.selectedCategory || undefined
-                });
+                const response = await axios.get(`${API_BASE_URL}/projects`);
 
-                const payload = Array.isArray(response) ? response : (response && response.data) ? response.data : [];
-                if (Array.isArray(payload) && payload.length > 0) {
-                    const newProjects = payload.map(project => ({
+                const projects = response.data.data;
+                if (Array.isArray(projects) && projects.length > 0) {
+                    const newProjects = projects.map(project => ({
                         ...project,
                         imageLoaded: false,
                         imageError: false,
@@ -258,10 +223,10 @@ const app = createApp({
 
         async loadProjectTypes() {
             try {
-                const response = await apiService.getProjectTypes();
-                const payload = Array.isArray(response) ? response : (response && response.data) ? response.data : [];
-                if (Array.isArray(payload)) {
-                    this.projectTypes = payload;
+                const response = await axios.get(`${API_BASE_URL}/projects/types`);
+                const projectTypes = response.data.data;
+                if (Array.isArray(projectTypes)) {
+                    this.projectTypes = projectTypes;
                 }
             } catch (error) {
                 console.error('Failed to load project types:', error);
@@ -362,8 +327,9 @@ const app = createApp({
         // Masonry column distribution like god_old
         getMasonryColumns() {
             const columns = this.columnCount;
-            console.log('Current window width:', window.innerWidth);
+            console.log('getMasonryColumns called - Current window width:', window.innerWidth);
             console.log('Calculated columns:', columns);
+            console.log('filteredProjects length:', this.filteredProjects.length);
             
             const columnData = Array.from({ length: columns }, () => []);
             

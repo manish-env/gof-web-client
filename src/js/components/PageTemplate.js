@@ -2,7 +2,7 @@
 // This file provides a simple template for pages that need the WhatsApp component
 
 // Include this script in your page:
-// <script src="js/components/WhatsApp.js"></script>
+// <script src="src/js/components/WhatsApp.js"></script>
 
 // Add this to your page HTML:
 // <whatsapp-component></whatsapp-component>
@@ -20,7 +20,7 @@
     <title>Your Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="src/css/styles.css">
 </head>
 <body>
     <div id="app">
@@ -30,7 +30,7 @@
         <whatsapp-component></whatsapp-component>
     </div>
     
-    <script src="js/components/WhatsApp.js"></script>
+    <script src="src/js/components/WhatsApp.js"></script>
     <script>
         const { createApp } = Vue;
         
