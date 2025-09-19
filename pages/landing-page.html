@@ -22,453 +22,149 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../src/css/styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body class="font-josefin bg-white text-gray-900">
     <div id="app">
         <navbar-component></navbar-component>
         
-        <main class="flex-1 py-6 md:py-16 w-full">
-            <div class="max-w-full mx-auto px-2.5">
-            <!-- Loading State -->
+        <main class="py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Loading State -->
                 <div v-if="loading" class="text-center py-20">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
                     <p class="mt-4 text-gray-600">Loading landing page...</p>
-            </div>
+                </div>
 
-            <!-- Error State -->
+                <!-- Error State -->
                 <div v-else-if="error" class="text-center py-20">
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded max-w-md mx-auto">
                         {{ error }}
+                    </div>
                 </div>
-            </div>
 
-            <!-- Landing Page Content -->
+                <!-- Landing Page Content -->
                 <div v-else-if="landingPage">
-                <!-- Hero Banner Section -->
-                    <section class="hero-banner">
-                        <!-- Background Image -->
-                        <div 
-                            class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                            :style="{ 
-                                backgroundImage: `url('${landingPage.heroImage || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'}')` 
-                            }"
-                        >
-                            <!-- Geometric Pattern Overlay -->
-                            <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><polygon points=\"0,0 50,0 25,50\" fill=\"%23ffffff\" opacity=\"0.1\"/><polygon points=\"50,0 100,0 75,50\" fill=\"%23ffffff\" opacity=\"0.05\"/><polygon points=\"0,50 25,50 12.5,100\" fill=\"%23ffffff\" opacity=\"0.05\"/><polygon points=\"75,50 100,50 87.5,100\" fill=\"%23ffffff\" opacity=\"0.05\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>');"></div>
-                        </div>
-                        
-                        <!-- Content Container -->
-                        <div class="hero-content">
-                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-                                    <!-- Left Side - Text Content -->
-                                    <div class="lg:col-span-1 space-y-6">
-                                        <!-- Main Heading -->
-                                        <h1 class="hero-title hero-text">
-                                            {{ landingPage.title || 'ARCHITECTURAL' }}
-                                        </h1>
-                                        
-                                        <!-- Subtext -->
-                                        <p class="hero-subtitle hero-text">
-                                            {{ landingPage.description || 'Discover the magic behind our innovative architecture designs and experience. Craft architectural with passion.' }}
-                                        </p>
-                                        
-                                        <!-- CTA Button -->
-                                        <div class="pt-4">
-                                            <button class="hero-cta">
-                                                Explore Our Work
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Right Side - Project Previews -->
-                                    <div class="lg:col-span-2 flex justify-end">
-                                        <div class="grid grid-cols-2 gap-4 max-w-md">
-                                            <!-- Project Preview 1 -->
-                                            <div class="project-preview group cursor-pointer">
-                                                <div class="aspect-square bg-cover bg-center" 
-                                                     style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
-                                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
-                                                </div>
-                                                <!-- Experience Badge -->
-                                                <div class="experience-badge">
-                                                    5+
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Project Preview 2 -->
-                                            <div class="project-preview group cursor-pointer">
-                                                <div class="aspect-square bg-cover bg-center" 
-                                                     style="background-image: url('https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
-                                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Bottom Section - Client Satisfaction -->
-                                <div class="absolute bottom-8 left-8 flex items-center">
-                                    <!-- Client Avatars -->
-                                    <div class="client-avatars">
-                                        <div class="client-avatar" 
-                                             style="background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')"></div>
-                                        <div class="client-avatar" 
-                                             style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')"></div>
-                                        <div class="client-avatar" 
-                                             style="background-image: url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')"></div>
-                                    </div>
-                                    
-                                    <!-- Satisfaction Text -->
-                                    <div class="satisfaction-text">
-                                        <div class="satisfaction-number">100+</div>
-                                        <div class="satisfaction-label">Satisfaction clients</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Scroll Indicator -->
-                        <div class="scroll-indicator">
-                            <lucide-chevron-down :size="24"></lucide-chevron-down>
-                        </div>
-                    </section>
-                    <!-- Featured Projects Grid Section -->
-                    <section v-if="projects.length > 0" class="mb-12">
-                        
-                        <!-- Loading State -->
-                        <div v-if="loadingProjects" class="flex justify-center items-center py-12">
-                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-                        </div>
-                        
-                        <!-- Projects Grid (Masonry Layout - Same as Index) -->
-                        <div v-else id="projects-container" class="projects-grid">
-                            <div 
-                                v-for="(column, columnIndex) in getMasonryColumns()" 
-                                :key="columnIndex" 
-                                class="masonry-column"
-                            >
-                                <div 
-                                    v-for="project in column" 
-                                    :key="project.uuid1"
-                                    :data-project-id="project.uuid1"
-                                    class="project-tile" 
-                                    :class="{ 'has-image': project.imageLoaded }"
-                                    @click="viewProject(project)"
-                                >
-                                    <!-- Tile Content -->
-                                    <div class="tile-content">
-                                        <!-- Loading state -->
-                                        <div v-if="!project.isLazyLoaded" class="tile-loading">
-                                            <div class="loading-spinner"></div>
-                                            <div class="loading-text">Loading...</div>
-                                        </div>
-
-                                        <!-- Image when loaded -->
-                                        <div v-else-if="project.imageLoaded" class="tile-with-image">
-                                            <img 
-                                                :src="getProjectImage(project)"
-                                                :alt="project.name"
-                                                class="tile-image"
-                                                @load="handleImageLoad"
-                                                @error="handleImageError"
-                                            />
-                                            <div class="tile-overlay">
-                                                <div class="tile-info">
-                                                    <h3 class="project-title">{{ project.name }}</h3>
-                                                    <p class="project-location">{{ project.location }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Placeholder when image failed to load -->
-                                        <div v-else-if="project.imageError" class="tile-placeholder">
-                                            <div class="placeholder-icon">
-                                                <lucide-alert-circle :size="48"></lucide-alert-circle>
-                                            </div>
-                                            <div class="placeholder-text">
-                                                <h3 class="project-title">{{ project.name }}</h3>
-                                                <p class="project-location">{{ project.location }}</p>
-                                            </div>
-                                        </div>
-
-                                        <!-- Fallback placeholder -->
-                                        <div v-else class="tile-placeholder">
-                                            <div class="placeholder-icon">
-                                                <lucide-image :size="48"></lucide-image>
-                                            </div>
-                                            <div class="placeholder-text">
-                                                <h3 class="project-title">{{ project.name }}</h3>
-                                                <p class="project-location">{{ project.location }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- View All Button -->
-                        <div v-if="!loadingProjects && projects.length > 6" class="text-center mt-8">
-                            <button 
-                                @click="toggleViewAll"
-                                class="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 flex items-center mx-auto"
-                            >
-                                <span v-if="!showAllProjects">View All Projects ({{ projects.length }})</span>
-                                <span v-else>Show Less</span>
-                                <lucide-chevron-down 
-                                    v-if="!showAllProjects" 
-                                    :size="20" 
-                                    class="ml-2 transition-transform duration-200"
-                                ></lucide-chevron-down>
-                                <lucide-chevron-up 
-                                    v-else 
-                                    :size="20" 
-                                    class="ml-2 transition-transform duration-200"
-                                ></lucide-chevron-up>
+                    <!-- Hero Section -->
+                    <section class="py-20 bg-gray-50 rounded-lg mb-16">
+                        <div class="text-center">
+                            <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                                {{ landingPage.title || 'ARCHITECTURAL' }}
+                            </h1>
+                            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                                {{ landingPage.description || 'Discover the magic behind our innovative architecture designs and experience. Craft architectural with passion.' }}
+                            </p>
+                            <button class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors">
+                                Explore Our Work
                             </button>
                         </div>
+                    </section>
 
-                        <!-- Empty State -->
-                        <div v-if="!loadingProjects && projects.length === 0" class="text-center py-12">
-                            <div class="text-gray-400 mb-4">
-                                <svg class="mx-auto h-16 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">No Projects Available</h3>
-                            <p class="text-gray-500">Projects will be displayed here once they are added.</p>
-                    </div>
-                </section>
-
-
-                <!-- Services & Benefits Section -->
-                    <section v-if="(landingPage.belowFold.services && landingPage.belowFold.services.length > 0) || (landingPage.belowFold.benefits && landingPage.belowFold.benefits.length > 0)" class="py-12">
-                        <div class="space-y-8">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                            <!-- Services -->
-                            <div v-if="landingPage.belowFold.services && landingPage.belowFold.services.length > 0">
-                                <h2 class="text-3xl font-bold text-gray-900 mb-8">Our Services</h2>
-                                <ul class="space-y-4">
-                                    <li 
-                                        v-for="service in landingPage.belowFold.services" 
-                                        :key="service"
-                                        class="flex items-center text-gray-700"
-                                    >
-                                            <div class="w-2 h-2 bg-red-600 rounded-full mr-3"></div>
-                                        {{ service }}
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Benefits -->
-                            <div v-if="landingPage.belowFold.benefits && landingPage.belowFold.benefits.length > 0">
-                                <h2 class="text-3xl font-bold text-gray-900 mb-8">Why Choose Us</h2>
-                                <ul class="space-y-4">
-                                    <li 
-                                        v-for="benefit in landingPage.belowFold.benefits" 
-                                        :key="benefit"
-                                        class="flex items-center text-gray-700"
-                                    >
-                                            <div class="w-2 h-2 bg-red-600 rounded-full mr-3"></div>
-                                        {{ benefit }}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Testimonials Section -->
-                    <section v-if="landingPage.belowFold.testimonials && landingPage.belowFold.testimonials.length > 0" class="py-12">
-                        <div class="space-y-8">
-                        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">What Our Clients Say</h2>
+                    <!-- Projects Section -->
+                    <section class="py-16">
+                        <h2 class="text-3xl font-bold text-center mb-12">Our Featured Projects</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <div 
-                                v-for="testimonial in landingPage.belowFold.testimonials" 
-                                :key="testimonial.quote"
-                                    class="group bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                            >
-                                <p class="text-gray-700 mb-4 italic">"{{ testimonial.quote }}"</p>
-                                    <p class="text-gray-900 font-semibold group-hover:text-red-600 transition-colors duration-200">- {{ testimonial.author }}</p>
+                            <div v-for="project in displayedProjects" :key="project.uuid1" class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                                <div class="aspect-video bg-gray-200">
+                                    <img 
+                                        :src="getProjectImage(project)" 
+                                        :alt="project.name"
+                                        class="w-full h-full object-cover"
+                                        @load="handleImageLoad"
+                                        @error="handleImageError"
+                                    />
                                 </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Contact Form Section -->
-                    <section id="contact-form" class="py-12 md:py-24 bg-gray-50">
-                        <div class="max-w-4xl mx-auto px-4">
-                            <div class="text-center mb-12">
-                                <h2 class="text-3xl md:text-5xl font-bold mb-4 text-gray-900">
-                                    {{ landingPage.form.title || 'Get In Touch' }}
-                                </h2>
-                                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                                    Ready to transform your space? Let's discuss your project and bring your vision to life.
-                                </p>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-semibold mb-2">{{ project.name }}</h3>
+                                    <p class="text-gray-600 mb-2">{{ project.location }}</p>
+                                    <p class="text-sm text-gray-500">{{ project.type }}</p>
+                                </div>
                             </div>
-                            
-                            <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-                                <form @submit.prevent="submitForm" class="space-y-6">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div 
-                                            v-for="field in getFormFields()" 
-                                            :key="field.name"
-                                            :class="field.type === 'textarea' ? 'md:col-span-2' : ''"
-                                        >
-                                            <label :for="field.name" class="block text-left text-sm font-semibold mb-2 text-gray-800">
-                                                {{ field.label }}
-                                                <span v-if="field.required" class="text-red-600">*</span>
-                                            </label>
-                                            
-                                            <!-- Text Input -->
-                                            <input 
-                                                v-if="field.type === 'text' || field.type === 'email' || field.type === 'tel' || field.type === 'number'"
-                                                :id="field.name"
-                                                v-model="formData[field.name]"
-                                                :type="field.type"
-                                                :required="field.required"
-                                                class="w-full px-4 py-3 rounded-lg text-gray-900 border-2 border-gray-200 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 hover:border-gray-300"
-                                                :placeholder="`Enter your ${field.label.toLowerCase()}`"
-                                            >
-                                            
-                                            <!-- Select Input -->
-                                            <select 
-                                                v-else-if="field.type === 'select'"
-                                                :id="field.name"
-                                                v-model="formData[field.name]"
-                                                :required="field.required"
-                                                class="w-full px-4 py-3 rounded-lg text-gray-900 border-2 border-gray-200 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 hover:border-gray-300"
-                                            >
-                                                <option value="">Select {{ field.label }}</option>
-                                                <option 
-                                                    v-for="option in field.options" 
-                                                    :key="option" 
-                                                    :value="option"
-                                                >
-                                                    {{ option }}
-                                                </option>
-                                            </select>
-                                            
-                                            <!-- Textarea -->
-                                            <textarea 
-                                                v-else-if="field.type === 'textarea'"
-                                                :id="field.name"
-                                                v-model="formData[field.name]"
-                                                :required="field.required"
-                                                rows="4"
-                                                class="w-full px-4 py-3 rounded-lg text-gray-900 border-2 border-gray-200 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 hover:border-gray-300 resize-none"
-                                                :placeholder="`Tell us about your ${field.label.toLowerCase()}`"
-                                            ></textarea>
-                                        </div>
-                                    </div>
+                        </div>
+                        
+                        <div v-if="projects.length > 6" class="text-center mt-8">
+                            <button 
+                                @click="toggleViewAll" 
+                                class="bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                            >
+                                {{ showAllProjects ? 'Show Less' : 'View All Projects' }}
+                            </button>
+                        </div>
+                    </section>
 
-                                    <div class="pt-4">
-                                        <button 
-                                            type="submit" 
-                                            :disabled="submitting"
-                                            class="w-full bg-red-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-red-700 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                                        >
-                                            <span v-if="submitting" class="flex items-center justify-center">
-                                                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                                                Submitting...
-                                            </span>
-                                            <span v-else>Send Message</span>
-                                        </button>
-                                    </div>
-                                </form>
-
-                                <!-- Success Message -->
-                                <div v-if="formSubmitted" class="mt-6 p-6 bg-green-50 border border-green-200 text-green-800 rounded-lg text-center">
-                                    <div class="flex items-center justify-center mb-2">
-                                        <lucide-check-circle :size="24" class="text-green-600 mr-2"></lucide-check-circle>
-                                        <span class="font-semibold">Message Sent Successfully!</span>
-                                    </div>
-                                    <p>Thank you for your interest! We'll get back to you within 24 hours.</p>
-                                </div>
+                    <!-- Services Section -->
+                    <section class="py-16 bg-gray-50 rounded-lg mb-16">
+                        <div class="text-center mb-12">
+                            <h2 class="text-3xl font-bold mb-4">Our Services</h2>
+                            <p class="text-gray-600">Comprehensive design solutions for every project</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div v-for="service in (landingPage.belowFold?.services || [])" :key="service" class="bg-white p-6 rounded-lg shadow-md">
+                                <h3 class="text-lg font-semibold mb-2">{{ service }}</h3>
                             </div>
                         </div>
                     </section>
-                    </div>
+
+                    <!-- Contact Form -->
+                    <section class="py-16">
+                        <div class="max-w-2xl mx-auto">
+                            <h2 class="text-3xl font-bold text-center mb-8">Get Started Today</h2>
+                            <form @submit.prevent="submitForm" class="space-y-6">
+                                <div v-for="field in getFormFields()" :key="field.name" class="space-y-2">
+                                    <label :for="field.name" class="block text-sm font-medium text-gray-700">
+                                        {{ field.label }}
+                                        <span v-if="field.required" class="text-red-500">*</span>
+                                    </label>
+                                    <input 
+                                        v-if="field.type !== 'textarea' && field.type !== 'select'"
+                                        :type="field.type"
+                                        :id="field.name"
+                                        v-model="formData[field.name]"
+                                        :required="field.required"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    />
+                                    <textarea 
+                                        v-else-if="field.type === 'textarea'"
+                                        :id="field.name"
+                                        v-model="formData[field.name]"
+                                        :required="field.required"
+                                        rows="4"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    ></textarea>
+                                    <select 
+                                        v-else-if="field.type === 'select'"
+                                        :id="field.name"
+                                        v-model="formData[field.name]"
+                                        :required="field.required"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    >
+                                        <option value="">Select {{ field.label }}</option>
+                                        <option v-for="option in field.options" :key="option" :value="option">
+                                            {{ option }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <button 
+                                    type="submit" 
+                                    :disabled="submitting"
+                                    class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+                                >
+                                    {{ submitting ? 'Submitting...' : 'Submit' }}
+                                </button>
+                            </form>
+                            
+                            <div v-if="formSubmitted" class="mt-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                                Thank you! Your message has been submitted successfully.
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </main>
 
         <footer-component></footer-component>
-        
-        <!-- Project Modal (Same as Index Page) -->
-        <div v-if="selectedProject" class="fixed inset-0 z-50 bg-transparent backdrop-blur-md" @click="closeModal">
-            <div class="relative w-full md:w-4/5 h-full mx-auto" @click.stop>
-                <!-- Close Button -->
-                <button @click="closeModal" class="absolute top-4 right-4 z-20 p-2 bg-white bg-opacity-20 rounded-full text-white hover:bg-opacity-30 transition-all duration-300">
-                    <lucide-x :size="24"></lucide-x>
-                </button>
-                
-                <!-- Full-Width Carousel with Info as First Slide -->
-                <div class="relative w-full h-full">
-                    <div class="w-full h-full overflow-x-auto overflow-y-hidden scrollbar-hide flex snap-x snap-mandatory carousel-container" ref="carouselContainer" @scroll="handleCarouselScroll" style="gap: 5px;">
-                        <!-- First slide: Info panel (fixed 350px, gradient overlay) -->
-                        <div class="carousel-slide snap-start shrink-0 h-full text-white" style="width: 350px; min-width: 350px; padding: 20px; backdrop-filter: blur(12px); background: linear-gradient(90deg, rgba(0,0,0,0.65), rgba(0,0,0,0.35) 60%, rgba(0,0,0,0) 100%);">
-                            <div class="max-w-xs">
-                                <ul class="modal-info-list">
-                                    <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <i class="fa-solid fa-circle-info mr-2 opacity-90"></i>
-                                        <span>{{ selectedProject.name }}</span>
-                                    </li>
-                                    <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <i class="fa-solid fa-location-dot mr-2 opacity-90"></i>
-                                        <span>{{ selectedProject.location }}</span>
-                                    </li>
-                                    <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <i class="fa-solid fa-user-check mr-2 opacity-90"></i>
-                                        <span>{{ selectedProject.client_name || selectedProject.clientName || 'N/A' }}</span>
-                                    </li>
-                                    <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <i class="fa-solid fa-folder-open mr-2 opacity-90"></i>
-                                        <span>{{ selectedProject.status || 'N/A' }}</span>
-                                    </li>
-                                    <li class="flex items-center" style="margin-bottom: 18px;">
-                                        <i class="fa-solid fa-layer-group mr-2 opacity-90"></i>
-                                        <span>{{ selectedProject.type || 'N/A' }}</span>
-                                    </li>
-                                    <li class="flex items-center" style="margin-bottom: 0;">
-                                        <i class="fa-solid fa-ruler-combined mr-2 opacity-90"></i>
-                                        <span>{{ selectedProject.area || 'N/A' }}</span>
-                                    </li>
-                                </ul>
-
-                                <div v-if="selectedProject.description" style="margin-top: 22px;">
-                                    <p class="modal-info-desc">{{ selectedProject.description }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Image slides: width equals image width, full height with 2px vertical margins -->
-                        <div v-for="(image, index) in selectedProject.photos" :key="`image-${index}`" class="carousel-slide snap-start shrink-0 h-full flex items-center justify-center p-0">
-                            <img :src="getCarouselImage(selectedProject, image)"
-                                 :alt="`${selectedProject.name} - Image ${index + 1}`"
-                                 class="object-contain shadow-2xl"
-                                 style="height: calc(100% - 4px); width: auto; margin-top: 2px; margin-bottom: 2px;"
-                                 @error="handleModalImageError">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Scroll Indicator -->
-                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-center">
-                    <div class="flex items-center space-x-2">
-                        <lucide-chevron-left :size="20"></lucide-chevron-left>
-                        <lucide-chevron-right :size="20"></lucide-chevron-right>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- WhatsApp Float Button Component -->
         <whatsapp-component></whatsapp-component>
     </div>
-    
-    <!-- Landing Page Clean URL Redirect -->
-    <script src="../scripts/landing-page-redirect.js"></script>
     
     <!-- API Configuration -->
     <script src="../src/js/config/api.js"></script>

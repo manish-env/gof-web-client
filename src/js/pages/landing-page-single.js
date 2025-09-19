@@ -1,11 +1,9 @@
 // Individual Landing Page Application
 const { createApp } = Vue;
 
-// API Configuration - using common config
-const API_BASE_URL = API_CONFIG.BASE_URL;
-const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    ? 'http://localhost:4001'
-    : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
+// API Configuration - using user API for landing pages
+const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const FILE_BASE_URL = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 
 // Main App
 const app = createApp({
@@ -21,7 +19,11 @@ const app = createApp({
             carouselContainer: null, // For carousel
             formData: {},
             submitting: false,
-            formSubmitted: false
+            formSubmitted: false,
+            // Gallery functionality
+            galleryImages: [],
+            showGallery: false,
+            currentImageIndex: 0
         };
     },
     computed: {
@@ -38,9 +40,14 @@ const app = createApp({
         }
     },
     async mounted() {
+        console.log('Vue app mounted, starting data loading...');
         await this.loadLandingPage();
+        console.log('Landing page loaded:', this.landingPage);
         if (this.landingPage) {
+            console.log('Loading projects...');
             await this.loadProjects();
+            console.log('Projects loaded:', this.projects.length);
+            this.loadGalleryImages();
         }
     },
     methods: {
@@ -55,53 +62,59 @@ const app = createApp({
         async loadLandingPage() {
             try {
                 this.loading = true;
+                console.log('Starting to load landing page...');
                 
-                // For testing purposes, always use dummy data
-                console.log('Loading dummy landing page data for testing');
-                this.landingPage = this.getDummyLandingPageData();
-                document.title = `${this.landingPage.title} - Genre of Design`;
-                document.getElementById('page-title').textContent = this.landingPage.title;
-                
-                // Optional: Try to load from API as well (for future use)
                 const slug = this.getSlugFromUrl();
-                if (slug && slug !== 'architectural-design') {
-                    try {
+                console.log('Marketing slug from URL:', slug);
+                
+                // Load from API
+                if (slug) {
+                    console.log('Attempting to load from API:', `${API_BASE_URL}/landing-pages/${encodeURIComponent(slug)}`);
                         const res = await fetch(`${API_BASE_URL}/landing-pages/${encodeURIComponent(slug)}`);
+                    console.log('API response status:', res.status);
+                    
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    
                         const data = await res.json();
+                    console.log('API response data:', data);
                         
                         if (data && data.success && data.data) {
-                            console.log('API data loaded, replacing dummy data');
-                            this.landingPage = data.data;
+                        console.log('✅ API data loaded successfully:', data.data);
+                        // Handle both single object and array response
+                        const landingPageData = Array.isArray(data.data) ? data.data[0] : data.data;
+                        this.landingPage = landingPageData;
                             document.title = `${this.landingPage.title} - Genre of Design`;
                             document.getElementById('page-title').textContent = this.landingPage.title;
-                        }
-                    } catch (apiError) {
-                        console.warn('API request failed, keeping dummy data:', apiError);
+                        return; // Success, exit early
+                    } else {
+                        console.log('❌ API returned no data or failed');
+                        throw new Error('API returned no data');
                     }
+                } else {
+                    console.log('❌ No slug provided in URL');
+                    throw new Error('No slug provided');
                 }
                 
             } catch (e) {
-                console.error('Failed to load landing page', e);
-                // Fallback to dummy data
-                this.landingPage = this.getDummyLandingPageData();
-                document.title = `${this.landingPage.title} - Genre of Design`;
-                document.getElementById('page-title').textContent = this.landingPage.title;
+                console.error('Failed to load landing page from API:', e);
+                this.error = 'Failed to load landing page: ' + e.message;
             } finally {
                 this.loading = false;
+                console.log('Loading state set to false');
             }
         },
         
-        getDummyLandingPageData() {
-            return {
-                id: 'dummy-landing-page',
+        getDummyLandingPageData(slug = 'architectural-design') {
+            const landingPages = {
+                'architectural-design': {
+                    id: 'dummy-lp-1',
                 slug: 'architectural-design',
-                title: 'ARCHITECTURAL',
-                description: 'Discover the magic behind our innovative architecture designs and experience. Craft architectural with passion.',
+                    title: 'ARCHITECTURAL DESIGN',
+                    description: 'Transform your vision into stunning architectural masterpieces with our innovative design solutions.',
                 category: 'Architecture',
-                heroImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-                projectSelectionType: 'all',
-                selectedProjects: [],
-                selectedCategory: null,
+                    heroImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 belowFold: {
                     services: [
                         'Residential Architecture',
@@ -133,7 +146,7 @@ const app = createApp({
                     ]
                 },
                 form: {
-                    title: 'Start Your Project Today',
+                        title: 'Start Your Architectural Project',
                     fields: [
                         { name: 'name', label: 'Full Name', type: 'text', required: true },
                         { name: 'email', label: 'Email Address', type: 'email', required: true },
@@ -142,8 +155,97 @@ const app = createApp({
                         { name: 'budget', label: 'Budget Range', type: 'select', required: false, options: ['Under $50k', '$50k - $100k', '$100k - $250k', '$250k - $500k', 'Over $500k'] },
                         { name: 'message', label: 'Project Description', type: 'textarea', required: false }
                     ]
+                    }
+                },
+                'interior-design': {
+                    id: 'dummy-lp-2',
+                    slug: 'interior-design',
+                    title: 'INTERIOR DESIGN',
+                    description: 'Create beautiful, functional spaces that reflect your personality and lifestyle with our interior design expertise.',
+                    category: 'Interior Design',
+                    heroImage: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    belowFold: {
+                        services: [
+                            'Home Interior Design',
+                            'Office Space Planning',
+                            'Luxury Interior Design',
+                            'Minimalist Design',
+                            'Color Consultation'
+                        ],
+                        benefits: [
+                            'Personalized design solutions',
+                            '3D visualization',
+                            'Quality material selection',
+                            'Project management',
+                            'Post-completion support'
+                        ],
+                        testimonials: [
+                            {
+                                quote: 'Our home looks absolutely stunning! The interior design team understood our vision perfectly.',
+                                author: 'Lisa Wang, Homeowner'
+                            },
+                            {
+                                quote: 'The office redesign has improved our productivity and employee satisfaction significantly.',
+                                author: 'David Kumar, CEO'
+                            }
+                        ]
+                    },
+                    form: {
+                        title: 'Transform Your Space',
+                        fields: [
+                            { name: 'name', label: 'Full Name', type: 'text', required: true },
+                            { name: 'email', label: 'Email Address', type: 'email', required: true },
+                            { name: 'phone', label: 'Phone Number', type: 'tel', required: true },
+                            { name: 'space_type', label: 'Space Type', type: 'select', required: true, options: ['Home', 'Office', 'Retail', 'Restaurant', 'Other'] },
+                            { name: 'budget', label: 'Budget Range', type: 'select', required: false, options: ['Under $25k', '$25k - $50k', '$50k - $100k', '$100k - $200k', 'Over $200k'] },
+                            { name: 'message', label: 'Design Requirements', type: 'textarea', required: false }
+                        ]
+                    }
+                },
+                'commercial-spaces': {
+                    id: 'dummy-lp-3',
+                    slug: 'commercial-spaces',
+                    title: 'COMMERCIAL SPACES',
+                    description: 'Professional commercial design solutions that enhance productivity and create impressive business environments.',
+                    category: 'Commercial',
+                    heroImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    belowFold: {
+                        services: [
+                            'Office Design',
+                            'Retail Space Design',
+                            'Restaurant Design',
+                            'Corporate Interiors',
+                            'Brand Integration'
+                        ],
+                        benefits: [
+                            'Brand-focused design',
+                            'Functional layouts',
+                            'Cost-effective solutions',
+                            'Timeline management',
+                            'Compliance expertise'
+                        ],
+                        testimonials: [
+                            {
+                                quote: 'Our new office space perfectly represents our brand and has improved team collaboration.',
+                                author: 'Maria Santos, Operations Manager'
+                            }
+                        ]
+                    },
+                    form: {
+                        title: 'Design Your Commercial Space',
+                        fields: [
+                            { name: 'name', label: 'Full Name', type: 'text', required: true },
+                            { name: 'email', label: 'Email Address', type: 'email', required: true },
+                            { name: 'phone', label: 'Phone Number', type: 'tel', required: true },
+                            { name: 'business_type', label: 'Business Type', type: 'select', required: true, options: ['Office', 'Retail', 'Restaurant', 'Healthcare', 'Other'] },
+                            { name: 'space_size', label: 'Space Size', type: 'select', required: false, options: ['Under 1000 sq ft', '1000-5000 sq ft', '5000-10000 sq ft', 'Over 10000 sq ft'] },
+                            { name: 'message', label: 'Project Requirements', type: 'textarea', required: false }
+                        ]
+                    }
                 }
             };
+            
+            return landingPages[slug] || landingPages['architectural-design'];
         },
         getSlugFromUrl() {
             // Check for marketing parameter first (from /discovermore?marketing=slugname)
@@ -200,36 +302,18 @@ const app = createApp({
             
             this.loadingProjects = true;
             try {
-                console.log('📝 Loading projects for landing page...');
+                console.log('📝 Loading projects from API...');
                 
-                // For testing, use dummy project data
-                console.log('📝 Using dummy project data for testing');
-                this.projects = this.getDummyProjectData();
-                
-                // Initialize project states for image loading (same as index page)
-                this.projects = this.projects.map(project => {
-                    return {
-                        ...project,
-                        isLazyLoaded: true, // Set to true immediately like index page
-                        imageLoaded: true, // Set to true immediately like index page
-                        imageError: false
-                    };
-                });
-                
-                console.log('📝 Projects loaded:', this.projects.length);
-                console.log('📝 First project data:', this.projects[0]);
-                if (this.projects[0]) {
-                    console.log('📝 First project photos:', this.projects[0].photos);
-                    console.log('📝 First project image URL:', this.getProjectImage(this.projects[0]));
+                const res = await fetch(`${API_BASE_URL}/projects`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
                 }
                 
-                // Optional: Try to load from API as well (for future use)
-                try {
-                    const res = await fetch(`${API_BASE_URL}/projects`);
                     const data = await res.json();
+                console.log('📝 API response:', data);
                     
                     if (data.success && data.data && data.data.length > 0) {
-                        console.log('📝 API projects loaded, replacing dummy data');
+                    console.log('📝 API projects loaded successfully:', data.data.length);
                         this.projects = data.data.map(project => {
                             let photos = project.photos;
                             if (typeof photos === 'string') {
@@ -249,14 +333,14 @@ const app = createApp({
                                 imageError: false
                             };
                         });
-                    }
-                } catch (apiError) {
-                    console.warn('API projects failed, keeping dummy data:', apiError);
+                } else {
+                    console.log('📝 No projects found in API response');
+                    this.projects = [];
                 }
                 
             } catch (error) {
-                console.error('❌ Failed to load projects:', error);
-                this.projects = this.getDummyProjectData();
+                console.error('❌ Failed to load projects from API:', error);
+                this.projects = [];
             } finally {
                 this.loadingProjects = false;
             }
@@ -585,28 +669,102 @@ const app = createApp({
                 ];
             }
             return this.landingPage.form.fields;
+        },
+        // Gallery methods
+        loadGalleryImages() {
+            // Load gallery images from landing page gallery_images field first
+            this.galleryImages = [];
+            
+            // Add gallery images from API if available
+            if (this.landingPage.galleryImages && Array.isArray(this.landingPage.galleryImages)) {
+                this.galleryImages = [...this.landingPage.galleryImages];
+                console.log('Gallery images loaded from API:', this.galleryImages.length);
+            }
+            
+            // If no gallery images from API, fallback to hero image and project images
+            if (this.galleryImages.length === 0) {
+                // Add hero image if available
+                if (this.landingPage.heroImage) {
+                    this.galleryImages.push(this.resolveImageUrl(this.landingPage.heroImage));
+                }
+                
+                // Add project images
+                this.projects.forEach(project => {
+                    if (project.photos && Array.isArray(project.photos)) {
+                        project.photos.forEach(photo => {
+                            const imageUrl = this.getProjectImageUrl(project, photo);
+                            if (imageUrl && !this.galleryImages.includes(imageUrl)) {
+                                this.galleryImages.push(imageUrl);
+                            }
+                        });
+                    }
+                });
+                
+                // Add some dummy images if we still don't have enough
+                if (this.galleryImages.length < 2) {
+                    this.galleryImages.push(
+                        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1600566753086-5f52b1c4c4c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    );
+                }
+                
+                console.log('Gallery images loaded from fallback sources:', this.galleryImages.length);
+            }
+            
+            console.log('Total gallery images loaded:', this.galleryImages.length);
+        },
+        openGallery(index) {
+            this.currentImageIndex = index;
+            this.showGallery = true;
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        },
+        closeGallery() {
+            this.showGallery = false;
+            document.body.style.overflow = ''; // Restore scrolling
+        },
+        nextImage() {
+            if (this.currentImageIndex < this.galleryImages.length - 1) {
+                this.currentImageIndex++;
+            }
+        },
+        previousImage() {
+            if (this.currentImageIndex > 0) {
+                this.currentImageIndex--;
+            }
         }
     }
 });
 
 // Register components
+console.log('Registering components...');
 if (typeof Navbar !== 'undefined') {
     app.component('navbar-component', Navbar);
+    console.log('Navbar component registered');
 } else {
     console.error('Navbar component not found');
 }
 
 if (typeof Footer !== 'undefined') {
     app.component('footer-component', Footer);
+    console.log('Footer component registered');
 } else {
     console.error('Footer component not found');
 }
 
 if (typeof WhatsApp !== 'undefined') {
     app.component('whatsapp-component', WhatsApp);
+    console.log('WhatsApp component registered');
 } else {
     console.error('WhatsApp component not found');
 }
 
 // Mount the app
+console.log('Mounting Vue app...');
+try {
 app.mount('#app');
+    console.log('Vue app mounted successfully');
+} catch (error) {
+    console.error('Failed to mount Vue app:', error);
+}

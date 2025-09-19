@@ -1,12 +1,9 @@
 // Landing Pages Listing Application
 const { createApp } = Vue;
 
-// API Configuration - using common config
-const API_BASE_URL = API_CONFIG.BASE_URL;
-const ADMIN_API_BASE_URL = window.ADMIN_API_BASE_URL || 'https://god-admin-worker.restless-mountain-f968.workers.dev/api';
-const FILE_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    ? 'http://localhost:4001'
-    : 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
+// API Configuration - using user API for landing pages
+const API_BASE_URL = 'https://god-worker.restless-mountain-f968.workers.dev/api';
+const FILE_BASE_URL = 'https://pub-adaf71aa7820480384f91cac298ea58e.r2.dev';
 
 // Main App
 const app = createApp({
@@ -27,16 +24,8 @@ const app = createApp({
     },
     methods: {
         async loadSettings() {
-            try {
-                const res = await fetch(`${ADMIN_API_BASE_URL}/site-settings?section=landing&_=${Date.now()}`);
-                if (!res.ok) throw new Error(`Failed: ${res.status}`);
-                const data = await res.json();
-                if (data && data.success) {
-                    this.settings = { ...this.settings, ...(data.data || {}) };
-                }
-            } catch (e) {
-                console.warn('Landing settings load failed:', e.message);
-            }
+            // Settings will use default values
+            console.log('Using default landing page settings');
         },
         resolveImageUrl(path) {
             if (!path) return '';
@@ -50,28 +39,30 @@ const app = createApp({
             try {
                 this.loading = true;
                 
-                // For testing, use dummy data first
-                console.log('🌐 Using dummy landing pages data for testing');
-                this.landingPages = this.getDummyLandingPagesData();
-                console.log('✅ Loaded dummy landing pages:', this.landingPages.length);
+                // Load from API
+                console.log('🌐 Fetching landing pages from API:', `${API_BASE_URL}/landing-pages`);
+                const res = await fetch(`${API_BASE_URL}/landing-pages`);
+                console.log('📡 Response status:', res.status, res.statusText);
                 
-                // Optional: Try to load from API as well (for future use)
-                try {
-                    console.log('🌐 Fetching landing pages from API:', `${API_BASE_URL}/landing-pages`);
-                    const res = await fetch(`${API_BASE_URL}/landing-pages`);
-                    console.log('📡 Response status:', res.status, res.statusText);
-                    const data = await res.json();
-                    console.log('📦 Response data:', data);
-                    if (data && data.success && data.data && data.data.length > 0) {
-                        console.log('✅ API data loaded, replacing dummy data');
-                        this.landingPages = data.data || [];
-                    }
-                } catch (apiError) {
-                    console.warn('API request failed, keeping dummy data:', apiError);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                
+                const data = await res.json();
+                console.log('📦 Response data:', data);
+                
+                if (data && data.success && data.data && data.data.length > 0) {
+                    console.log('✅ API data loaded successfully:', data.data.length, 'landing pages');
+                    this.landingPages = data.data;
+                } else {
+                    console.log('❌ API returned no data, using dummy data as fallback');
+                    this.landingPages = this.getDummyLandingPagesData();
                 }
                 
             } catch (e) {
-                console.error('❌ Failed to load landing pages', e);
+                console.error('❌ Failed to load landing pages from API:', e);
+                console.log('🔄 Falling back to dummy data');
+                this.landingPages = this.getDummyLandingPagesData();
                 this.error = 'Failed to load landing pages: ' + e.message;
             } finally {
                 this.loading = false;
